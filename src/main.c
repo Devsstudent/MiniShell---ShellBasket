@@ -1,14 +1,13 @@
-#include "ms.h"
+#include "minishell.h"
 
 int	main(int ac, char **av, char **envp)
 {
-	int i;
-	i = 0;
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
+	t_gc	*gc;
+	char	*test = "lol";
+
+	gc = NULL;
+	add_to_gc(PIPE, test, &gc);
+	printf("%p, %s\n", gc, (char *)gc->content);
 	/*
 	while (ac)
 	{

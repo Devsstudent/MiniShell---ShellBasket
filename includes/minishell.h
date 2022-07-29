@@ -1,5 +1,5 @@
-#ifndef MS_H
-# define MS_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -7,6 +7,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft.h"
 
 typedef enum	e_token {
 	UNDEF,
@@ -20,11 +21,17 @@ typedef enum	e_token {
 	ARG
 }	t_token;
 
-typedef struct	s_garbage_col{
-	void	*content;
-	struct	s_garbage_col	*next;
-	char	*type;
-}		t_garbage_col;
+typedef enum	e_type{
+	LST,
+	DOUBLE,
+	SIMPLE
+}	t_type;
+
+typedef struct	s_gc{
+	void			*content;
+	struct	s_gc	*next;
+	t_type			type;
+}		t_gc;
 
 typedef struct	s_lexeur {
 	t_token		token;
@@ -32,5 +39,6 @@ typedef struct	s_lexeur {
 	struct s_lexeur	*next;
 }			t_lexeur;
 
+t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
 
 #endif
