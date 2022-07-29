@@ -20,6 +20,12 @@ typedef enum	e_token {
 	ARG
 }	t_token;
 
+typedef struct	s_garbage_col{
+	void	*content;
+	struct	s_garbage_col	*next;
+	char	*type;
+}		t_garbage_col;
+
 typedef struct	s_lexeur {
 	t_token		token;
 	void		*content;
