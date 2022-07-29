@@ -40,5 +40,6 @@ typedef struct	s_lexeur {
 }			t_lexeur;
 
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
+char	**copy_env(char **env);
 
 #endif
