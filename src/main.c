@@ -22,6 +22,8 @@ int	main(int ac, char **av, char **envp)
 		printf("%s=%s\n", buff->key, buff->value);
 		buff = buff->next;
 	}
+	free(arg);
+	dict_clear(&env);
 	printf("done\n");
 	return (0);
 }

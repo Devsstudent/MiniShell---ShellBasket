@@ -16,11 +16,24 @@ typedef struct	s_elem{
 	char			*value;
 }					t_elem;
 
+typedef struct	s_block{
+	struct s_block	*next;
+	struct s_block	*prev;
+	t_token			token;
+	char			*word;
+}
+
 typedef struct	s_dict{
 	t_elem	*head;
 	t_elem	*last;
 	int		size;
 }			t_dict;
+
+typedef struct s_line{
+	t_block	*head;
+	t_block	*last;
+	int		size;
+}			t_line;
 
 typedef enum	e_token {
 	UNDEF,
@@ -33,6 +46,12 @@ typedef enum	e_token {
 	CMD,
 	ARG
 }	t_token;
+
+typedef enum	e_quote{
+	NO,
+	SINGLE,
+	DOUBLE
+}	t_quote;
 
 typedef enum	e_type{
 	LST,
@@ -58,6 +77,7 @@ t_elem	*new_elem(char *content);
 void	dict_addback(t_dict *dict, t_elem *new);
 void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
+void	dict_clear(t_dict *dict);
 t_bool	double_char_to_lst(char **d_char, t_dict *env);
 
 t_gc	*gc_new_node(t_type type, void *ptr);

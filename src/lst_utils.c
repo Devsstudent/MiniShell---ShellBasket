@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/30 18:34:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/07/30 19:35:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -62,7 +62,6 @@ void	dict_delone(t_dict *dict, char *key)
 {
 	t_elem	*buff;
 	
-	printf("fofo\n");
 	buff = dict->head;
 	while (buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
 		buff = buff->next;
@@ -93,5 +92,21 @@ void	dict_modify(t_dict	*dict, char *key, char *value)
 		free(buff->value);
 		free(key);
 		buff->value = value;
+	}
+}
+
+void	dict_clear(t_dict *dict)
+{
+	t_elem	*buff;
+	t_elem	*tmp;
+
+	buff = dict->head;
+	while (buff != NULL)
+	{
+		tmp = buff->next;
+		free(buff->key);
+		free(buff->value);
+		free(buff);
+		buff = tmp;
 	}
 }
