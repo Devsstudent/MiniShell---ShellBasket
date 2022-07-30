@@ -7,9 +7,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
-
-//Type lst avec head etc
+# include "libft/libft.h"
 
 typedef enum	e_token {
 	UNDEF,
@@ -36,12 +34,13 @@ typedef struct	s_gc{
 }		t_gc;
 
 typedef struct	s_lexeur {
-	t_token		token;
-	void		*content;
+	t_token			token;
+	void			*content;
 	struct s_lexeur	*next;
 }			t_lexeur;
 
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
-char	**copy_env(char **env);
+void	free_gc(t_gc **gc);
+void	gc_free_node_addr(void *ptr, t_gc **gc);
 
 #endif

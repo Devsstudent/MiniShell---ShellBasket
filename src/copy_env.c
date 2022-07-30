@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 14:19:25 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/29 18:27:54 by odessein         ###   ########.fr       */
+/*   Updated: 2022/07/29 20:24:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -68,4 +68,21 @@ char	**copy_env(char **env)
 	}
 	env[i] = NULL;
 	return(new_env);
+}
+
+t_lst	double_char_to_lst(char **d_char)
+{
+	t_lst	lst;
+	t_lst	*new;
+
+	lst->head = NULL;
+	while (*d_char != 0)
+	{
+		new = lst_new(*d_char);
+		if (!new)
+			return (NULL);
+		lst_addback(head, new);
+		d_char++;
+	}
+	return (lst);
 }

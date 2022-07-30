@@ -1,8 +1,8 @@
 FLAG = -Werror -Wall -Wextra -g3 -MMD
 LIB = ./libft
-HEAD = ./includes
-OBJ = $(addprefix obj/, main.o garbage_col.o copy_env.o)
-D_LST = $(addprefix obj/, main.d garbage_col.d copy_env.d null.d)
+HEAD = .
+OBJ = $(addprefix obj/, new_main.o gc_collector.o copy_env.o)
+D_LST = $(addprefix obj/, new_main.d gc_collector.d copy_env.d null.d)
 NAME = minishell
 
 all : $(NAME)
