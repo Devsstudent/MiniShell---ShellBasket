@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 16:29:54 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/07/29 20:09:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/07/30 18:37:20 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -22,8 +22,7 @@ t_gc	*gc_new_node(t_type type, void *ptr)
 	new->type = type;
 	new->content = ptr;
 	return (new);
-}
-
+} 
 void	gc_free_node(t_gc *node)
 {
 	size_t	i;

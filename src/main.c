@@ -2,27 +2,28 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	t_gc	*gc;
-	char	**our_env;
-	char	*test = "lol";
+	t_dict	env;
+	t_elem	*buff;
+	t_elem	*new;
+	char	**arg;
 
-	//gc = NULL;
-	our_env = copy_env(envp);
-	int		i;
-	int		j;
-	i = 0;
-	while (our_env[i])
+	arg = ft_split("COCO=COCO", '=');	
+	if (!double_char_to_lst(envp, &env))
+		return (1);
+	printf("here\n");
+	new = new_elem("COCO=PASCOCO");
+	if (!new)
+		return (3);
+	dict_addback(&env, new);
+	dict_modify(&env, arg[0], arg[1]);
+	buff = env.head;
+	while (buff)
 	{
-		printf("%s", our_env[i]);
-		i++;
+		printf("%s=%s\n", buff->key, buff->value);
+		buff = buff->next;
 	}
-	//add_to_gc(PIPE, test, &gc);
-	//printf("%p, %s\n", gc, (char *)gc->content);
-	/*
-	while (ac)
-	{
-		//Faire une copie de envp pour avoir notre propre environnement
-	}*/
+	printf("done\n");
+	return (0);
 }
 
 //function to malloc like each malloc store in a list the adress of the malloced value

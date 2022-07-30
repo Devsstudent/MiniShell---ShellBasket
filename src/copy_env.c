@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 14:19:25 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/29 20:24:04 by odessein         ###   ########.fr       */
+/*   Updated: 2022/07/30 18:26:33 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -70,19 +70,25 @@ char	**copy_env(char **env)
 	return(new_env);
 }
 
-t_lst	double_char_to_lst(char **d_char)
+static void	init_env(t_dict *env)
 {
-	t_lst	lst;
-	t_lst	*new;
+	env->size = 0;
+	env->head = NULL;
+	env->last = NULL;
+}
 
-	lst->head = NULL;
+t_bool	double_char_to_lst(char **d_char, t_dict *env)
+{
+	t_elem	*new;
+
+	init_env(env);
 	while (*d_char != 0)
 	{
-		new = lst_new(*d_char);
+		new = new_elem(*d_char);
 		if (!new)
-			return (NULL);
-		lst_addback(head, new);
+			return (FALSE);
+		dict_addback(env, new);
 		d_char++;
 	}
-	return (lst);
+	return (TRUE);
 }
