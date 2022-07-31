@@ -45,6 +45,7 @@ typedef struct	s_block{
 	struct s_block	*next;
 	struct s_block	*prev;
 	t_token			token;
+	t_bool			expand;
 	char			*word;
 }				t_block;
 

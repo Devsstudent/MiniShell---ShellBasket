@@ -1,11 +1,11 @@
-FLAG = -Wall -g -Wextra -MMD
+FLAG = -Wall -g -Wextra -MMD #-Werror
 LIB = ./libft
 HEAD = ./includes
-OBJ = $(addprefix obj/, main.o \
+OBJ = $(addprefix obj/, new_main.o \
 			gc_collector.o \
 			copy_env.o \
 			lst_utils.o)
-D_LST = $(addprefix obj/, main.d \
+D_LST = $(addprefix obj/, new_main.d \
 			gc_collector.d \
 			copy_env.d \
 			lst_utils.d \

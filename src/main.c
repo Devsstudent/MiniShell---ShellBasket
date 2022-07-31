@@ -16,7 +16,7 @@ int	main(int ac, char **av, char **envp)
 	t_gc	*gc;
 	t_dict	env;
 
-	if (ac != 1)
+	if (av[1])
 		return (1);
 	gc = NULL;
 	double_char_to_lst(envp, &env, &gc);
