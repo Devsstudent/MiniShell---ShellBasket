@@ -11,14 +11,15 @@
 
 typedef enum	e_token {
 	UNDEF,
-	ENV,
 	RED_IN,
 	RED_OUT_TRUNC,
 	RED_OUT_APPEND,
 	HERE_DOC,
 	PIPE,
 	CMD,
-	ARG
+	ARG,
+	FILES,
+	DELIMITER
 }	t_token;
 
 typedef enum	e_quote{

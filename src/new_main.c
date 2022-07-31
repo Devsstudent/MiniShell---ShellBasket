@@ -44,7 +44,7 @@ int	size_new_word_quote(char *word)
 	return (size);
 }
 
-void	str_cp_till_char(char *word, char *new_word, int *i, int *j)
+void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
 {
 	char	c;
 
@@ -73,11 +73,11 @@ void	str_quote_parse(char *word, char *new_word)
 		if (word[i] == '\'')
 		{
 			i++;
-			str_cp_till_char(word, new_word, &i, &j);
+			str_cp_till_quote(word, new_word, &i, &j);
 		}
 		else if (word[i] == '\"')
 		{
-			str_cp_till_char(word, new_word, &i, &j);
+			str_cp_till_quote(word, new_word, &i, &j);
 			i++;
 		}
 		else
@@ -101,6 +101,7 @@ t_bool	handle_quote(char *word)
 	if (!new_word)
 		return (FALSE);
 	str_quote_parse(word, new_word);
+	//block->word = new_word
 	
 	return (TRUE);
 }
