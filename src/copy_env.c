@@ -39,9 +39,7 @@ int	**size_env(char **env)
 		xy[1][i] = j;
 	}
 	return (xy);
-}
-
-char	**copy_env(char **env)
+} char	**copy_env(char **env)
 {
 	int		i;
 	int		j;
@@ -77,7 +75,7 @@ static void	init_env(t_dict *env)
 	env->last = NULL;
 }
 
-t_bool	double_char_to_lst(char **d_char, t_dict *env)
+t_bool	double_char_to_lst(char **d_char, t_dict *env, t_gc **gc)
 {
 	t_elem	*new;
 
@@ -85,10 +83,12 @@ t_bool	double_char_to_lst(char **d_char, t_dict *env)
 	while (*d_char != 0)
 	{
 		new = new_elem(*d_char);
+		//Free tous les elememt malloc avant ! Si ca crash
 		if (!new)
 			return (FALSE);
 		dict_addback(env, new);
 		d_char++;
 	}
+	add_to_gc(DICT, env, gc);
 	return (TRUE);
 }

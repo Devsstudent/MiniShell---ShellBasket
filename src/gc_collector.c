@@ -41,8 +41,8 @@ void	gc_free_node(t_gc *node)
 		}
 		free(node->content);
 	}
-	else if (node->type == LST)
-		ft_lstclear(node->content, free);
+	else if (node->type == DICT)
+		dict_clear(node->content);
 	free(node);
 }
 

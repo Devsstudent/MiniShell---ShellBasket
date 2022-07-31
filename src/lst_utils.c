@@ -85,7 +85,7 @@ void	dict_modify(t_dict	*dict, char *key, char *value)
 	t_elem	*buff;
 
 	buff = dict->head;
-	while (ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
+	while (buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
 		buff = buff->next;
 	if (buff)
 	{

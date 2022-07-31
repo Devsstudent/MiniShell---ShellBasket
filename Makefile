@@ -1,8 +1,15 @@
 FLAG = -Wall -g -Wextra -MMD
 LIB = ./libft
 HEAD = ./includes
-OBJ = $(addprefix obj/, main.o gc_collector.o copy_env.o lst_utils.o)
-D_LST = $(addprefix obj/, main.d gc_collector.d copy_env.d lst_utils.d null.d)
+OBJ = $(addprefix obj/, main.o \
+			gc_collector.o \
+			copy_env.o \
+			lst_utils.o)
+D_LST = $(addprefix obj/, main.d \
+			gc_collector.d \
+			copy_env.d \
+			lst_utils.d \
+			null.d)
 NAME = minishell
 
 all : $(NAME)

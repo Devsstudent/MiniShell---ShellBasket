@@ -1,5 +1,36 @@
 #include "minishell.h"
 
+t_bool	handle_line(char **line, t_gc **gc)
+{
+	*line = readline("@ShellBasket^$ ");
+	if (!(*line))
+		return (FALSE);
+	add_history(*line);
+	add_to_gc(SIMPLE, *line, gc);
+	return (TRUE);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	char	*line;
+	t_gc	*gc;
+	t_dict	env;
+
+	if (ac != 1)
+		return (1);
+	gc = NULL;
+	double_char_to_lst(envp, &env, &gc);
+	while (ac)
+	{
+		if (!handle_line(&line, &gc))
+		{
+			free_gc(&gc);
+			return (0);
+		}
+	}
+}
+
+/*
 int	main(int ac, char **av, char **envp)
 {
 	t_dict	env;
@@ -27,6 +58,4 @@ int	main(int ac, char **av, char **envp)
 	printf("done\n");
 	return (0);
 }
-
-//function to malloc like each malloc store in a list the adress of the malloced value
-//Maybe tokenise it with a token or something
+*/
