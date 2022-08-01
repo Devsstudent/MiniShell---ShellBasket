@@ -9,6 +9,7 @@
 /*   Updated: 2022/07/30 18:26:33 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 int	**size_env(char **env)
@@ -39,7 +40,9 @@ int	**size_env(char **env)
 		xy[1][i] = j;
 	}
 	return (xy);
-} char	**copy_env(char **env)
+}
+
+char	**copy_env(char **env)
 {
 	int		i;
 	int		j;

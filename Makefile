@@ -1,14 +1,18 @@
 FLAG = -Wall -g -Wextra -MMD #-Werror
 LIB = ./libft
 HEAD = ./includes
-OBJ = $(addprefix obj/, new_main.o \
+OBJ = $(addprefix obj/, new_main_2.o \
 			gc_collector.o \
 			copy_env.o \
-			lst_utils.o)
-D_LST = $(addprefix obj/, new_main.d \
+			lst_utils.o \
+			lexing_wait.o \
+			line_lst_utils.o)
+D_LST = $(addprefix obj/, new_main_2.d \
 			gc_collector.d \
 			copy_env.d \
 			lst_utils.d \
+			lexing_wait.d \
+			line_lst_utils.d \
 			null.d)
 NAME = minishell
 

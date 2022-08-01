@@ -9,6 +9,7 @@
 /*   Updated: 2022/07/29 15:17:21 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)

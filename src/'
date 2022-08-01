@@ -6,7 +6,9 @@ int		size_till_next_char(char *word, char c, int *i)
 
 	size = 0;
 	while (word[*i] && word[*i] != c)
-	{ (*i)++; size++;
+	{
+		(*i)++;
+		size++;
 	}
 	if ((size_t) ((*i) + 1) < ft_strlen(word))
 		(*i)++;
@@ -50,7 +52,7 @@ void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
 	while (*i < ft_strlen(word) && word[*i] != c)
 	{
 		new_word[*j] = word[*i];
-	//	ft_printf("%i %i %c\n", *i, *j, word[*i]);
+		ft_printf("%i %i %c\n", *i, *j, word[*i]);
 		(*j)++;
 		(*i)++;
 	}
@@ -106,20 +108,20 @@ t_bool	handle_quote(char *word)
 t_bool	check_lines_quotes(char *line)
 {
 	int		i;
-	t_quote	quote;
+	t_type	quote;
 
 	i = 0;
 	quote = NO;
 	while (line[i] != 0)
 	{
-		if (line[i] == '\"' && quote == DOUBLE_QUOTE)
+		if (line[i] == '\"' && quote == DOUBLE)
 			quote = NO;
 		else if (line[i] == '\'' && quote == SINGLE)
 			quote = NO;
 		else if (line[i] == '\'' && quote == NO)
 			quote = SINGLE;
 		else if (line[i] == '\"' && quote == NO)
-			quote = DOUBLE_QUOTE;
+			quote = DOUBLE;
 		i++;
 	}
 	if (quote != NO)
@@ -135,9 +137,9 @@ int	main(void)
 	size = 0;
 	line = readline("word :");
 	handle_quote(line);
-	if (!check_lines_quotes(line))
+	/*if (!check_lines_quotes(line))
 		ft_printf("NEED MORE QUOTE");
 	else
 		ft_printf("SYNTAX OK");
-	
+	*/
 }

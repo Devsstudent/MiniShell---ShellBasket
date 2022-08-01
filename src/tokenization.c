@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/31 20:19:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/01 16:58:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -57,7 +57,7 @@ t_bool	check_dollar_in_block(t_block *block)
 {
 
 	//Maybe in the strcut do something like a double arr with 1 layer for stock the things after the $sign, then 1 layer to a  bool expand or not
-	//May should be able to store in 1 array the expand value directly or not if motivated
+	//May should be able to store in 1 array the expand value directly or not if motivated PAS POSSIBLE JE CROIT
 	int	i;
 	t_type	type;
 

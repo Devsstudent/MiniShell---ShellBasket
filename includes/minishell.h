@@ -46,7 +46,8 @@ typedef struct	s_block{
 	struct s_block	*next;
 	struct s_block	*prev;
 	t_token			token;
-	t_bool			expand;
+	//Maybe useful to store env_var in a lst for the expand
+//	t_env			*env_list;
 	char			*word;
 }				t_block;
 
@@ -96,5 +97,19 @@ void	dict_addback(t_dict *dict, t_elem *new);
 void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
+
+
+/********************************************/
+/*               first_parsing              */
+/********************************************/
+
+t_bool	split(char *line, int *i, int *size, t_line *lst);
+t_bool	get_size_word(int *size, t_line *lst);
+t_bool	handle_pipe(char *line, int *i, int *size, t_line *lst);
+t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst);
+t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst);
+t_bool	split(char *line, int *i, int *size, t_line *lst);
+t_bool	get_size_line_words(char *line, t_line *lst);
+t_bool	fill_line_lst(t_line *block_lst, char *line);
 
 #endif
