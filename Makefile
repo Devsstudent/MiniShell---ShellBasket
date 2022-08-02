@@ -6,13 +6,15 @@ OBJ = $(addprefix obj/, new_main_2.o \
 			copy_env.o \
 			lst_utils.o \
 			lexing_wait.o \
-			line_lst_utils.o)
+			line_lst_utils.o \
+			tokenization.o)
 D_LST = $(addprefix obj/, new_main_2.d \
 			gc_collector.d \
 			copy_env.d \
 			lst_utils.d \
 			lexing_wait.d \
 			line_lst_utils.d \
+			tokenization.d \
 			null.d)
 NAME = minishell
 
