@@ -98,18 +98,24 @@ void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
 
+/********************************************/
+/*                parsing                   */
+/********************************************/
+t_block	*new_block(char *word);
+void	line_lst_addback(t_line *line, t_block *new);
+void	line_clear(t_line *line);
+
 
 /********************************************/
-/*               first_parsing              */
+/*                  lexing                  */
 /********************************************/
 
-t_bool	split(char *line, int *i, int *size, t_line *lst);
-t_bool	get_size_word(int *size, t_line *lst);
+t_bool	handle_line(char *line, t_line *lst);
+t_bool	analyse_symbol(char *line, int *i, int *size, t_line *lst);
+t_bool	fill_word(int *size, t_line *lst, char *line, int i);
 t_bool	handle_pipe(char *line, int *i, int *size, t_line *lst);
 t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst);
 t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst);
-t_bool	split(char *line, int *i, int *size, t_line *lst);
-t_bool	get_size_line_words(char *line, t_line *lst);
 t_bool	fill_line_lst(t_line *block_lst, char *line);
 
 #endif

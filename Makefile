@@ -23,7 +23,7 @@ $(NAME): $(OBJ)
 	$(CC) $(FLAG) $(OBJ) -lreadline -L $(LIB) -lft -o $(NAME)
 
 obj/%.o: src/%.c | object
-	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -lreadline -c $< -o $@
+	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -c $< -o $@
 
 object:
 	@mkdir -p obj

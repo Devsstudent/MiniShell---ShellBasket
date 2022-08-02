@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/01 16:58:46 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/02 14:05:24 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -47,6 +47,8 @@ void	attribute_token(t_line *line, char *block_content, t_block *block)
 			block->token = CMD;
 		if (previous == RED_IN || previous == RED_OUT_TRUNC || previous == RED_OUT_APPEND)
 			block->token = FILES;
+		if (previous == DELIMITER)
+			block->token = CMD;
 		
 	}
 	//dans le premier parsing faudrait aussi separer sur les symbols :)
