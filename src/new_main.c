@@ -1,65 +1,143 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   new_main.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/29 16:30:06 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/07/29 18:30:15 by mbelrhaz         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-int	main(int ac, char **av, char **envp)
+int		size_till_next_char(char *word, char c, int *i)
 {
-	t_gc	*gc;
-	char	*test0 = ft_strdup("lol");
-	char	*test1 = ft_strdup("hoho");
-	char	*test2 = ft_strdup("haha");
-	char	**split = ft_split("super oui ca marche", ' ');
+	int	size;
 
-	(void)ac;
-	(void)av;
-	(void)envp;
+	size = 0;
+	while (word[*i] && word[*i] != c)
+	{ (*i)++; size++;
+	}
+	if ((size_t) ((*i) + 1) < ft_strlen(word))
+		(*i)++;
+	return (size);
+}
 
-	gc = NULL;
-	add_to_gc(SIMPLE, test0, &gc); //pipe is not a type, but a token, that was the problem (face palm)
-	printf("%p, %s\n", gc, (char *)gc->content);
-	add_to_gc(SIMPLE, test1, &gc);
+int	size_new_word_quote(char *word)
+{
+	int		size;
+	int		i;
 
-	printf("\nadding another simple\n\n");
-
-	printf("%p, %s\n", gc, (char *)gc->content);
-	printf("%p, %s\n", gc, (char *)gc->next->content);
-	add_to_gc(SIMPLE, test2, &gc);
-
-	printf("\nadding another simple\n\n");
-
-	printf("%p, %s\n", gc, (char *)gc->content);
-	printf("%p, %s\n", gc, (char *)gc->next->content);
-	printf("%p, %s\n", gc, (char *)gc->next->next->content);
-	add_to_gc(DOUBLE, split, &gc);
-
-	printf("\nadding a double\n\n");
-
-	gc_free_node_addr(test0, &gc);
-	printf("\ndeleting the first one\n\n");
-	printf("%p, %s\n", gc, (char *)gc->content);
-	printf("%p, %s\n", gc, (char *)gc->next->content);
-
-	gc_free_node_addr(test2, &gc);
-	printf("\ndeleting the second one\n\n");
-	printf("%p, %s\n", gc, (char *)gc->content);
-	printf("%p\n", gc->next);
-	printf("%p\n", gc->next->next);
-
-	printf("\ndeleting everything\n\n");
-	free_gc(&gc);
-	/*
-	while (ac)
+	size = 0;
+	i = 0;
+	while (i < ft_strlen(word))
 	{
-		//Faire une copie de envp pour avoir notre propre environnement
-	}*/
+		if (word[i] == '\'')
+		{
+			i++;
+			size += size_till_next_char(word, '\'', &i);
+		}
+		else if (word[i] == '\"')
+		{
+			i++;
+			size += size_till_next_char(word, '\"', &i);
+		}
+		else
+		{
+			size++;
+			i++;
+		}
+	} ft_printf("size : %i\n", size);
+	return (size);
+}
+
+void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
+{
+	char	c;
+
+	if (*i > 0)
+		c = word[*i - 1];
+	while (*i < ft_strlen(word) && word[*i] != c)
+	{
+		new_word[*j] = word[*i];
+	//	ft_printf("%i %i %c\n", *i, *j, word[*i]);
+		(*j)++;
+		(*i)++;
+	}
+	if ((size_t) (*i) + 1 < ft_strlen(word))
+		(*i)++;
+}
+
+void	str_quote_parse(char *word, char *new_word)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < ft_strlen(word))
+	{
+		if (word[i] == '\'')
+		{
+			i++;
+			str_cp_till_quote(word, new_word, &i, &j);
+		}
+		else if (word[i] == '\"')
+		{
+			i++;
+			str_cp_till_quote(word, new_word, &i, &j);
+		}
+		else
+		{
+			new_word[j] = word[i];
+			j++;
+			i++;
+		}
+	}
+	new_word[j] = 0;
+	ft_printf("%s", new_word);
+}
+
+t_bool	handle_quote(char *word)
+{
+	char	*new_word;
+	int		size;
+
+	size = size_new_word_quote(word);
+	new_word = malloc(sizeof(*new_word) * size + 1);
+	if (!new_word)
+		return (FALSE);
+	str_quote_parse(word, new_word);
+	//block->word = new_word
+	
+	return (TRUE);
+}
+
+t_bool	check_lines_quotes(char *line)
+{
+	int		i;
+	t_quote	quote;
+
+	i = 0;
+	quote = NO;
+	while (line[i] != 0)
+	{
+		if (line[i] == '\"' && quote == DOUBLE_QUOTE)
+			quote = NO;
+		else if (line[i] == '\'' && quote == SINGLE)
+			quote = NO;
+		else if (line[i] == '\'' && quote == NO)
+			quote = SINGLE;
+		else if (line[i] == '\"' && quote == NO)
+			quote = DOUBLE_QUOTE;
+		i++;
+	}
+	if (quote != NO)
+		return (FALSE);
+	return (TRUE);
+}
+
+int	main(void)
+{
+	char	*line;
+	int		size;
+
+	size = 0;
+	line = readline("word :");
+	handle_quote(line);
+	if (!check_lines_quotes(line))
+		ft_printf("NEED MORE QUOTE");
+	else
+		ft_printf("SYNTAX OK");
+	
 }

@@ -1,8 +1,19 @@
-FLAG = -Wall -g -Wextra -MMD
+FLAG = -Wall -g -Wextra -MMD #-Werror
 LIB = ./libft
 HEAD = ./includes
-OBJ = $(addprefix obj/, main.o gc_collector.o copy_env.o lst_utils.o)
-D_LST = $(addprefix obj/, main.d gc_collector.d copy_env.d lst_utils.d null.d)
+OBJ = $(addprefix obj/, new_main_2.o \
+			gc_collector.o \
+			copy_env.o \
+			lst_utils.o \
+			lexing_wait.o \
+			line_lst_utils.o)
+D_LST = $(addprefix obj/, new_main_2.d \
+			gc_collector.d \
+			copy_env.d \
+			lst_utils.d \
+			lexing_wait.d \
+			line_lst_utils.d \
+			null.d)
 NAME = minishell
 
 all : $(NAME)
@@ -12,7 +23,7 @@ $(NAME): $(OBJ)
 	$(CC) $(FLAG) $(OBJ) -lreadline -L $(LIB) -lft -o $(NAME)
 
 obj/%.o: src/%.c | object
-	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -lreadline -c $< -o $@
+	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -c $< -o $@
 
 object:
 	@mkdir -p obj
