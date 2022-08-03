@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/02 16:25:39 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/03 15:31:59 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,7 +24,7 @@ t_bool	tokenisation(t_line *line)
 	buff = line->head;
 	while (buff != NULL)
 	{
-		attribute_token(buff->word, buff);
+		attribute_token(buff);
 		if (!check_symbol(buff))
 			return (FALSE);
 		//if (!handle_quote(buff))
@@ -83,7 +83,7 @@ t_token	get_next_token(t_block *next_block)
 	if (!next_block)
 		return (UNDEF);
 	else
-		attribute_token(next_block->word, next_block);
+		attribute_token(next_block);
 	return (next_block->token);
 }
 
@@ -94,7 +94,7 @@ t_token	get_previous_token(t_block *previous_block)
 	return (UNDEF);
 }
 
-void	attribute_token(char *block_content, t_block *block)
+void	attribute_token(t_block *block)
 {
 	t_bool	already_attributed;
 	t_token	previous;
@@ -105,7 +105,7 @@ void	attribute_token(char *block_content, t_block *block)
 		previous = get_previous_token(block->prev);
 		if (previous == UNDEF)
 			block->token = CMD;
-		if (previous == CMD)
+		if (previous == CMD || previous == ARG || previous == FILES)
 			block->token = ARG;
 		if (previous == HERE_DOC)
 			block->token = DELIMITER;

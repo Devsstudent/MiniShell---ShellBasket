@@ -5,6 +5,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <signal.h>
+# include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
@@ -125,7 +128,7 @@ t_bool check_HERE_DOC(t_token next);
 t_bool check_RED(t_token next);
 t_bool check_symbol(t_block *block);
 t_token	get_next_token(t_block *next_block);
-void	attribute_token(char *block_content, t_block *block);
+void	attribute_token(t_block *block);
 t_token	get_previous_token(t_block *block);
 t_bool	attribute_symbol(t_block *block);
 

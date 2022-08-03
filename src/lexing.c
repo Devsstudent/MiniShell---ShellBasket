@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexing.c                                           :+:      :+:    :+:   */
+/*   lexing_wait.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/01 19:14:24 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/02 15:50:18 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+#include "../includes/minishell.h"
 //Fill the line list; block by block
 //First check the line quotes
+// in not_in_quote, no need to take transfer the address of i
+// the value is enough
 
 static t_bool	check_lines_quotes(char *line)
 {
@@ -31,7 +32,7 @@ static t_bool	check_lines_quotes(char *line)
 		else if (line[i] == '\'' && quote == NO)
 			quote = SINGLE;
 		else if (line[i] == '\"' && quote == NO)
-			quote = DOUBLE;
+			quote = DOUBLE_QUOTE;
 		i++;
 	}
 	if (quote != NO)
@@ -39,86 +40,149 @@ static t_bool	check_lines_quotes(char *line)
 	return (TRUE);
 }
 
-static t_bool	not_in_quote(char *line, int *i)
+static t_bool	not_in_quote(char *line, int i)
 {
 	static t_quote	quote;
-	
-	if (line[*i] == '\"' && quote == DOUBLE_QUOTE)
+
+	if (line[i] == '\"' && quote == DOUBLE_QUOTE)
 		quote = NO;
-	else if (line[*i] == '\'' && quote == SINGLE)
+	else if (line[i] == '\'' && quote == SINGLE)
 		quote = NO;
-	else if (line[*i] == '\'' && quote == NO)
+	else if (line[i] == '\'' && quote == NO)
 		quote = SINGLE;
-	else if (line [*i] == '\"' && quote == NO)
-		quote = DOUBLE;
+	else if (line [i] == '\"' && quote == NO)
+		quote = DOUBLE_QUOTE;
 	if (quote == NO)
 		return (TRUE);
 	return (FALSE);
 }
 
-static int	*int_dup(int size)
+t_bool	fill_word(int *size, t_line *lst, char *line, int i)
 {
-	int	*dup;
+	char	*word;
+	t_block	*buff;
+	int		j;
 
-	dup = (int *) malloc(sizeof(*dup));
-	if (!dup)
-		return (NULL);
-	*dup = size;
-	return (dup);
+	j = *size - 1;
+	if (*size == 0)
+		return (TRUE);
+	word = malloc(sizeof(*word) * (*size + 1));
+	if (!word)
+		return (FALSE);
+	while (j >= 0)
+		word[j--] = line[i--];
+	word[*size] = '\0';
+	buff = new_block(word);
+	if (!buff)
+		return (FALSE);
+	line_lst_addback(lst, buff);
+	*size = 0;
+	return (TRUE);
 }
 
-t_bool	get_size_word(int *size, t_list **len_lst, char c)
+t_bool	handle_pipe(char *line, int *i, int *size, t_line *lst)
 {
-	int		*cp_size;
-	int		tmp;
-	t_list	*new;
-
-	cp_size = int_dup(*size);
-	new = ft_lstnew(cp_size);
-	if (!new)
+	if (*i >= 1 && line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
+			|| line[*i - 1] == '\''))
+		if (!fill_word(size, lst, line, *i - 1))
+			return (FALSE);
+	(*size) += 1;
+	if (!fill_word(size, lst, line, *i))
 		return (FALSE);
-	ft_lstadd_back(len_lst, new);
-	*size = 0;
-	if (c == '|' || c == '>' || c == '<')
-	{ 
-		tmp = 1;
-		if (!get_size_word(&tmp, len_lst, 0))
+	return (TRUE);
+}
+
+t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst)
+{
+	if (line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
+			|| line[*i - 1] == '\''))
+		if (!fill_word(size, lst, line, *i - 1))
+			return (FALSE);
+	if (line[*i + 1] && line[*i + 1] == '>')
+	{
+		(*i)++;
+		(*size) += 2;
+		if (!fill_word(size, lst, line, *i))
 			return (FALSE);
 	}
-	if (c == 'H' || c == 'R')
+	else
 	{
-		tmp = 2;
-		if (!get_size_word(&tmp, len_lst, 0))
+		(*size) += 1;
+		if (!fill_word(size, lst, line, *i))
 			return (FALSE);
 	}
 	return (TRUE);
 }
 
-t_bool	split(char *line, int *i, int *size, t_list **len_lst)
+t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst)
 {
-	if (line[*i] == ' ' || line[*i] == '|')
-		if (!get_size_word(size, len_lst, line[*i]))
+	if (line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
+			|| line[*i - 1] == '\''))
+		if (!fill_word(size, lst, line, *i - 1))
 			return (FALSE);
-	if (line[*i] == '>' || line[*i] == '<')
+	if (line[*i + 1] && line[*i + 1] == '<')
 	{
-		if (line[*i + 1] == line[*i])
-		{
-			(*i)++;
-			if (line[*i] == '<')
-				if (!get_size_word(size, len_lst, 'H'))
-					return (FALSE);
-			if (line[*i] == '>')
-				if (!get_size_word(size, len_lst, 'R'))
-					return (FALSE);
-		}
-		else 
-			if (!get_size_word(size, len_lst, line[*i]))
-				return (FALSE);
+		(*i)++;
+		(*size) += 2;
+		if (!fill_word(size, lst, line, *i))
+			return (FALSE);
 	}
+	else
+	{
+		(*size) += 1;
+		if (!fill_word(size, lst, line, *i))
+			return (FALSE);
+	}
+	return (TRUE);
+}
+
+t_bool	analyse_symbol(char *line, int *i, int *size, t_line *lst)
+{
+	if (line[*i] == '|')
+	{
+		if (!handle_pipe(line, i, size, lst))
+			return (FALSE);
+	}
+	else if (line[*i] == '>')
+	{
+		if (!handle_red_o(line, i, size, lst))
+			return (FALSE);
+	}
+	else if (line[*i] == '<')
+	{
+		if (!handle_red_i(line, i, size, lst))
+			return (FALSE);
+	}
+	else
+		(*size)++;
 	return(TRUE);
 }
 
-t_bool	get_size_line_words(char *line, t_list **len_lst)
+static t_bool	handle_space(char *line, int *i, int *size, t_line *lst)
+{
+	 if (*i > 0 && (ft_isalnum(line[*i - 1])
+			|| line[*i - 1] == '\"' || line[*i - 1] == '\''))
+	{
+		if (!fill_word(size, lst, line, *i - 1))
+			return (FALSE);
+	}
+	*size = 0;
+	return (TRUE);
+}
+
+t_bool	analyse_word(char *line, int *i, int *size_word, t_line *lst)
+{
+	if (line[*i] == ' ')
+	{
+		if (!handle_space(line, i, size_word, lst))
+			return (FALSE);
+	}
+	else if (!analyse_symbol(line, i, size_word, lst))
+		return (FALSE);
+	return (TRUE);
+}
+
+t_bool	handle_line(char *line, t_line *lst)
 {
 	int		i;
 	int		size_word;
@@ -128,31 +192,19 @@ t_bool	get_size_line_words(char *line, t_list **len_lst)
 	size_word = 0;
 	while (line[i] != 0)
 	{
-		not_quote = not_in_quote(line, &i);
-		if (not_quote && (line[i] == '\'' || line[i] == '\"'))
-		{
+		not_quote = not_in_quote(line, i);
+		if (!not_quote)
 			size_word++;
-			i++;
+		if (not_quote && (line[i] == '\'' || line[i] == '\"')
+			&& size_word++ && i++)
 			continue ;
-		}
 		if (not_quote && line[i] != 0)
-		{
-			if (line[i] == ' ' && i - 1 >= 0 && line[i - 1] == ' ')
-			{
-				i++;
-				continue;
-			}
-			printf("size_word = %i\n", size_word);
-			if (!split(line, &i, &size_word, len_lst))
+			if (!analyse_word(line, &i, &size_word, lst))
 				return (FALSE);
-		}
 		if (line[i] != 0)
-		{
-			size_word++;
-			i++;
-		}
+		       	i++;
 	}
-	if (!get_size_word(&size_word, len_lst, 0))
+	if (!fill_word(&size_word, lst, line, i - 1))
 		return (FALSE);
 	return (TRUE);
 }
@@ -160,21 +212,18 @@ t_bool	get_size_line_words(char *line, t_list **len_lst)
 t_bool	fill_line_lst(t_line *block_lst, char *line)
 {
 	int		i;
-	t_list	*len_lst;
+	t_block		*buff;
 
 	i = 0;
-	len_lst = NULL;
 	if (!check_lines_quotes(line))
 		return (FALSE);
-	get_size_line_words(line, &len_lst);
-	t_list	*buff;
-
-	buff = len_lst;
-	while (buff != NULL)
+	handle_line(line, block_lst);
+	buff = block_lst->head;
+	while (buff)
 	{
-		ft_printf("ici : %i\n", *(int *)(buff->content));
+		ft_printf("|%s|\n", buff->word);
 		buff = buff->next;
 	}
-	//If quote on compte rien / sinon 
+	//If quote on compte rien / sinon
 	return (TRUE);
 }

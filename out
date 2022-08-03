@@ -1,0 +1,13 @@
+.
+..
+.git
+includes
+libft
+main.c
+Makefile
+minishell
+new_lexer.c
+new_main.c
+obj
+out
+src
