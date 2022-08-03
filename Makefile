@@ -8,7 +8,8 @@ OBJ = $(addprefix obj/, main.o \
 			lexing.o \
 			line_lst_utils.o \
 			free_exit.o \
-			singleton.o)
+			singleton.o \
+			tokenization.o )
 D_LST = $(addprefix obj/, main.d \
 			gc_collector.d \
 			copy_env.d \
@@ -17,6 +18,7 @@ D_LST = $(addprefix obj/, main.d \
 			line_lst_utils.d \
 			free_exit.d \
 			singleton.d \
+			tokenization.d \
 			null.d)
 NAME = minishell
 
