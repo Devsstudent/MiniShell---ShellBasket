@@ -121,12 +121,26 @@ t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst);
 t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst);
 t_bool	fill_line_lst(t_line *block_lst, char *line);
 
+/********************************************/
+/*             remove_quotes                */
+/********************************************/
 
-t_bool	tokenisation(t_line *line);
+void	remove_useless_quote(t_block *word);
+void	str_quote_parse(char *word, char *new_word);
+void	str_cp_till_quote(char *word, char *new_word, int *i, int *j);
+int	size_new_word_quote(char *word);
+int		size_till_next_char(char *word, char c, int *i);
+
+/********************************************/
+/*              tokenization                */
+/********************************************/
+
+//check_symbol
 t_bool check_pipe(t_token next, t_token previous);
-t_bool check_here_doc(t_token next);
-t_bool check_redir(t_token next);
 t_bool check_symbol(t_block *block);
+
+//tokenization
+t_bool	tokenisation(t_line *line);
 t_token	get_next_token(t_block *next_block);
 void	attribute_token(t_block *block);
 t_token	get_previous_token(t_block *block);

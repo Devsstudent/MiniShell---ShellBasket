@@ -14,5 +14,6 @@ int	main(void)
 			ft_printf("malloc error");
 		if (!tokenisation(&block_lst))
 			ft_printf("syntax error");
+		
 	}
 }

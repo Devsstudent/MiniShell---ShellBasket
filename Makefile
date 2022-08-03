@@ -1,7 +1,7 @@
 FLAG = -Wall -g -Wextra -MMD -Werror
 LIB = ./libft
 HEAD = ./includes
-OBJ = $(addprefix obj/, main.o \
+OBJ = $(addprefix obj/, new_main_2.o \
 			garbage_collector.o \
 			copy_env.o \
 			lst_utils.o \
