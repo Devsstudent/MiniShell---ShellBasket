@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 16:05:23 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 18:17:15 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -153,7 +153,7 @@ t_bool	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 	}
 	else
 		(*size)++;
-	return(TRUE);
+	return (TRUE);
 }
 
 static t_bool	handle_space(char *line, int *i, int *size, t_line *lst)
