@@ -118,4 +118,15 @@ t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst);
 t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst);
 t_bool	fill_line_lst(t_line *block_lst, char *line);
 
+
+t_bool	tokenisation(t_line *line);
+t_bool check_pipe(t_token next, t_token previous);
+t_bool check_HERE_DOC(t_token next);
+t_bool check_RED(t_token next);
+t_bool check_symbol(t_block *block);
+t_token	get_next_token(t_block *next_block);
+void	attribute_token(char *block_content, t_block *block);
+t_token	get_previous_token(t_block *block);
+t_bool	attribute_symbol(t_block *block);
+
 #endif

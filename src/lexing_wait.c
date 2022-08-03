@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_wait.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/01 22:28:08 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 15:51:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -87,7 +86,7 @@ t_bool	fill_word(int *size, t_line *lst, char *line, int i)
 
 t_bool	handle_pipe(char *line, int *i, int *size, t_line *lst)
 {
-	if (line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
+	if (*i >= 1 && line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
 			|| line[*i - 1] == '\''))
 		if (!fill_word(size, lst, line, *i - 1))
 			return (FALSE);
