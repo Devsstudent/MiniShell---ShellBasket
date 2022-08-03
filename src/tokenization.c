@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 15:55:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 16:08:59 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,7 +24,7 @@ t_bool	tokenisation(t_line *line)
 	buff = line->head;
 	while (buff != NULL)
 	{
-		attribute_token(buff->word, buff);
+		attribute_token(buff);
 		if (!check_symbol(buff))
 			return (FALSE);
 		//if (!handle_quote(buff))
@@ -43,14 +43,14 @@ t_bool check_pipe(t_token next, t_token previous)
 	return (TRUE);
 }
 
-t_bool check_HERE_DOC(t_token next)
+t_bool check_here_doc(t_token next)
 {
 	if (next != DELIMITER)
 		return (FALSE);
 	return (TRUE);
 }
 
-t_bool check_RED(t_token next)
+t_bool check_redir(t_token next)
 {
 	if (next != FILES)
 		return (FALSE);
@@ -71,10 +71,10 @@ t_bool check_symbol(t_block *block)
 		return (check_pipe(next_token, previous_token));
 	}
 	else if (token == HERE_DOC)
-		return (check_HERE_DOC(next_token));
+		return (check_here_doc(next_token));
 	else if (token == RED_IN || token == RED_OUT_APPEND 
 		|| token == RED_OUT_TRUNC)
-		return (check_RED(next_token));
+		return (check_redir(next_token));
 	return (TRUE);
 }
 
@@ -83,7 +83,7 @@ t_token	get_next_token(t_block *next_block)
 	if (!next_block)
 		return (UNDEF);
 	else
-		attribute_token(next_block->word, next_block);
+		attribute_token(next_block);
 	return (next_block->token);
 }
 
@@ -94,13 +94,13 @@ t_token	get_previous_token(t_block *previous_block)
 	return (UNDEF);
 }
 
-void	attribute_token(char *block_content, t_block *block)
+void	attribute_token(t_block *block)
 {
-	t_bool	already_attributed;
+	t_bool	is_symbol;
 	t_token	previous;
 
-	already_attributed = attribute_symbol(block);
-	if (!already_attributed)
+	is_symbol = attribute_symbol(block);
+	if (!is_symbol)
 	{
 		previous = get_previous_token(block->prev);
 		if (previous == UNDEF)
@@ -111,10 +111,9 @@ void	attribute_token(char *block_content, t_block *block)
 			block->token = DELIMITER;
 		if (previous == PIPE)
 			block->token = CMD;
-		if (previous == RED_IN || previous == RED_OUT_TRUNC || previous == RED_OUT_APPEND)
-		{
+		if (previous == RED_IN || previous == RED_OUT_TRUNC 
+			|| previous == RED_OUT_APPEND)
 			block->token = FILES;
-		}
 		if (previous == DELIMITER)
 			block->token = CMD;
 		
@@ -149,33 +148,21 @@ t_bool	check_dollar_in_block(t_block *block)
 	}
 }
 */
+
 t_bool	attribute_symbol(t_block *block)
 {
 	if (ft_strncmp(block->word, "<", 2) == 0)
-	{
 		block->token = RED_IN;
-		return (TRUE);
-	}
 	else if (ft_strncmp(block->word, ">", 2) == 0)
-	{
 		block->token = RED_OUT_TRUNC;
-		return (TRUE);
-	}
 	else if (ft_strncmp(block->word, ">>", 3) == 0)
-	{
 		block->token = RED_OUT_APPEND;
-		return (TRUE);
-	}
 	else if (ft_strncmp(block->word, "<<", 3) == 0)
-	{
 		block->token = HERE_DOC;
-		return (TRUE);
-	}
 	else if (ft_strncmp(block->word, "|", 2) == 0)
-	{
 		block->token = PIPE;
+	if (block->token != UNDEF)
 		return (TRUE);
-	}
 	return (FALSE);
 }
 

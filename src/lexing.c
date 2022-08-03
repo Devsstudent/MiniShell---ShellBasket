@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexing_wait.c                                      :+:      :+:    :+:   */
+/*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 15:54:27 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 16:05:23 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 //Fill the line list; block by block
 //First check the line quotes
-
-#include "../includes/minishell.h"
-//Fill the line list; block by block
-//First check the line quotes
-// in not_in_quote, no need to take transfer the address of i
-// the value is enough
 
 static t_bool	check_lines_quotes(char *line)
 {
@@ -86,8 +80,8 @@ t_bool	fill_word(int *size, t_line *lst, char *line, int i)
 
 t_bool	handle_pipe(char *line, int *i, int *size, t_line *lst)
 {
-	if (*i >= 1 && line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
-			|| line[*i - 1] == '\''))
+	if (*i >= 1 && line[*i - 1] && (ft_isalnum(line[*i - 1]) 
+			|| line[*i - 1] == '\"' || line[*i - 1] == '\''))
 		if (!fill_word(size, lst, line, *i - 1))
 			return (FALSE);
 	(*size) += 1;

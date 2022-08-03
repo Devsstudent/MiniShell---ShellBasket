@@ -1,8 +1,8 @@
-FLAG = -Wall -g -Wextra -MMD #-Werror
+FLAG = -Wall -g -Wextra -MMD -Werror
 LIB = ./libft
 HEAD = ./includes
 OBJ = $(addprefix obj/, main.o \
-			gc_collector.o \
+			garbage_collector.o \
 			copy_env.o \
 			lst_utils.o \
 			lexing.o \
@@ -11,7 +11,7 @@ OBJ = $(addprefix obj/, main.o \
 			singleton.o \
 			tokenization.o )
 D_LST = $(addprefix obj/, main.d \
-			gc_collector.d \
+			garbage_collector.d \
 			copy_env.d \
 			lst_utils.d \
 			lexing.d \
