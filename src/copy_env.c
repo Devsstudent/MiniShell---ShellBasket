@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 14:19:25 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/30 18:26:33 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 14:27:19 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void	init_env(t_dict *env)
 	env->last = NULL;
 }
 
-t_bool	double_char_to_lst(char **d_char, t_dict *env, t_gc **gc)
+t_bool	double_char_to_lst(char **d_char, t_dict *env)
 {
 	t_elem	*new;
 
@@ -92,6 +92,6 @@ t_bool	double_char_to_lst(char **d_char, t_dict *env, t_gc **gc)
 		dict_addback(env, new);
 		d_char++;
 	}
-	add_to_gc(DICT, env, gc);
+	add_to_gc(DICT, env, get_gc());
 	return (TRUE);
 }

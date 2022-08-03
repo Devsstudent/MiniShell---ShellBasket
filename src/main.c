@@ -1,30 +1,28 @@
 #include "minishell.h"
 
-t_bool	handle_line(char **line, t_gc **gc)
+t_bool	ms_line(char **line)
 {
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
 		return (FALSE);
 	add_history(*line);
-	add_to_gc(SIMPLE, *line, gc);
+	add_to_gc(SIMPLE, *line, get_gc());
 	return (TRUE);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
-	t_gc	*gc;
 	t_dict	env;
 
 	if (av[1])
 		return (1);
-	gc = NULL;
-	double_char_to_lst(envp, &env, &gc);
+	double_char_to_lst(envp, &env);
 	while (ac)
 	{
-		if (!handle_line(&line, &gc))
+		if (!ms_line(&line))
 		{
-			free_gc(&gc);
+			free_exit();
 			return (0);
 		}
 	}

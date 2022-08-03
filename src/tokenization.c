@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/02 14:05:24 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 15:42:48 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,8 +20,7 @@ t_bool	tokenisation(t_line *line, t_gc *gc)
 	{
 		attribute_token()
 		if (check_symbol())
-			return (FALSE);
-		if (!handle_quote(buff))
+			return (FALSE); if (!handle_quote(buff))
 			return (FALSE);
 		buff = buff->next;
 	}
@@ -39,7 +38,7 @@ void	attribute_token(t_line *line, char *block_content, t_block *block)
 		previous = get_previous_token(block);
 		if (previous == UNDEF)
 			block->token = CMD;
-		if (previous == CMD)
+		if (previous == CMD || previous == ARG || previous == FILES)
 			block->token = ARG;
 		if (previous == HERE_DOC)
 			block->token = DELIMITER;
