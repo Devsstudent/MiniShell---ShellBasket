@@ -13,54 +13,54 @@ void	signal_handler(int signum, siginfo_t *info, void *ucontext)
 	}
 }
 
-t_bool	read_line(char **line, t_gc **gc)
+t_bool	read_line(char **line)
 {	
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
 		return (FALSE);
+	listen_to_sigs();
 	add_history(*line);
-	add_to_gc(SIMPLE, *line, gc);
+	add_to_gc(SIMPLE, *line, get_gc());
 	return (TRUE);
 }
 
-int	main(int ac, char **av, char **envp)
+void	listen_to_sigs(void)
 {
-	t_dict			env;
-	t_gc			*gc;
-
-	//signal handling
 	struct sigaction	action;
 
 	action.sa_sigaction = signal_handler;
 	sigemptyset(&action.sa_mask);
 	action.sa_flags = 0;
-	//ends here
-	
+	sigaction(SIGQUIT, &action, NULL);
+	sigaction(SIGINT, &action, NULL);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_dict			env;
+	t_line			block_lst;
+	char			*line;
+
 	if (av[1] && ac)
 		return (1);
-	gc = NULL;
-	double_char_to_lst(envp, &env, &gc);
+	double_char_to_lst(envp, &env);
 	while (1)
 	{
-		t_line	block_lst;
-
 		block_lst.head = NULL;
-		//signal handling
-		sigaction(SIGQUIT, &action, NULL);
-		sigaction(SIGINT, &action, NULL);
-		//ends here
-		char *line;
-		if (!read_line(&line, &gc))
-		{
-			free_gc(&gc);
-			return (1);
-		}
+		if (!read_line(&line))
+			free_exit();
 		if (!fill_line_lst(&block_lst, line))
 			ft_printf("malloc error\n");
-		if (!tokenisation(&block_lst))
-			ft_printf("syntax error\n");
+		tokenisation(&block_lst);
+		t_block	*buff;
+		buff = block_lst.head;
+		while (buff)
+		{
+			ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
+			buff = buff->next;
+		}
 	}
-	return (0);
+	free_exit();
 }
 
 //testing the dict env

@@ -13,16 +13,16 @@
 # include "libft.h"
 
 typedef enum	e_token {
-	UNDEF,
-	RED_IN,
-	RED_OUT_TRUNC,
-	RED_OUT_APPEND,
-	HERE_DOC,
-	PIPE,
-	CMD,
-	ARG,
-	FILES,
-	DELIMITER
+	UNDEF,//0
+	RED_IN,//1
+	RED_OUT_TRUNC,//2
+	RED_OUT_APPEND,//3
+	HERE_DOC,//4
+	PIPE,//5
+	CMD,//6
+	ARG,//7
+	FILES,//8
+	DELIMITER//9
 }	t_token;
 
 typedef enum	e_quote{
@@ -80,6 +80,7 @@ typedef struct	s_lexeur {
 }			t_lexeur;
 
 void	free_exit(void);
+void	listen_to_sigs(void);
 
 /********************************************/
 /*           garbage collector              */
@@ -130,9 +131,9 @@ t_bool	fill_line_lst(t_line *block_lst, char *line);
 
 void	remove_useless_quote(t_block *word);
 void	str_quote_parse(char *word, char *new_word);
-void	str_cp_till_quote(char *word, char *new_word, int *i, int *j);
-int	size_new_word_quote(char *word);
-int		size_till_next_char(char *word, char c, int *i);
+void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j);
+size_t	size_new_word_quote(char *word);
+size_t	size_till_next_char(char *word, char c, size_t *i);
 
 /********************************************/
 /*              tokenization                */
@@ -143,7 +144,7 @@ t_bool check_pipe(t_token next, t_token previous);
 t_bool check_symbol(t_block *block);
 
 //tokenization
-t_bool	tokenisation(t_line *line);
+void	tokenisation(t_line *line);
 t_token	get_next_token(t_block *next_block);
 void	attribute_token(t_block *block);
 t_token	get_previous_token(t_block *block);

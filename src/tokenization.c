@@ -6,12 +6,12 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 18:24:02 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 19:50:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-t_bool	tokenisation(t_line *line)
+void	tokenisation(t_line *line)
 {
 	t_block	*buff;
 
@@ -26,10 +26,15 @@ t_bool	tokenisation(t_line *line)
 	{
 		attribute_token(buff);
 		if (!check_symbol(buff))
-			return (FALSE);
+		{
+			if (buff->next)
+				ft_printf("syntax error: unexpected token near field `%s`", buff->next->word);
+			else
+				ft_printf("syntax error: unexpected token near field `newline`");
+			free_exit();
+		}
 		buff = buff->next;
 	}
-	return (TRUE);
 }
 
 t_token	get_next_token(t_block *next_block)

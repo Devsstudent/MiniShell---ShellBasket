@@ -6,14 +6,14 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:43:59 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 18:02:04 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 18:30:35 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-int		size_till_next_char(char *word, char c, int *i)
+size_t		size_till_next_char(char *word, char c, size_t *i)
 {
-	int	size;
+	size_t	size;
 
 	size = 0;
 	while (word[*i] && word[*i] != c)
@@ -26,14 +26,14 @@ int		size_till_next_char(char *word, char c, int *i)
 	return (size);
 }
 
-int	size_new_word_quote(char *word)
+size_t	size_new_word_quote(char *word)
 {
-	int		size;
-	int		i;
+	size_t		size;
+	size_t		i;
 
 	size = 0;
 	i = 0;
-	while (i < ft_strlen(word))
+	while ((size_t) i < ft_strlen(word))
 	{
 		if (word[i] == '\'')
 		{
@@ -54,7 +54,7 @@ int	size_new_word_quote(char *word)
 	return (size);
 }
 
-void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
+void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j)
 {
 	char	c;
 
@@ -72,8 +72,8 @@ void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
 
 void	str_quote_parse(char *word, char *new_word)
 {
-	int	i;
-	int	j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -99,16 +99,16 @@ void	str_quote_parse(char *word, char *new_word)
 	new_word[j] = 0;
 }
 
-void	remove_useless_quote(t_block *word)
+void	remove_useless_quote(t_block *block)
 {
 	char	*new_word;
-	int		size;
+	size_t		size;
 
-	size = size_new_word_quote(word);
+	size = size_new_word_quote(block->word);
 	new_word = malloc(sizeof(*new_word) * size + 1);
 	if (!new_word)
 		free_exit();
-	str_quote_parse(word, new_word);
+	str_quote_parse(block->word, new_word);
 	add_to_gc(SIMPLE, block->word, get_gc());
 	block->word = new_word;
 }

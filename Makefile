@@ -9,7 +9,9 @@ OBJ = $(addprefix obj/, new_main_2.o \
 			line_lst_utils.o \
 			free_exit.o \
 			singleton.o \
-			tokenization.o )
+			check_symbol.o \
+			tokenization.o \
+			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, new_main_2.d \
 			garbage_collector.d \
 			copy_env.d \
@@ -18,7 +20,9 @@ D_LST = $(addprefix obj/, new_main_2.d \
 			line_lst_utils.d \
 			free_exit.d \
 			singleton.d \
+			check_symbol.d \
 			tokenization.d \
+			remove_quote_before_exec.d \
 			null.d)
 NAME = minishell
 

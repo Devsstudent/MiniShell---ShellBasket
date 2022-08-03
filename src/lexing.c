@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 18:17:15 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/03 18:45:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -220,7 +220,7 @@ t_bool	fill_line_lst(t_line *block_lst, char *line)
 	buff = block_lst->head;
 	while (buff)
 	{
-		ft_printf("|%s|\n", buff->word);
+		//ft_printf("|%s|\n", buff->word);
 		buff = buff->next;
 	}
 	//If quote on compte rien / sinon
