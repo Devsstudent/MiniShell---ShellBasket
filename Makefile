@@ -10,7 +10,7 @@ OBJ = $(addprefix obj/, new_main_2.o \
 			free_exit.o \
 			singleton.o \
 			tokenization.o )
-D_LST = $(addprefix obj/, main.d \
+D_LST = $(addprefix obj/, new_main_2.d \
 			garbage_collector.d \
 			copy_env.d \
 			lst_utils.d \
