@@ -6,12 +6,12 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 19:50:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/03 20:28:20 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	tokenisation(t_line *line)
+void	tokenization(t_line *line)
 {
 	t_block	*buff;
 
@@ -63,19 +63,18 @@ void	attribute_token(t_block *block)
 	{
 		previous = get_previous_token(block->prev);
 		if (previous == UNDEF)
-			block->token = CMD;
-		if (previous == CMD || previous == ARG || previous == FILES)
-			block->token = ARG;
+			block->token = CMD_ARG;
+		if (previous == CMD_ARG || previous == FILES)
+			block->token = CMD_ARG;
 		if (previous == HERE_DOC)
 			block->token = DELIMITER;
 		if (previous == PIPE)
-			block->token = CMD;
+			block->token = CMD_ARG;
 		if (previous == RED_IN || previous == RED_OUT_TRUNC 
 			|| previous == RED_OUT_APPEND)
 			block->token = FILES;
 		if (previous == DELIMITER)
-			block->token = CMD;
-		
+			block->token = CMD_ARG;
 	}
 }
 

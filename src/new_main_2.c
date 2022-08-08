@@ -1,9 +1,7 @@
 #include "minishell.h"
 
-void	signal_handler(int signum, siginfo_t *info, void *ucontext)
+void	signal_handler(int signum)
 {
-	(void)info;
-	(void)ucontext;
 	if (signum == SIGINT)
 	{
 		write(0, "\n", 1);
@@ -18,7 +16,6 @@ t_bool	read_line(char **line)
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
 		return (FALSE);
-	listen_to_sigs();
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
 	return (TRUE);
@@ -26,13 +23,17 @@ t_bool	read_line(char **line)
 
 void	listen_to_sigs(void)
 {
-	struct sigaction	action;
-
-	action.sa_sigaction = signal_handler;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = 0;
-	sigaction(SIGQUIT, &action, NULL);
-	sigaction(SIGINT, &action, NULL);
+	struct sigaction	action_quit;
+	struct sigaction	action_int;
+	
+	sigemptyset(&action_quit.sa_mask);
+	sigemptyset(&action_int.sa_mask);
+	action_int.sa_handler = signal_handler;
+	action_quit.sa_handler = SIG_IGN;
+	action_quit.sa_flags = 0;
+	action_int.sa_flags = 0;
+	sigaction(SIGQUIT, &action_quit, NULL);
+	sigaction(SIGINT, &action_int, NULL);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -40,7 +41,8 @@ int	main(int ac, char **av, char **envp)
 	t_dict			env;
 	t_line			block_lst;
 	char			*line;
-
+	
+	listen_to_sigs();
 	if (av[1] && ac)
 		return (1);
 	double_char_to_lst(envp, &env);
@@ -51,7 +53,7 @@ int	main(int ac, char **av, char **envp)
 			free_exit();
 		if (!fill_line_lst(&block_lst, line))
 			ft_printf("malloc error\n");
-		tokenisation(&block_lst);
+		tokenization(&block_lst);
 		t_block	*buff;
 		buff = block_lst.head;
 		while (buff)
@@ -87,7 +89,6 @@ int	main(int ac, char **av, char **envp)
 	{
 		printf("%s=%s\n", buff->key, buff->value);
 		buff = buff->next;
->>>>>>> 9d42c746574d6454e85bfb0c4d2885897d5fb292
 	}
 	free(arg);
 	dict_clear(&env);
