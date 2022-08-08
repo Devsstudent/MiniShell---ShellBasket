@@ -1,15 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   new_main_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/08 19:30:02 by mbelrhaz          #+#    #+#             */
+/*   Updated: 2022/08/08 19:30:29 by mbelrhaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
-
-void	signal_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		write(0, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 1);
-		rl_redisplay();
-	}
-}
 
 t_bool	read_line(char **line)
 {	
@@ -19,21 +19,6 @@ t_bool	read_line(char **line)
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
 	return (TRUE);
-}
-
-void	listen_to_sigs(void)
-{
-	struct sigaction	action_quit;
-	struct sigaction	action_int;
-	
-	sigemptyset(&action_quit.sa_mask);
-	sigemptyset(&action_int.sa_mask);
-	action_int.sa_handler = signal_handler;
-	action_quit.sa_handler = SIG_IGN;
-	action_quit.sa_flags = 0;
-	action_int.sa_flags = 0;
-	sigaction(SIGQUIT, &action_quit, NULL);
-	sigaction(SIGINT, &action_int, NULL);
 }
 
 int	main(int ac, char **av, char **envp)

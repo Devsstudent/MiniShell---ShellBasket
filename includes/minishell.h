@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
+/*   Updated: 2022/08/08 19:24:33 by mbelrhaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -65,7 +77,6 @@ typedef struct s_line{
 	int		size;
 }			t_line;
 
-
 typedef struct	s_gc{
 	void			*content;
 	struct	s_gc	*next;
@@ -93,7 +104,7 @@ void	free_gc(t_gc **gc);
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
 
 /********************************************/
-/*                environement              */
+/*                environment               */
 /********************************************/
 
 char	**copy_env(char **env);
@@ -107,10 +118,10 @@ void	dict_clear(t_dict *dict);
 /********************************************/
 /*                parsing                   */
 /********************************************/
+
 t_block	*new_block(char *word);
 void	line_lst_addback(t_line *line, t_block *new);
 void	line_clear(t_line *line);
-
 
 /********************************************/
 /*                  lexing                  */
@@ -148,5 +159,12 @@ t_token	get_next_token(t_block *next_block);
 void	attribute_token(t_block *block);
 t_token	get_previous_token(t_block *block);
 t_bool	attribute_symbol(t_block *block);
+
+/********************************************/
+/*             signal handling              */
+/********************************************/
+
+void	sigint_handler(int signum);
+void	listen_to_sigs(void);
 
 #endif

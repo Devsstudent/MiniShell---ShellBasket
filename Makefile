@@ -11,6 +11,7 @@ OBJ = $(addprefix obj/, new_main_2.o \
 			singleton.o \
 			check_symbol.o \
 			tokenization.o \
+			signal_handling.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, new_main_2.d \
 			garbage_collector.d \
@@ -22,6 +23,7 @@ D_LST = $(addprefix obj/, new_main_2.d \
 			singleton.d \
 			check_symbol.d \
 			tokenization.d \
+			signal_handling.d \
 			remove_quote_before_exec.d \
 			null.d)
 NAME = minishell
