@@ -19,10 +19,9 @@ typedef enum	e_token {
 	RED_OUT_APPEND,//3
 	HERE_DOC,//4
 	PIPE,//5
-	CMD,//6
-	ARG,//7
-	FILES,//8
-	DELIMITER//9
+	CMD_ARG,//6
+	FILES,//7
+	DELIMITER//8
 }	t_token;
 
 typedef enum	e_quote{
@@ -144,7 +143,7 @@ t_bool check_pipe(t_token next, t_token previous);
 t_bool check_symbol(t_block *block);
 
 //tokenization
-void	tokenisation(t_line *line);
+void	tokenization(t_line *line);
 t_token	get_next_token(t_block *next_block);
 void	attribute_token(t_block *block);
 t_token	get_previous_token(t_block *block);
