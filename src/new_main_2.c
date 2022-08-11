@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:30:02 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/08 19:30:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/11 20:50:53 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -21,11 +21,26 @@ t_bool	read_line(char **line)
 	return (TRUE);
 }
 
+void	browse_tree(t_tree *tree)
+{
+	t_leaf	*buff;
+	
+	buff = tree->head;
+	while (buff)
+	{
+		ft_printf("type = %i\n", buff->type);
+		if (buff->left != NULL)
+			ft_printf("left type = %i\n", buff->left->type);
+		buff = buff->right;
+	}
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_dict			env;
 	t_line			block_lst;
 	char			*line;
+	t_tree			tree;
 	
 	listen_to_sigs();
 	if (av[1] && ac)
@@ -46,6 +61,8 @@ int	main(int ac, char **av, char **envp)
 			ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
 			buff = buff->next;
 		}
+		fill_ast(&block_lst, &tree);
+		browse_tree(&tree);
 	}
 	free_exit();
 }

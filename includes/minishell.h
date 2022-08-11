@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/08 19:24:33 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/11 20:23:32 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
+
+typedef enum	e_type_leaf{
+	CMD,
+	PIPE_L	
+}	t_type_leaf;
 
 typedef enum	e_token {
 	UNDEF,//0
@@ -48,6 +53,18 @@ typedef enum	e_type{
 	DOUBLE,
 	SIMPLE
 }	t_type;
+
+typedef struct	s_leaf{
+	//head de la sous-list
+	void			*content;
+	t_type_leaf		type;
+	struct s_leaf	*right;
+	struct s_leaf	*left;
+}					t_leaf;
+
+typedef struct	s_tree{
+	t_leaf	*head;
+}			t_tree;
 
 typedef struct	s_elem{
 	struct s_elem	*next;
@@ -81,13 +98,13 @@ typedef struct	s_gc{
 	void			*content;
 	struct	s_gc	*next;
 	t_type			type;
-}		t_gc;
+}					t_gc;
 
 typedef struct	s_lexeur {
-	t_token		token;
-	void		*content;
+	t_token			token;
+	void			*content;
 	struct s_lexeur	*next;
-}			t_lexeur;
+}					t_lexeur;
 
 void	free_exit(void);
 void	listen_to_sigs(void);
@@ -166,5 +183,9 @@ t_bool	attribute_symbol(t_block *block);
 
 void	sigint_handler(int signum);
 void	listen_to_sigs(void);
+
+
+void	fill_ast(t_line *line, t_tree *tree);
+void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 
 #endif
