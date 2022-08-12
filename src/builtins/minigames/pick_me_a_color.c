@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:38:40 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/08 20:21:51 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/12 14:27:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../../libft/libft.h"
@@ -30,14 +30,16 @@ int	main(void)
 	ft_printf("\nHmm, interesting...\n");
 	while (i < 1000000000)
 		i++;
-	printf("Your color is...\n");
+	ft_printf("Your color is...\n");
 	i = 0;
 	while (i < 1000000000)
 		i++;
 	if (((size_t)&a / 10) % 2 == 0)
-		ft_printf("\n\033[38;5;%dmWhite !!\033[m\n\n", (((size_t)&a / 10)) % 10 + 30);
+		ft_printf("\n\033[38;5;%dmWhite !!\033[m\n\n", 
+				((size_t)&a / 10) % 100);
 	else
-		ft_printf("\nBlack !!\n\n");
+		ft_printf("\n\033[38;5;%dmBlack !!\033[m\n\n", 
+				((size_t)&a / 10) % 100);
 	return 0;
 }
 
