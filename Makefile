@@ -5,12 +5,12 @@ OBJ = $(addprefix obj/, new_main_2.o \
 			garbage_collector.o \
 			copy_env.o \
 			lst_utils.o \
-			lexing.o \
+			lexing_bonus.o \
 			line_lst_utils.o \
 			free_exit.o \
 			singleton.o \
 			check_symbol.o \
-			tokenization.o \
+			tokenization_bonus.o \
 			signal_handling.o \
 			abstract_syntax_tree.o \
 			remove_quote_before_exec.o)
@@ -18,12 +18,12 @@ D_LST = $(addprefix obj/, new_main_2.d \
 			garbage_collector.d \
 			copy_env.d \
 			lst_utils.d \
-			lexing.d \
+			lexing_bonus.d \
 			line_lst_utils.d \
 			free_exit.d \
 			singleton.d \
 			check_symbol.d \
-			tokenization.d \
+			tokenization_bonus.d \
 			signal_handling.d \
 			abstract_syntax_tree.d \
 			remove_quote_before_exec.d \
