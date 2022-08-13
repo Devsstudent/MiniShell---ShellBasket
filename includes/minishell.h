@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/13 18:14:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/13 22:26:31 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@
 
 typedef enum	e_type_leaf{
 	CMD,
-	PIPE_L	
+	PIPE_L,
+    AND_L,
+    OR_L,
+    PRTS	
 }	t_type_leaf;
 
 typedef enum	e_token {
@@ -60,7 +63,7 @@ typedef enum	e_type{
 
 typedef struct	s_leaf{
 	//head de la sous-list
-	void			*content : NULL;
+	void			*content;
 	t_type_leaf		type;
 	struct s_leaf	*right;
 	struct s_leaf	*left;
@@ -194,10 +197,19 @@ void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 
 //BONUS
 
-t_bool	check_parentheses(t_token next, t_token previous, t_token token);
-t_bool	check_and(t_token next, t_token previous, t_token token);
-t_bool	check_or(t_token next, t_token previous, t_token token);
-t_bool	handle_and(char *line, int *i, int *size, t_line *lst);
-t_bool	handle_par(char *line, int *i, int *size, t_line *lst);
+t_bool	    check_parentheses(t_token next, t_token previous, t_token token);
+t_bool	    check_and(t_token next, t_token previous, t_token token);
+t_bool	    check_or(t_token next, t_token previous, t_token token);
+t_bool	    handle_and(char *line, int *i, int *size, t_line *lst);
+t_bool	    handle_par(char *line, int *i, int *size, t_line *lst);
+t_leaf      *new_leaf_bonus(t_line *sub);
+void        remove_parentheses(t_line *line);
+t_line      *fill_parentheses_block(t_block **buff);
+t_type_leaf get_type(t_token token);
+t_line      *fill_till_ope(t_block **buff);
+void        line_cpy_till_ope(t_block **buff, t_line *sub_lst);
+void        test(t_leaf *leaf, t_line *line);
+void        fill_ast_bonus(t_line *line, t_tree *tree);
+void        line_cpy_till_pend(t_block **buff, t_line *sub_lst);
 
 #endif

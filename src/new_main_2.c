@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:30:02 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/11 20:50:53 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/13 23:34:00 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,6 +20,37 @@ t_bool	read_line(char **line)
 	add_to_gc(SIMPLE, *line, get_gc());
 	return (TRUE);
 }
+
+//essai qui ne marche pas
+/*
+void    browse_sub_tree(t_leaf *leaf)
+{
+    t_leaf  *buff;
+    
+    buff = leaf;
+    while (buff)
+    {
+        ft_printf("type = %i\n", buff->type);
+        if (buff->left != NULL)
+            browse_sub_tree(buff->left);
+        else
+            return ;
+        if (buff->right != NULL)
+            browse_sub_tree(buff->right);
+        else
+            return ;
+    }
+}
+
+void    browse_tree(t_tree *tree)
+{
+    t_leaf  *buff;
+    
+    buff = tree->head;
+    browse_sub_tree(buff);
+}
+*/
+
 
 void	browse_tree(t_tree *tree)
 {
@@ -61,7 +92,7 @@ int	main(int ac, char **av, char **envp)
 			ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
 			buff = buff->next;
 		}
-		fill_ast(&block_lst, &tree);
+		fill_ast_bonus(&block_lst, &tree);
 		browse_tree(&tree);
 	}
 	free_exit();

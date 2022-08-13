@@ -12,7 +12,7 @@ OBJ = $(addprefix obj/, new_main_2.o \
 			check_symbol.o \
 			tokenization_bonus.o \
 			signal_handling.o \
-			abstract_syntax_tree.o \
+			abstract_syntax_tree_bonus.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, new_main_2.d \
 			garbage_collector.d \
@@ -25,7 +25,7 @@ D_LST = $(addprefix obj/, new_main_2.d \
 			check_symbol.d \
 			tokenization_bonus.d \
 			signal_handling.d \
-			abstract_syntax_tree.d \
+			abstract_syntax_tree_bonus.d \
 			remove_quote_before_exec.d \
 			null.d)
 NAME = minishell
