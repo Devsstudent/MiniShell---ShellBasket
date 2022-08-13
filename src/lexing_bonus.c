@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexing.c                                           :+:      :+:    :+:   */
+/*   lexing_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/12 20:15:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/12 23:43:50 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 //Fill the line list; block by block
 //First check the line quotes
+
+t_bool	is_symbol(char c)
+{
+	if (c == '|' || c == '<' || c == '>' || c == '&')
+		return (FALSE);
+	return (TRUE);
+}
 
 static t_bool	check_lines_quotes(char *line)
 {
@@ -55,6 +62,30 @@ static t_bool	not_in_quote(char *line, int i)
 	return (FALSE);
 }
 
+static t_bool	check_lines_parentheses(char *line)
+{
+	int	i;
+	int	not_quote;
+	int	close;
+	int	open;
+
+	i = 0;
+	close = 0;
+	open = 0;
+	while (line[i])
+	{
+		not_quote = not_in_quote(line, i);
+		if (not_quote && line[i] == '(')
+			open++;
+		else if (not_quote && line[i] == ')')
+			close++;
+		i++;
+	}
+	if (close != open)
+		return (FALSE);
+	return (TRUE);
+}
+
 t_bool	fill_word(int *size, t_line *lst, char *line, int i)
 {
 	char	*word;
@@ -80,20 +111,28 @@ t_bool	fill_word(int *size, t_line *lst, char *line, int i)
 
 t_bool	handle_pipe(char *line, int *i, int *size, t_line *lst)
 {
-	if (*i >= 1 && line[*i - 1] && (ft_isalnum(line[*i - 1]) 
-			|| line[*i - 1] == '\"' || line[*i - 1] == '\''))
+	if (*i >= 1 && line[*i - 1])
 		if (!fill_word(size, lst, line, *i - 1))
 			return (FALSE);
-	(*size) += 1;
-	if (!fill_word(size, lst, line, *i))
-		return (FALSE);
+	if (line[*i + 1] && line[*i + 1] == '|')
+	{
+		(*i)++;
+		(*size) += 2;
+		if (!fill_word(size, lst, line, *i))
+			return (FALSE);
+	}
+	else
+	{
+		(*size) += 1;
+		if (!fill_word(size, lst, line, *i))
+			return (FALSE);
+	}
 	return (TRUE);
 }
 
 t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst)
 {
-	if (line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
-			|| line[*i - 1] == '\''))
+	if (*i > 1 && line[*i - 1])
 		if (!fill_word(size, lst, line, *i - 1))
 			return (FALSE);
 	if (line[*i + 1] && line[*i + 1] == '>')
@@ -112,10 +151,40 @@ t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst)
 	return (TRUE);
 }
 
+t_bool	handle_and(char *line, int *i, int *size, t_line *lst)
+{
+	if (*i > 1 && line[*i - 1])
+		if (!fill_word(size, lst, line, *i - 1))
+			return (FALSE);
+	if (line[*i + 1] && line[*i + 1] == '&')
+	{
+		(*i)++;
+		(*size) += 2;
+		if (!fill_word(size, lst, line, *i))
+			return (FALSE);
+	}
+	else
+		return (FALSE); //Erreur 1 seul & a gereee
+	return (TRUE);
+}
+
+t_bool	handle_par(char *line, int *i, int *size, t_line *lst)
+{
+	if (*i > 1 && line[*i - 1])
+		if (!fill_word(size, lst, line, *i - 1))
+			return (FALSE);
+	if (line[*i] == ')' || line[*i] == '(')
+	{
+		(*size) += 1;
+		if (!fill_word(size, lst, line, *i))
+			return (FALSE);
+	}
+	return (TRUE);
+}
+
 t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst)
 {
-	if (line[*i - 1] && (ft_isalnum(line[*i - 1]) || line[*i - 1] == '\"'
-			|| line[*i - 1] == '\''))
+	if (*i > 1 && line[*i - 1])
 		if (!fill_word(size, lst, line, *i - 1))
 			return (FALSE);
 	if (line[*i + 1] && line[*i + 1] == '<')
@@ -138,6 +207,8 @@ t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst)
 //Check || && ();
 t_bool	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 {
+
+//less Line with a && on the first condition
 	if (line[*i] == '|')
 	{
 		if (!handle_pipe(line, i, size, lst))
@@ -153,6 +224,19 @@ t_bool	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 		if (!handle_red_i(line, i, size, lst))
 			return (FALSE);
 	}
+	else if (line[*i] == '&')
+	{
+		if (!handle_and(line, i, size, lst))
+		{
+			ft_printf("TEESSST");
+			return (FALSE);
+		}
+	}
+	else if (line[*i] == '(' || line[*i] == ')')
+	{
+		if (!handle_par(line, i, size, lst))
+			return (FALSE);
+	}
 	else
 		(*size)++;
 	return (TRUE);
@@ -160,15 +244,14 @@ t_bool	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 
 static t_bool	handle_space(char *line, int *i, int *size, t_line *lst)
 {
-	 if (*i > 0 && (ft_isalnum(line[*i - 1])
-			|| line[*i - 1] == '\"' || line[*i - 1] == '\''))
+	if (*i > 0 && (line[*i - 1]))
 	{
 		if (!fill_word(size, lst, line, *i - 1))
 			return (FALSE);
 	}
 	*size = 0;
 	return (TRUE);
-}
+} 
 
 t_bool	analyse_word(char *line, int *i, int *size_word, t_line *lst)
 {
@@ -215,9 +298,10 @@ t_bool	fill_line_lst(t_line *block_lst, char *line)
 	t_block		*buff;
 
 	i = 0;
-	if (!check_lines_quotes(line))
+	if (!check_lines_quotes(line) || !check_lines_parentheses(line))
 		return (FALSE);
-	handle_line(line, block_lst);
+	if (!handle_line(line, block_lst))
+		return (FALSE);
 	add_to_gc(LINE, block_lst, get_gc());
 	buff = block_lst->head;
 	while (buff)

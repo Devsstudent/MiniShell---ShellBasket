@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/11 20:23:32 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:14:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ typedef enum	e_token {
 	RED_OUT_APPEND,//3
 	HERE_DOC,//4
 	PIPE,//5
+	OR,
+	AND,
+	P_OPEN,
+	P_CLOSE,
 	CMD_ARG,//6
 	FILES,//7
 	DELIMITER//8
@@ -56,7 +60,7 @@ typedef enum	e_type{
 
 typedef struct	s_leaf{
 	//head de la sous-list
-	void			*content;
+	void			*content : NULL;
 	t_type_leaf		type;
 	struct s_leaf	*right;
 	struct s_leaf	*left;
@@ -187,5 +191,13 @@ void	listen_to_sigs(void);
 
 void	fill_ast(t_line *line, t_tree *tree);
 void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
+
+//BONUS
+
+t_bool	check_parentheses(t_token next, t_token previous, t_token token);
+t_bool	check_and(t_token next, t_token previous, t_token token);
+t_bool	check_or(t_token next, t_token previous, t_token token);
+t_bool	handle_and(char *line, int *i, int *size, t_line *lst);
+t_bool	handle_par(char *line, int *i, int *size, t_line *lst);
 
 #endif
