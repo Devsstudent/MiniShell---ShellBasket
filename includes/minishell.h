@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/12 22:47:41 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:14:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef enum	e_type{
 
 typedef struct	s_leaf{
 	//head de la sous-list
-	void			*content;
+	void			*content : NULL;
 	t_type_leaf		type;
 	struct s_leaf	*right;
 	struct s_leaf	*left;
