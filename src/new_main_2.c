@@ -55,13 +55,25 @@ void    browse_tree(t_tree *tree)
 void	browse_tree(t_tree *tree)
 {
 	t_leaf	*buff;
+	t_leaf	*buff_left;
 	
 	buff = tree->head;
 	while (buff)
 	{
 		ft_printf("type = %i\n", buff->type);
 		if (buff->left != NULL)
-			ft_printf("left type = %i\n", buff->left->type);
+		{
+			buff_left = buff->left;
+			while (buff_left != NULL)
+			{
+				ft_printf("left type = %i\n", buff_left->type);
+				if (buff_left->right)
+					ft_printf("right type %i\n", buff_left->right->type);
+				buff_left = buff_left->left;
+			}
+			
+		}
+			
 		buff = buff->right;
 	}
 }

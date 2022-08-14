@@ -294,10 +294,8 @@ t_bool	handle_line(char *line, t_line *lst)
 
 t_bool	fill_line_lst(t_line *block_lst, char *line)
 {
-	int		i;
 	t_block		*buff;
 
-	i = 0;
 	if (!check_lines_quotes(line) || !check_lines_parentheses(line))
 		return (FALSE);
 	if (!handle_line(line, block_lst))

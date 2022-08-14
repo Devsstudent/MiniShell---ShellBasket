@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
+//When we have somthing in parentheses we should handle it as a subshell and just use the result so need to know if its in parenthese or not
+
 t_leaf  *new_leaf_bonus(t_line *sub)
 {
     t_leaf  *leaf;
@@ -25,7 +27,10 @@ t_leaf  *new_leaf_bonus(t_line *sub)
     if (sub != NULL)
     {
         if (sub->head && sub->head->token == P_OPEN)
-            leaf->type = PRTS;
+	{
+		remove_parentheses(sub);
+            	leaf->type = PRTS;
+	}
         else
             leaf->type = CMD;
     }
@@ -89,35 +94,55 @@ t_line  *fill_till_ope(t_block **buff)
         add_to_gc(LINE, new_sub, get_gc());
     new_sub->head = NULL;
     line_cpy_till_ope(buff, new_sub);
+t_block	*b;
+	b = new_sub->head;
+	while (b)
+	{
+		ft_printf("%i\n", b->token);
+		b = b->next;
+	}
     return (new_sub);
 }
 
 void    last_elem(t_line *line, t_leaf *leaf)
 {
-    leaf = new_leaf_bonus(line);
-    if (leaf->type == PRTS)
-    {
         leaf->left = new_leaf_bonus(line);
-        test(leaf->left, line);
-    }
+    	if (leaf->left->type == PRTS)
+	{
+		remove_parentheses(line);
+	        test(leaf, line);
+	}
+		
 }
 
 void	test(t_leaf *leaf, t_line *line)
 {
 	t_block	*buff;
 	t_line	*sub;
+	t_bool	lol;
 
-	remove_parentheses(line);
+	int	i;
+	i = 0;
+//	remove_parentheses(line);
 	buff = line->head;
+	lol = FALSE;
 	while (buff)
 	{
+		i++;
 		if (buff->token == P_OPEN)
+		{
 			sub = fill_parentheses_block(&buff);
+			lol = TRUE;
+		}
 		else
+		{
 			sub = fill_till_ope(&buff);
+			lol = FALSE;
+		}
 		if (buff == NULL)
 		{
-			last_elem(sub, leaf);
+			if (lol)
+				last_elem(sub, leaf);
 			return ;
 		}
 		leaf->type = get_type(buff->token);
@@ -129,9 +154,29 @@ void	test(t_leaf *leaf, t_line *line)
 		buff = buff->next;
 	}
 }
-	
+/*
+t_leaf	*head_ast(t_line *line)
+{
+	t_leaf	*head;
+	t_block	*buff;
+
+	head =(t_leaf *) malloc(sizeof(t_leaf));
+	if (!head)
+		free_exit();
+    	add_to_gc(SIMPLE, leaf, get_gc());
+	while (buff)
+	{
+		if (buff->token == P_CLOSE && buff->next)
+		{
+			if (buff->next->token == PIPE
+			leaf->type = 
+		}
+		buff = buff->next;
+	}
+}
+*/	
 void	fill_ast_bonus(t_line *line, t_tree *tree)
 {
-    tree->head = new_leaf_bonus(line);
+    tree->head = new_leaf_bonus(NULL);
     test(tree->head, line);
 }
