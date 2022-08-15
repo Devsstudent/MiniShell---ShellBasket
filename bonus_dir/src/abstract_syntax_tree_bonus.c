@@ -6,14 +6,14 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/15 16:27:42 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/15 19:22:53 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 //When we have somthing in parentheses we should handle it as a subshell and just use the result so need to know if its in parenthese or not
 
-t_leaf	*new_leaf_bonus(t_line *sub, int par)
+t_leaf	*new_leaf_bonus(t_line *sub, int lay_par)
 {
 	t_leaf	*leaf;
 
@@ -23,7 +23,7 @@ t_leaf	*new_leaf_bonus(t_line *sub, int par)
 	add_to_gc(SIMPLE, leaf, get_gc());
 	leaf->content = sub;
 	leaf->right = NULL;
-	leaf->parentheses = par;
+	leaf->parentheses = lay_par;
 	leaf->left = NULL;
 	if (sub != NULL)
 	{
@@ -49,7 +49,7 @@ void	remove_parentheses(t_line *line)
 		line->head = buff;
 		while (buff)
 		{
-			if (buff->next->next == NULL)
+			if (buff->next->next == NULL && buff->next->token == P_CLOSE)
 			{
 				free(buff->next);
 				buff->next = NULL;
@@ -98,78 +98,76 @@ t_line	*fill_till_ope(t_block **buff)
 	return (new_sub);
 }
 
-void	last_elem(t_line *line, t_leaf *leaf, int par)
+static void	last_elem(t_line *line, t_leaf *leaf, int lay_par)
 {
-	leaf->left = new_leaf_bonus(line, par);
+	leaf->left = new_leaf_bonus(line, lay_par);
 	if (leaf->left->type == PRTS)
 	{
-		test(leaf, line, ++par);
+		leaf->left = NULL;
+		test(leaf, line, ++lay_par);
+	}
+}
+static void	last_elem_not_par(t_leaf *leaf, int lay_par, t_line *sub)
+{
+	leaf->type = CMD;
+	leaf->content = sub;
+	leaf->parentheses = lay_par;
+}
+
+int	fill_leaf(t_leaf *leaf, t_block *buff, int lay_par, t_line *sub)
+{
+	leaf->type = get_type(buff->token);
+	leaf->parentheses = lay_par;
+	leaf->left = new_leaf_bonus(sub, lay_par);
+	return (lay_par);
+}
+
+void	fill_sub(t_block **buff, t_bool *par, t_line **sub)
+{
+	if ((*buff)->token == P_OPEN)
+	{
+		*sub = fill_parentheses_block(buff);
+		*par = TRUE;
+	}
+	else
+	{
+		*sub = fill_till_ope(buff);
+		*par = FALSE;
 	}
 }
 
-void	test(t_leaf *leaf, t_line *line, int parr)
+void	handle_last_elem(t_leaf *leaf, t_line *sub, int lay_par, t_bool par)
+{
+	if (par)
+		last_elem(sub, leaf, lay_par);
+	else
+		last_elem_not_par(leaf, lay_par, sub);
+}
+
+void	test(t_leaf *leaf, t_line *line, int lay_par)
 {
 	t_block	*buff;
 	t_line	*sub;
 	t_bool	par;
-	int	new_parr;
+	int		new_lay_par;
 
 	buff = line->head;
-	par = FALSE;
 	while (buff)
 	{
-		if (buff->token == P_OPEN)
-		{
-			sub = fill_parentheses_block(&buff);
-			par = TRUE;
-		}
-		else
-			sub = fill_till_ope(&buff);
+		fill_sub(&buff, &par, &sub);
 		if (buff == NULL)
 		{
-			if (par)
-				last_elem(sub, leaf, parr);
-			else
-			{
-				leaf->type = CMD;
-				leaf->content = sub;
-				leaf->parentheses = parr;
-			}
+			handle_last_elem(leaf, sub, lay_par, par);
 			return ;
 		}
-		leaf->type = get_type(buff->token);
-		leaf->parentheses = parr;
-		leaf->left = new_leaf_bonus(sub, parr);
-		new_parr = parr;
+		new_lay_par = fill_leaf(leaf, buff, lay_par, sub);
 		if (leaf->left->type == PRTS)
-			test(leaf->left, sub, ++new_parr);
-		leaf->right = new_leaf_bonus(NULL, parr);
+			test(leaf->left, sub, ++new_lay_par);
+		leaf->right = new_leaf_bonus(NULL, lay_par);
 		leaf = leaf->right;
 		buff = buff->next;
 	}
 }
-
-/*
-t_leaf	*head_ast(t_line *line)
-{
-	t_leaf	*head;
-	t_block	*buff;
-
-	head =(t_leaf *) malloc(sizeof(t_leaf));
-	if (!head)
-		free_exit();
-    	add_to_gc(SIMPLE, leaf, get_gc());
-	while (buff)
-	{
-		if (buff->token == P_CLOSE && buff->next)
-		{
-			if (buff->next->token == PIPE
-			leaf->type = 
-		}
-		buff = buff->next;
-	}
-}
-*/
 
 void	fill_ast_bonus(t_line *line, t_tree *tree)
 {
