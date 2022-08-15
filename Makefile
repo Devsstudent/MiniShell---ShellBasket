@@ -1,31 +1,31 @@
 FLAG = -Wall -g -Wextra -MMD -Werror
 LIB = ./libft
 HEAD = ./includes
-OBJ = $(addprefix obj/, new_main_2.o \
+OBJ = $(addprefix obj/, main.o \
 			garbage_collector.o \
 			copy_env.o \
 			lst_utils.o \
-			lexing_bonus.o \
+			lexing.o \
 			line_lst_utils.o \
 			free_exit.o \
 			singleton.o \
 			check_symbol.o \
-			tokenization_bonus.o \
+			tokenization.o \
 			signal_handling.o \
-			abstract_syntax_tree_bonus.o \
+			abstract_syntax_tree.o \
 			remove_quote_before_exec.o)
-D_LST = $(addprefix obj/, new_main_2.d \
+D_LST = $(addprefix obj/, main.d \
 			garbage_collector.d \
 			copy_env.d \
 			lst_utils.d \
-			lexing_bonus.d \
+			lexing.d \
 			line_lst_utils.d \
 			free_exit.d \
 			singleton.d \
 			check_symbol.d \
-			tokenization_bonus.d \
+			tokenization.d \
 			signal_handling.d \
-			abstract_syntax_tree_bonus.d \
+			abstract_syntax_tree.d \
 			remove_quote_before_exec.d \
 			null.d)
 NAME = minishell

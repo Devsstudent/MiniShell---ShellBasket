@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/13 21:54:33 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/15 21:09:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -17,7 +17,7 @@ t_block	*new_block(char *word)
 
 	new_block = malloc(sizeof(t_block));
 	if (!new_block)
-		return (NULL);
+		free_exit();
 	new_block->word = word;
 	new_block->next = NULL;
 	new_block->prev = NULL;
@@ -29,9 +29,9 @@ void	line_lst_addback(t_line *line, t_block *new)
 	t_block	*buff;
 
 	if (!line)
-		return ;
+		return (free_exit());
 	if (!new)
-		return ;
+		return (free_exit());
 	if (!(line->head))
 	{
 		line->head = new;

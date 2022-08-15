@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/11 20:40:04 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/15 21:57:57 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -29,6 +29,7 @@ t_leaf	*new_leaf(t_line *cmd, t_type_leaf type)
 	add_to_gc(SIMPLE, leaf, get_gc());
 	if (type != PIPE_L)
 		leaf->content = cmd;
+	leaf->parentheses = FALSE;
 	leaf->type = type;
 	leaf->right = NULL;
 	leaf->left = NULL;
@@ -49,17 +50,42 @@ t_line	*fill_till_pipe(t_block **buff)
 	return (new_sub);
 }
 
-void	fill_tree_while_pipe(t_tree *tree, t_line *cmd)
+void	fill_tree_while_pipe(t_tree **tree, t_line *cmd)
 {
 	t_leaf	*buff;
 
-	buff = tree->head;
+	buff = (*tree)->head;
 	while (buff->right != NULL)
 		buff = buff->right;
 	buff->right = new_leaf(NULL, PIPE_L);
 	buff->right->left = new_leaf(cmd, CMD);
 }
 
+static void	loop_line_to_ast(t_tree **tree, t_bool pipe, t_line *line)
+{
+	t_block	*buff;
+	t_line	*cmd;
+
+	buff = line->head;
+	while (buff)
+	{
+		cmd = fill_till_pipe(&buff);
+		if (buff == NULL)
+		{
+			fill_tree_while_pipe(tree, cmd);
+			return ;
+		}
+		if (buff->token == PIPE && !pipe)
+		{
+			pipe = TRUE;
+			(*tree)->head = new_leaf(NULL, PIPE_L);
+			(*tree)->head->left = new_leaf(cmd, CMD);
+		}
+		else if (buff->token == PIPE && pipe)
+			fill_tree_while_pipe(tree, cmd);
+		buff = buff->next;
+	}
+}
 
 void	fill_ast(t_line *line, t_tree *tree)
 {
@@ -76,23 +102,5 @@ void	fill_ast(t_line *line, t_tree *tree)
 		tree->head = new_leaf(cmd, CMD);
 		return ;
 	}
-	buff = line->head;
-	while (buff)
-	{
-		cmd = fill_till_pipe(&buff);
-		if (buff == NULL)
-		{
-			fill_tree_while_pipe(tree, cmd);
-			return ;
-		}
-		if (buff->token == PIPE && !pipe)
-		{
-			pipe = TRUE;
-			tree->head = new_leaf(NULL, PIPE_L);
-			tree->head->left = new_leaf(cmd, CMD);
-		}
-		else if (buff->token == PIPE && pipe)
-			fill_tree_while_pipe(tree, cmd);
-		buff = buff->next;
-	}
+	loop_line_to_ast(&tree, pipe, line);
 }

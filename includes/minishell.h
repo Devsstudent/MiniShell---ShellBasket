@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/15 16:19:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/15 21:48:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,13 +152,13 @@ void	line_clear(t_line *line);
 /*                  lexing                  */
 /********************************************/
 
-t_bool	handle_line(char *line, t_line *lst);
-t_bool	analyse_symbol(char *line, int *i, int *size, t_line *lst);
-t_bool	fill_word(int *size, t_line *lst, char *line, int i);
-t_bool	handle_pipe(char *line, int *i, int *size, t_line *lst);
-t_bool	handle_red_o(char *line, int *i, int *size, t_line *lst);
-t_bool	handle_red_i(char *line, int *i, int *size, t_line *lst);
-t_bool	fill_line_lst(t_line *block_lst, char *line);
+void	fill_word(int *size, t_line *lst, char *line, int i);
+void	handle_line(char *line, t_line *lst);
+void	analyse_symbol(char *line, int *i, int *size, t_line *lst);
+void	handle_pipe(char *line, int *i, int *size, t_line *lst);
+void	handle_red_o(char *line, int *i, int *size, t_line *lst);
+void	handle_red_i(char *line, int *i, int *size, t_line *lst);
+t_line	*fill_line_lst(char *line);
 
 /********************************************/
 /*             remove_quotes                */
@@ -195,6 +195,10 @@ void	listen_to_sigs(void);
 
 void	fill_ast(t_line *line, t_tree *tree);
 void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
+
+/********************************************/
+/*          abstract syntax tree            */
+/********************************************/
 
 //BONUS
 
