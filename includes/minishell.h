@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/15 21:48:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/16 17:31:08 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,5 +216,12 @@ void        line_cpy_till_ope(t_block **buff, t_line *sub_lst);
 void        test(t_leaf *leaf, t_line *line, int parr);
 void        fill_ast_bonus(t_line *line, t_tree *tree);
 void        line_cpy_till_pend(t_block **buff, t_line *sub_lst);
+
+
+void	expand(t_line *line);
+int	size_doll_val(char *word, int *i);
+void	fill_key_arr(t_block *block, char **key_arr);
+void	check_dollar_in_block(t_block *block);
+int	get_nb_of_dollar(t_block *block);
 
 #endif

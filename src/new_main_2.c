@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:30:02 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/15 16:26:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/16 17:28:52 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -28,6 +28,7 @@ void	browse_sub_tree(t_leaf *leaf)
 	{
 		t_line *line;
 		line = leaf->content;
+		expand(line);
 		t_block	*buff;
 		if (line)
 		{
@@ -123,8 +124,6 @@ int	main(int ac, char **av, char **envp)
 		}
 		fill_ast_bonus(&block_lst, &tree);
 		browse_tree(&tree);
-		ft_printf("\n\nhead = %i\n", tree.head->type);
-		ft_printf("right leaf = %i\n", tree.head->right->type);
 	}
 	free_exit();
 }

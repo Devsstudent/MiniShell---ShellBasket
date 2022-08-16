@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:30:02 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/15 16:26:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/16 17:39:11 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -28,6 +28,7 @@ void	browse_sub_tree(t_leaf *leaf)
 	{
 		t_line *line;
 		line = leaf->content;
+		expand(line);
 		t_block	*buff;
 		if (line)
 		{
@@ -95,7 +96,7 @@ void	browse_tree(t_tree *tree)
 int	main(int ac, char **av, char **envp)
 {
 	t_dict			env;
-	t_line			block_lst;
+	t_line			*block_lst;
 	char			*line;
 	t_tree			tree;
 	
@@ -105,26 +106,12 @@ int	main(int ac, char **av, char **envp)
 	double_char_to_lst(envp, &env);
 	while (1)
 	{
-		block_lst.head = NULL;
 		if (!read_line(&line))
 			free_exit();
-		if (!fill_line_lst(&block_lst, line))
-		{
-			ft_printf("malloc error\n");
-			return (0);
-		}
-		tokenization(&block_lst);
-		t_block	*buff;
-		buff = block_lst.head;
-		while (buff)
-		{
-//			ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
-			buff = buff->next;
-		}
-		fill_ast_bonus(&block_lst, &tree);
+		block_lst = fill_line_lst(line);
+		tokenization(block_lst);
+		fill_ast_bonus(block_lst, &tree);
 		browse_tree(&tree);
-		ft_printf("\n\nhead = %i\n", tree.head->type);
-		ft_printf("right leaf = %i\n", tree.head->right->type);
 	}
 	free_exit();
 }

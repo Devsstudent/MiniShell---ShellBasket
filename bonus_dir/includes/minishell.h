@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/16 15:03:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/16 17:31:22 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,5 +212,12 @@ t_type_leaf	get_type(t_token token);
 t_line		*fill_till_ope(t_block **buff);
 //Recusrion fill tree :
 void		test(t_leaf *leaf, t_line *line, int lay_par);
+
+void	expand(t_line *line);
+int	size_doll_val(char *word, int *i);
+void	fill_key_arr(t_block *block, char **key_arr);
+void	check_dollar_in_block(t_block *block);
+int	get_nb_of_dollar(t_block *block);
+
 
 #endif

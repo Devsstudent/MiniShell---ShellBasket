@@ -74,11 +74,20 @@ int	main(int ac, char **av, char **envp)
 	if (av[1])
 		return (1);
 	double_char_to_lst(envp, &env);
+	/*
+	t_elem *buff;
+	buff = env.head;
+	while (buff)
+	{
+		ft_printf("%s, %s\n", buff->key, buff->value);
+		buff = buff->next;
+	}
+	*/
 	while (ac)
 	{
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
-		browse_tree(tree);
+//		browse_tree(tree);
 	}
 	return (1);
 }
