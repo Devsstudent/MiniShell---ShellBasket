@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/15 18:02:57 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/16 15:03:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	dict_clear(t_dict *dict);
 /*                parsing                   */
 /********************************************/
 
-t_block	*new_block(char *word);
+t_block		*new_block(char *word);
 void		line_lst_addback(t_line *line, t_block *new);
 void		line_clear(t_line *line);
 void		line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
@@ -155,15 +155,15 @@ void		line_cpy_till_pend(t_block **buff, t_line *sub_lst);
 /*                  lexing                  */
 /********************************************/
 
-t_bool		analyse_symbol(char *line, int *i, int *size, t_line *lst);
-t_bool		fill_word(int *size, t_line *lst, char *line, int i);
-t_bool		handle_pipe(char *line, int *i, int *size, t_line *lst);
-t_bool		handle_red_o(char *line, int *i, int *size, t_line *lst);
-t_bool		handle_red_i(char *line, int *i, int *size, t_line *lst);
-t_bool		handle_and(char *line, int *i, int *size, t_line *lst);
-t_bool		handle_par(char *line, int *i, int *size, t_line *lst);
-t_bool		handle_line(char *line, t_line *lst);
-t_bool		fill_line_lst(t_line *block_lst, char *line);
+void		analyse_symbol(char *line, int *i, int *size, t_line *lst);
+void		fill_word(int *size, t_line *lst, char *line, int i);
+void		handle_pipe(char *line, int *i, int *size, t_line *lst);
+void		handle_red_o(char *line, int *i, int *size, t_line *lst);
+void		handle_red_i(char *line, int *i, int *size, t_line *lst);
+void		handle_and(char *line, int *i, int *size, t_line *lst);
+void		handle_par(char *line, int *i, int *size, t_line *lst);
+void		handle_line(char *line, t_line *lst);
+t_line		*fill_line_lst(char *line);
 
 /********************************************/
 /*             remove_quotes                */

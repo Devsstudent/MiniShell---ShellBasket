@@ -1,18 +1,81 @@
 #include "minishell.h"
 
-t_bool	ms_line(char **line)
+void	ms_line(char **line)
 {
+	listen_to_sigs();
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
-		return (FALSE);
+		free_exit();
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
-	return (TRUE);
 }
+
+t_tree	*ms_lex_and_parse(char **line)
+{
+	t_line	*line_lst;
+	t_tree	*tree;
+
+	tree = (t_tree *) malloc(sizeof(t_tree));
+	line_lst = fill_line_lst(*line);
+	tokenization(line_lst);
+	t_block	*buff;
+	buff = line_lst->head;
+	while (buff)
+	{
+		ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
+		buff = buff->next;
+	}
+	fill_ast_bonus(line_lst, tree);
+	return (tree);
+}
+
+void	browse_sub_tree(t_leaf *leaf)
+{
+	ft_printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	if (leaf->type == CMD)
+	{
+		t_line *line;
+		line = leaf->content;
+		t_block	*buff;
+		if (line)
+		{
+			buff = line->head;
+			while (buff)
+			{
+				ft_printf("content = %s\n", buff->word);
+				buff = buff->next;
+			}
+		}
+	}
+	if (leaf->left != NULL)
+	{
+		ft_printf("left\n");
+		browse_sub_tree(leaf->left);
+	}
+	else
+		return ;
+	if (leaf->right != NULL)
+	{
+		ft_printf("right\n");
+		browse_sub_tree(leaf->right);
+	}
+	else
+		return ;
+}
+
+void	browse_tree(t_tree *tree)
+{
+	t_leaf  *buff;
+
+	buff = tree->head;
+	browse_sub_tree(buff);
+}
+
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
+	t_tree	*tree;
 	t_dict	env;
 
 	if (av[1])
@@ -20,13 +83,11 @@ int	main(int ac, char **av, char **envp)
 	double_char_to_lst(envp, &env);
 	while (ac)
 	{
-		if (!ms_line(&line))
-		{
-			free_exit();
-			return (0);
-		}
-	
+		ms_line(&line);
+		tree = ms_lex_and_parse(&line);
+		browse_tree(tree);
 	}
+	return (1);
 }
 
 /*

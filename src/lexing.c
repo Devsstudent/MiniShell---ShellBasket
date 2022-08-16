@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/15 21:53:50 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/16 14:56:58 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -172,10 +172,8 @@ void	handle_line(char *line, t_line *lst)
 
 t_line	*fill_line_lst(char *line)
 {
-	int		i;
 	t_line	*block_lst;
 
-	i = 0;
 	block_lst = (t_line *) malloc(sizeof(t_line));
 	if (!block_lst || !check_lines_quotes(line))
 		free_exit();

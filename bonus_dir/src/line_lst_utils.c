@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/13 21:54:33 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/16 15:02:40 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -17,7 +17,7 @@ t_block	*new_block(char *word)
 
 	new_block = malloc(sizeof(t_block));
 	if (!new_block)
-		return (NULL);
+		free_exit();
 	new_block->word = word;
 	new_block->next = NULL;
 	new_block->prev = NULL;
