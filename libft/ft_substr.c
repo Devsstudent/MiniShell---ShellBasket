@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 18:34:28 by odessein          #+#    #+#             */
-/*   Updated: 2022/05/13 21:16:25 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:44:09 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -33,7 +33,6 @@ inline static int	ft_malloc_size(char *s, int start, size_t len, char **ret)
 		size++;
 	if (start == (int) len)
 		size = len + 1;
-	ft_printf("malloc_size : %i\n", size);
 	*ret = malloc(sizeof(char) * size);
 	if (!(*ret))
 		return (0);
@@ -62,7 +61,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	while (j < len && s[i] != '\0')
 		res[j++] = s[i++];
-	ft_printf("%i", j);
 	res[j] = '\0';
 	return (res);
 }
