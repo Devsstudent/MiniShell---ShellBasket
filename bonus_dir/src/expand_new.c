@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/17 22:15:09 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/17 22:51:07 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -182,7 +182,6 @@ void	replace_key(char *new_word, int *j, char **val_arr)
 {
 	int	i;
 
-	ft_printf("HERE\n");
 	i = 0;
 	if (!(*val_arr))
 		return ;
@@ -194,6 +193,16 @@ void	replace_key(char *new_word, int *j, char **val_arr)
 	}
 }
 
+t_bool	handle_simple_word(char *new_word, char *word, int *indexes)
+{
+	if (indexes[0] == -1)
+	{
+		ft_strlcpy(new_word, word, ft_strlen(word) + 1);
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
 void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes)
 {
 	int		i;
@@ -203,19 +212,12 @@ void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes)
 	i = 0;
 	j = 0;
 	k = 0;
-	if (indexes[0] == -1)
-	{
-		ft_strlcpy(new_word, word, ft_strlen(word) + 1);
+	if (handle_simple_word(new_word, word, indexes))
 		return ;
-	}
 	while (word[i])
 	{
 		while (i != indexes[k] && word[i])
-		{
-			new_word[j] = word[i];
-			j++;
-			i++;
-		}
+			new_word[j++] = word[i++];
 		if (word[i] && i == indexes[k])
 		{
 			i++;
