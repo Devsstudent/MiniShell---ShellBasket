@@ -62,7 +62,7 @@ void	fill_key_arr(t_block *block, char **key_arr)
 		if (block->word[i + 1] && block->word[i] == '$' && block->word[i + 1] != '$' && block->word[i + 1] != ' ' && block->word[i + 1] != '\'' && block->word[i + 1] != '\"')
 		{
 			key_arr[j] = ft_substr(block->word, i, size_doll_val(block->word, &i));
-			ft_printf("\n%s %i\n", key_arr[j], j);
+			ft_printf("\nTEST%s %i\n", key_arr[j], j);
 			j++;
 		}
 		else
