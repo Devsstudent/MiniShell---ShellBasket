@@ -40,6 +40,7 @@ int	size_doll_val(char *word, int *i)
 		size++;
 		(*i)++;
 	}
+	ft_printf("size : %i", size);
 	return (size);
 }
 
@@ -47,6 +48,7 @@ void	fill_key_arr(t_block *block, char **key_arr)
 {
 	int		i;
 	int		j;
+	int		buff;
 
 	i = 0;
 	j = 0;
@@ -64,8 +66,17 @@ void	fill_key_arr(t_block *block, char **key_arr)
 			&& block->word[i + 1] != '$' && block->word[i + 1] != ' ' 
 			&& block->word[i + 1] != '\'' && block->word[i + 1] != '\"')
 		{
-			key_arr[j] = ft_substr(block->word, i, size_doll_val(block->word, &i));
-			ft_printf("\n%s %i\n", key_arr[j], j);
+			buff = i + 1;
+			key_arr[j] = ft_substr(block->word, buff, size_doll_val(block->word, &i));
+			int	z;
+			z = 0;
+			while (key_arr[j][z])
+			{
+				ft_printf("%c", key_arr[j][z]);
+				z++;
+			}
+			ft_printf("\n%i", ft_strlen(key_arr[j]));
+			ft_printf("\n%s j : %i\n", key_arr[j], j);
 			j++;
 		}
 		else
@@ -82,6 +93,7 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 	i = 0;
 	while (key_arr[i])
 	{
+		ft_printf("\n%i", ft_strlen(key_arr[i]));
 		value = ft_strdup(dict_get_value(dict, key_arr[i]));
 		ft_printf("\n value : %s\n", value);
 		if (!value)
@@ -99,6 +111,7 @@ void	check_dollar_in_block(t_block *block, t_dict *dict)
 	int		size_double_arr;
 
 	size_double_arr = get_nb_of_dollar(block);
+	ft_printf("%i size double\n", size_double_arr);
 	key_arr = (char **) malloc(sizeof(*key_arr) * (size_double_arr + 1));
 	if (!key_arr)
 		free_exit();
@@ -108,10 +121,9 @@ void	check_dollar_in_block(t_block *block, t_dict *dict)
 	if (!val_arr)
 		free_exit();
 	add_to_gc(DOUBLE, val_arr, get_gc());
-	(void)dict;
-//	fill_val_arr(key_arr, val_arr, dict);
+	fill_val_arr(key_arr, val_arr, dict);
 }
-// a tester
+
 int	get_nb_of_dollar(t_block *block)
 {
 	int		i;

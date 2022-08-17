@@ -33,6 +33,7 @@ inline static int	ft_malloc_size(char *s, int start, size_t len, char **ret)
 		size++;
 	if (start == (int) len)
 		size = len + 1;
+	ft_printf("malloc_size : %i\n", size);
 	*ret = malloc(sizeof(char) * size);
 	if (!(*ret))
 		return (0);
@@ -61,6 +62,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	while (j < len && s[i] != '\0')
 		res[j++] = s[i++];
+	ft_printf("%i", j);
 	res[j] = '\0';
 	return (res);
 }
