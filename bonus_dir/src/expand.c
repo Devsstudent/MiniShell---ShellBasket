@@ -64,7 +64,7 @@ void	fill_key_arr(t_block *block, char **key_arr)
 			&& block->word[i + 1] != '$' && block->word[i + 1] != ' ' 
 			&& block->word[i + 1] != '\'' && block->word[i + 1] != '\"')
 		{
-			key_arr[j] = ft_substr(block->word, i + 1, size_doll_val(block->word, &i));
+			key_arr[j] = ft_substr(block->word, i, size_doll_val(block->word, &i));
 			ft_printf("\n%s %i\n", key_arr[j], j);
 			j++;
 		}
@@ -83,6 +83,7 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 	while (key_arr[i])
 	{
 		value = ft_strdup(dict_get_value(dict, key_arr[i]));
+		ft_printf("\n value : %s\n", value);
 		if (!value)
 			free_exit();
 		val_arr[i] = value;
@@ -106,8 +107,9 @@ void	check_dollar_in_block(t_block *block, t_dict *dict)
 	val_arr = (char **) malloc(sizeof(*val_arr) * (size_double_arr + 1));
 	if (!val_arr)
 		free_exit();
-	add_to_gc(DOUBLE, key_arr, get_gc());
-	fill_val_arr(key_arr, val_arr, dict);
+	add_to_gc(DOUBLE, val_arr, get_gc());
+	(void)dict;
+//	fill_val_arr(key_arr, val_arr, dict);
 }
 // a tester
 int	get_nb_of_dollar(t_block *block)
