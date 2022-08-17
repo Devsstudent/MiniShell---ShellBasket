@@ -13,7 +13,7 @@
 
 void	free_exit(void)
 {
-	rl_clear_history();
+	clear_history();
 	free_gc(get_gc());
 	exit(1);
 }

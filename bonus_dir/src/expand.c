@@ -74,7 +74,7 @@ void	fill_key_arr(t_block *block, char **key_arr)
 	key_arr[j] = NULL;
 }
 
-void	fill_val_arr(char **key_arr, char **val_arr, dict *dict)
+void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 {
 	int		i;
 	char	*value;
@@ -82,7 +82,7 @@ void	fill_val_arr(char **key_arr, char **val_arr, dict *dict)
 	i = 0;
 	while (key_arr[i])
 	{
-		value = ft_strdup(dict_get_value(dict, key_arr[i]);
+		value = ft_strdup(dict_get_value(dict, key_arr[i]));
 		if (!value)
 			free_exit();
 		val_arr[i] = value;

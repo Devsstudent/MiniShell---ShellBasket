@@ -138,6 +138,7 @@ t_elem	*new_elem(char *content);
 void	dict_addback(t_dict *dict, t_elem *new);
 void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
+char	*dict_get_value(t_dict *dict, char *key);
 void	dict_clear(t_dict *dict);
 
 /********************************************/
@@ -213,10 +214,11 @@ t_line		*fill_till_ope(t_block **buff);
 //Recusrion fill tree :
 void		test(t_leaf *leaf, t_line *line, int lay_par);
 
-void	expand(t_line *line);
+void	expand(t_line *line, t_dict *dict);
+void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict);
 int	size_doll_val(char *word, int *i);
 void	fill_key_arr(t_block *block, char **key_arr);
-void	check_dollar_in_block(t_block *block);
+void	check_dollar_in_block(t_block *block, t_dict *dict);
 int	get_nb_of_dollar(t_block *block);
 
 

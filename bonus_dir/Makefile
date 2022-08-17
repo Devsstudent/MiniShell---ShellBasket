@@ -1,4 +1,5 @@
 FLAG = -Wall -g -Wextra -MMD -Werror
+CC = gcc
 LIB = ../libft
 HEAD = ./includes
 OBJ = $(addprefix obj/, new_main_2.o \
@@ -39,7 +40,7 @@ $(NAME): $(OBJ)
 	$(CC) $(FLAG) $(OBJ) -lreadline -L $(LIB) -lft -o $(NAME)
 
 obj/%.o: src/%.c | object
-	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -c $< -o $@
+	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -I /usr/local/opt/readline/include -c $< -o $@
 
 object:
 	@mkdir -p obj

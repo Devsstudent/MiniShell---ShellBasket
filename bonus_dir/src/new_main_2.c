@@ -21,14 +21,14 @@ t_bool	read_line(char **line)
 	return (TRUE);
 }
 
-void	browse_sub_tree(t_leaf *leaf)
+void	browse_sub_tree(t_leaf *leaf, t_dict *env)
 {
 	ft_printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
 		line = leaf->content;
-		expand(line);
+		expand(line, env);
 		t_block	*buff;
 		if (line)
 		{
@@ -43,25 +43,25 @@ void	browse_sub_tree(t_leaf *leaf)
 	if (leaf->left != NULL)
 	{
 		ft_printf("left\n");
-		browse_sub_tree(leaf->left);
+		browse_sub_tree(leaf->left, env);
 	}
 	else
 		return ;
 	if (leaf->right != NULL)
 	{
 		ft_printf("right\n");
-		browse_sub_tree(leaf->right);
+		browse_sub_tree(leaf->right, env);
 	}
 	else
 		return ;
 }
 
-void	browse_tree(t_tree *tree)
+void	browse_tree(t_tree *tree, t_dict *env)
 {
 	t_leaf  *buff;
 
 	buff = tree->head;
-	browse_sub_tree(buff);
+	browse_sub_tree(buff, env);
 }
 
 /*
@@ -111,7 +111,7 @@ int	main(int ac, char **av, char **envp)
 		block_lst = fill_line_lst(line);
 		tokenization(block_lst);
 		fill_ast_bonus(block_lst, &tree);
-		browse_tree(&tree);
+		browse_tree(&tree, &env);
 	}
 	free_exit();
 }
