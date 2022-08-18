@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/16 17:31:08 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/18 12:40:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ void	dict_addback(t_dict *dict, t_elem *new);
 void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
+char	*dict_get_value(t_dict *dict, char *key);
 
 /********************************************/
 /*                parsing                   */
@@ -218,9 +219,10 @@ void        fill_ast_bonus(t_line *line, t_tree *tree);
 void        line_cpy_till_pend(t_block **buff, t_line *sub_lst);
 
 
-void	expand(t_line *line);
-int	size_doll_val(char *word, int *i);
-void	fill_key_arr(t_block *block, char **key_arr);
+void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
+void	expand(t_line *line, t_dict *env);
+int	size_doll_val(char *word, int i);
+void	fill_key_arr(t_block *block, char **key_arr, int *indexes);
 void	check_dollar_in_block(t_block *block);
 int	get_nb_of_dollar(t_block *block);
 

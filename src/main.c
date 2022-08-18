@@ -87,6 +87,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
+		browse_ast_apply_expand(tree->head, &env);
 //		browse_tree(tree);
 	}
 	return (1);

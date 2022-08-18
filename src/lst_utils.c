@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/30 19:35:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/18 12:40:28 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -110,3 +110,17 @@ void	dict_clear(t_dict *dict)
 		buff = tmp;
 	}
 }
+
+char	*dict_get_value(t_dict *dict, char *key)
+{
+	t_elem	*buff;
+
+	buff = dict->head;
+	while (buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
+		buff = buff->next;
+	if (buff)
+		return (buff->value);
+	else
+		return (NULL);
+}
+

@@ -1,7 +1,7 @@
 FLAG = -Wall -g -Wextra -MMD -Werror
 LIB = ./libft
 HEAD = ./includes
-OBJ = $(addprefix obj/, new_main_2.o \
+OBJ = $(addprefix obj/, main.o \
 			garbage_collector.o \
 			copy_env.o \
 			lst_utils.o \
@@ -12,10 +12,10 @@ OBJ = $(addprefix obj/, new_main_2.o \
 			check_symbol.o \
 			tokenization.o \
 			signal_handling.o \
-			expand.o \
+			expand_new.o \
 			abstract_syntax_tree.o \
 			remove_quote_before_exec.o)
-D_LST = $(addprefix obj/, new_main_2.d \
+D_LST = $(addprefix obj/, main.d \
 			garbage_collector.d \
 			copy_env.d \
 			lst_utils.d \
@@ -26,7 +26,7 @@ D_LST = $(addprefix obj/, new_main_2.d \
 			check_symbol.d \
 			tokenization.d \
 			signal_handling.d \
-			expand.d \
+			expand_new.d \
 			abstract_syntax_tree.d \
 			remove_quote_before_exec.d \
 			null.d)
