@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/16 17:31:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:56:12 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ void	gc_free_node(t_gc *node);
 void	gc_free_node_addr(void *ptr, t_gc **gc);
 void	free_gc(t_gc **gc);
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
-
 /********************************************/
 /*                environment               */
 /********************************************/
@@ -214,12 +213,21 @@ t_line		*fill_till_ope(t_block **buff);
 //Recusrion fill tree :
 void		test(t_leaf *leaf, t_line *line, int lay_par);
 
-void	expand(t_line *line, t_dict *dict);
-void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict);
-int	size_doll_val(char *word, int *i);
-void	fill_key_arr(t_block *block, char **key_arr);
-void	check_dollar_in_block(t_block *block, t_dict *dict);
-int	get_nb_of_dollar(t_block *block);
 
+int	total_char_to_remove(char **key_arr);
+int	total_char_to_add(char **val_arr);
+t_bool	check_char(char c);
+int	size_doll_val(char *word, int i);
+void	advance_if_in_s_quote(t_bool *d_quote, char *word, int *i);
+void	fill_key_arr(t_block *block, char **key_arr, int *indexes);
+int	*get_indexes_expandables(t_block *block, int dollar);
+int	get_nb_of_dollar(t_block *block);
+void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict);
+void	replace_key(char *new_word, int *j, char **val_arr);
+t_bool	handle_simple_word(char *new_word, char *word, int *indexes);
+void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes);
+void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes);
+void	handle_dollar_in_block(t_block *block, t_dict *dict);
+void	expand(t_line *line, t_dict *dict);
 
 #endif
