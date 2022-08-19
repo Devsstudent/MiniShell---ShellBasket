@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 14:19:25 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 14:27:19 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 21:48:59 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,27 +71,25 @@ char	**copy_env(char **env)
 	return(new_env);
 }
 
-static void	init_env(t_dict *env)
+t_dict	*double_char_to_lst(char **d_char)
 {
+	t_elem	*new;
+	t_dict	*env;
+
+	env = (t_dict *)malloc(sizeof(t_dict));
 	env->size = 0;
 	env->head = NULL;
 	env->last = NULL;
-}
-
-t_bool	double_char_to_lst(char **d_char, t_dict *env)
-{
-	t_elem	*new;
-
-	init_env(env);
+	add_to_gc(DICT, env, get_gc());
 	while (*d_char != 0)
 	{
 		new = new_elem(*d_char);
 		//Free tous les elememt malloc avant ! Si ca crash
 		if (!new)
-			return (FALSE);
+			free_exit();
 		dict_addback(env, new);
 		d_char++;
 	}
-	add_to_gc(DICT, env, get_gc());
-	return (TRUE);
+	ft_printf(0, "dict_size:%i", env->size);
+	return env;
 }

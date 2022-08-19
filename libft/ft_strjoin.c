@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 18:54:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/05/07 11:54:15 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 22:21:55 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -37,5 +37,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 			res[i] = s2[++j];
 	}
 	res[i] = '\0';
+	free((char *)s1);
 	return (res);
 }

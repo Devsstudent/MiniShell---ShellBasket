@@ -72,11 +72,11 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_tree	*tree;
-	t_dict	env;
+	t_dict	*env;
 
 	if (av[1])
 		return (1);
-	double_char_to_lst(envp, &env);
+	env = double_char_to_lst(envp);
 	/*
 	t_elem *buff;
 	buff = env.head;

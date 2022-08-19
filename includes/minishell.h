@@ -2,9 +2,7 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+         +:+     */ /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */ /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
 /*   Updated: 2022/08/19 20:31:48 by odessein         ###   ########.fr       */
 /*                                                                            */
@@ -135,7 +133,7 @@ t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
 /********************************************/
 
 char	**copy_env(char **env);
-t_bool	double_char_to_lst(char **d_char, t_dict *env);
+t_dict	*double_char_to_lst(char **d_char);
 t_elem	*new_elem(char *content);
 void	dict_addback(t_dict *dict, t_elem *new);
 void	dict_delone(t_dict *dict, char *key);
