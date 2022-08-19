@@ -28,9 +28,9 @@ void	tokenization(t_line *line)
 		if (!check_symbol(buff))
 		{
 			if (buff->next)
-				ft_printf("syntax error: unexpected token near field `%s`", buff->next->word);
+				ft_printf(1, "syntax error: unexpected token near field `%s`", buff->next->word);
 			else
-				ft_printf("syntax error: unexpected token near field `newline`");
+				ft_printf(1, "syntax error: unexpected token near field `newline`");
 			free_exit();
 		}
 		buff = buff->next;

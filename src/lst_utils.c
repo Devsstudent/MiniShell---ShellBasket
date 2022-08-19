@@ -110,3 +110,15 @@ void	dict_clear(t_dict *dict)
 		buff = tmp;
 	}
 }
+char	*dict_get_value(t_dict *dict, char *key)
+{
+	t_elem	*buff;
+
+	buff = dict->head;
+	while (buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
+		buff = buff->next;
+	if (buff)
+		return (buff->value);
+	else
+		return (NULL);
+}

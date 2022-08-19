@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/18 18:06:37 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 13:44:35 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -96,7 +96,7 @@ void	fill_key_arr(t_block *block, char **key_arr, int *indexes)
 	{
 		size_val = size_doll_val(block->word, indexes[i]);
 		key_arr[j] = ft_substr(block->word, indexes[i] + 1, size_val);
-		ft_printf("key = %s\n", key_arr[j]);
+		ft_printf(1, "key = %s\n", key_arr[j]);
 		//KEYS OK
 		j++;
 		i++;
@@ -159,7 +159,6 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 	{
 		if (key_arr[i][0] == '?' && !key_arr[i][1])
 		{
-			ft_printf("test");
 			value = get_exit_status();
 			val_arr[i++] = value;
 			continue ;
@@ -263,7 +262,7 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes)
 	if (!new_word)
 		free_exit();
 	fill_new_word(new_word, block->word, val_arr, indexes);
-	ft_printf("new_word: %s\n", new_word);
+	ft_printf(0, "new_word: %s\n", new_word);
 	add_to_gc(SIMPLE, block->word, get_gc());
 	block->word = new_word;
 }
@@ -276,7 +275,7 @@ void	handle_dollar_in_block(t_block *block, t_dict *dict)
 	int		*indexes;
 
 	size_double_arr = get_nb_of_dollar(block);
-	ft_printf("***nb expandable = %i***\n", size_double_arr);
+	ft_printf(0, "***nb expandable = %i***\n", size_double_arr);
 	indexes = get_indexes_expandables(block, size_double_arr);
 	if (!indexes)
 		free_exit();

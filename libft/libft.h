@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 12:38:41 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/08 22:46:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 13:19:15 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ typedef struct s_storage {
 	t_bool					space_after;
 }							t_storage;
 
-int		ft_printf(const char *string, ...);
 char	*get_next_line(int fd);
 char	*gnl_strjoin(char *s1, char *s2);
 char	*gnl_strdup(char *s);
@@ -81,7 +80,7 @@ t_bool	ft_check_dieze(char *str);
 t_bool	ft_is_digit(char c);
 t_bool	ft_check_space(char *str);
 void	ft_putnstr(char *str, int size, int *ret_val);
-int		ft_printf(const char *string, ...);
+int		ft_printf(t_bool err, const char *string, ...);
 void	ft_loop(char *string, va_list ap, int *ret_val);
 char	*ft_brows(char *str, va_list ap, int *ret_val);
 t_bool	ft_check_end(char c);

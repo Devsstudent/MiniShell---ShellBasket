@@ -24,7 +24,7 @@ t_tree	*ms_lex_and_parse(char **line)
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	ft_printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
@@ -35,21 +35,21 @@ void	browse_sub_tree(t_leaf *leaf)
 			buff = line->head;
 			while (buff)
 			{
-				ft_printf("content = %s\n", buff->word);
+				ft_printf(0, "content = %s\n", buff->word);
 				buff = buff->next;
 			}
 		}
 	}
 	if (leaf->left != NULL)
 	{
-		ft_printf("left\n");
+		ft_printf(0, "left\n");
 		browse_sub_tree(leaf->left);
 	}
 	else
 		return ;
 	if (leaf->right != NULL)
 	{
-		ft_printf("right\n");
+		ft_printf(0, "right\n");
 		browse_sub_tree(leaf->right);
 	}
 	else
@@ -87,7 +87,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
-//		browse_tree(tree);
+		browse_tree(tree);
 	}
 	return (1);
 }
