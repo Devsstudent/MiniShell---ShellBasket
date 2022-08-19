@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/12 21:21:33 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 13:43:59 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -28,9 +28,9 @@ void	tokenization(t_line *line)
 		if (!check_symbol(buff))
 		{
 			if (buff->next)
-				ft_printf("syntax error: unexpected token near field `%s`", buff->next->word); //ft_printf_put_error
+				ft_printf(0, "syntax error: unexpected token near field `%s`", buff->next->word); //ft_printf_put_error
 			else
-				ft_printf("syntax error: unexpected token near field `newline`");
+				ft_printf(0, "syntax error: unexpected token near field `newline`");
 			free_exit();
 		}
 		buff = buff->next;

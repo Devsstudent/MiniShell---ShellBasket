@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 18:11:48 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/12 23:21:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 13:41:30 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -31,6 +31,8 @@ t_bool	check_parentheses(t_token next, t_token previous, t_token token)
 	}
 	else if (token == P_OPEN)
 	{
+		if (next == P_CLOSE)
+			return (FALSE);
 		if (previous == UNDEF || previous == OR || previous == AND
 			|| previous == PIPE || previous == P_OPEN)
 			return (TRUE);
