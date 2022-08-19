@@ -60,7 +60,8 @@ typedef enum	e_type{
 	DICT,
 	LINE,
 	DOUBLE,
-	SIMPLE
+	SIMPLE,
+	TREE
 }	t_type;
 
 typedef struct	s_leaf{
@@ -238,5 +239,6 @@ void	expand(t_line *line, t_dict *dict);
 void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
 
 char	*get_exit_status(void);
+void	clean_tree(t_leaf *leaf);
 
 #endif

@@ -2,6 +2,7 @@ FLAG = -Wall -g -Wextra -MMD -Werror
 LIB = ./libft
 HEAD = ./includes
 OBJ = $(addprefix obj/, main.o \
+			ast_utils.o \
 			garbage_collector.o \
 			copy_env.o \
 			lst_utils.o \
@@ -17,6 +18,7 @@ OBJ = $(addprefix obj/, main.o \
 			error.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
+			ast_utils.d \
 			garbage_collector.d \
 			copy_env.d \
 			lst_utils.d \

@@ -26,7 +26,6 @@ t_leaf	*new_leaf(t_line *cmd, t_type_leaf type)
 	leaf = (t_leaf *) malloc(sizeof(t_leaf));
 	if (!leaf)
 		free_exit();
-	add_to_gc(SIMPLE, leaf, get_gc());
 	if (type != PIPE_L)
 		leaf->content = cmd;
 	leaf->parentheses = FALSE;
@@ -43,8 +42,6 @@ t_line	*fill_till_pipe(t_block **buff)
 	new_sub = (t_line *) malloc(sizeof(t_line));
 	if (!new_sub)
 		free_exit();
-	else
-		add_to_gc(LINE, new_sub, get_gc());
 	new_sub->head = NULL;
 	line_cpy_till_pipe(buff, new_sub);
 	return (new_sub);

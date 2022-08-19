@@ -16,6 +16,7 @@ t_tree	*ms_lex_and_parse(char **line)
 	t_tree	*tree;
 
 	tree = (t_tree *) malloc(sizeof(t_tree));
+	add_to_gc(TREE, tree, get_gc());
 	line_lst = fill_line_lst(*line);
 	tokenization(line_lst);
 	fill_ast(line_lst, tree);

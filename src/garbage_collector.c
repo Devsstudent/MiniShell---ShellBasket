@@ -1,6 +1,5 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
+/*                                                                            */ /*                                                        :::      ::::::::   */
 /*   gc_collector.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
@@ -46,6 +45,13 @@ void	gc_free_node(t_gc *node)
 	}
 	else if (node->type == DICT)
 		dict_clear(node->content);
+	else if (node->type == LINE)
+		line_clear(node->content);
+	else if (node->type == TREE)
+	{
+		clean_tree(((t_tree *)(node->content))->head);
+		free(node->content);
+	}
 	free(node);
 }
 
