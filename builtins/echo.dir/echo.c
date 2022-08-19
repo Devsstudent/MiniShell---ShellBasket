@@ -6,10 +6,25 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 14:49:21 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 15:10:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:18:02 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
+
+//without -e, the escape sequences are not interpreted
+//to do that, use write, char by char, not ft_printf, it does it alone, it erases \ alone
+
+void	display_single_arg(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i])
+	{
+		write(1, &arg[i], 1);
+		i++;
+	}
+}
 
 void	display_args(char **argv)
 {
@@ -18,9 +33,9 @@ void	display_args(char **argv)
 	i = 0;
 	while (argv[i] != NULL)
 	{
-		ft_printf("%s", argv[i]);
+		display_single_arg(argv[i]);
 		if (argv[i + 1] != NULL)
-			ft_printf(" ");
+			write(1, " ", 1);
 		i++;
 	}
 }
@@ -30,7 +45,7 @@ void	exec_echo(int ac, char **argv, t_dict *env)
 	(void)env;
 	if (ac == 1)
 	{
-		ft_printf("\n");
+		write(1, "\n", 1);
 		return ;
 	}
 	if (ac > 1 && ft_strncmp(argv[1], "-n", 3) == 0)
@@ -40,7 +55,15 @@ void	exec_echo(int ac, char **argv, t_dict *env)
 	else if (ac > 1 && ft_strncmp(argv[1], "-n", 3) != 0)
 	{
 		display_args(&argv[1]);
-		ft_printf("\n");
+		write(1, "\n", 1);
 	}
 }
+
+/*
+int	main(int ac, char **argv)
+{
+	exec_echo(ac, argv);
+	return (0);
+}
+*/
 
