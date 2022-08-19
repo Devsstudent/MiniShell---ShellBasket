@@ -6,16 +6,21 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 14:52:20 by odessein          #+#    #+#             */
-/*   Updated: 2022/06/02 15:37:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 13:18:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 
-int	ft_printf(const char *string, ...)
+int	ft_printf(t_bool err, const char *string, ...)
 {
 	va_list		ap;
 	int			ret_val;
 
+	if (err)
+	{
+		if (dup2(STDOUT_FILENO, STDERR_FILENO) == -1)
+			return (0);
+	}
 	ret_val = 0;
 	va_start(ap, string);
 	ft_loop((char *) string, ap, &ret_val);
