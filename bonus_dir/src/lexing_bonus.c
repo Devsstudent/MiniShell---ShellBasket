@@ -247,7 +247,6 @@ t_line	*fill_line_lst(char *line)
 		free_exit();
 	}
 	block_lst->head = NULL;
-	add_to_gc(LINE, block_lst, get_gc());
 	handle_line(line, block_lst);
 	return (block_lst);
 }

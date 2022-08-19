@@ -25,7 +25,8 @@ t_tree	*ms_lex_and_parse(char **line)
 		ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
 		buff = buff->next;
 	}
-	fill_ast_bonus(line_lst, tree);
+	tree = NULL;
+//	fill_ast_bonus(line_lst, tree);
 	return (tree);
 }
 
@@ -72,12 +73,14 @@ void	browse_tree(t_tree *tree)
 }
 
 
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_tree	*tree;
 	t_dict	env;
 
+	g_exit_status = 0;
 	if (av[1])
 		return (1);
 	double_char_to_lst(envp, &env);
@@ -85,7 +88,9 @@ int	main(int ac, char **av, char **envp)
 	{
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
-		browse_tree(tree);
+		(void) tree;
+	//	browse_ast_apply_expand(tree->head, &env);
+		//browse_tree(tree);
 	}
 	return (1);
 }

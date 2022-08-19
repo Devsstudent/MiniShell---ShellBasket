@@ -2,14 +2,11 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                    +:+ +:+         +:+     */ /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
 /*   Updated: 2022/08/18 17:56:12 by odessein         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
+/*                                                                            */ /* ************************************************************************** */ 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -113,6 +110,7 @@ typedef struct	s_lexeur {
 	void			*content;
 	struct s_lexeur	*next;
 }					t_lexeur;
+int	g_exit_status;
 
 void	free_exit(void);
 void	listen_to_sigs(void);
@@ -229,5 +227,8 @@ void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes);
 void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes);
 void	handle_dollar_in_block(t_block *block, t_dict *dict);
 void	expand(t_line *line, t_dict *dict);
+void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
+
+char	*get_exit_status(void);
 
 #endif

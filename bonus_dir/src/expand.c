@@ -53,7 +53,7 @@ int	size_doll_val(char *word,int i)
 
 	size = 0;
 	i++;
-	if (word[i] >= '0' && word[i] <= '9')
+	if ((word[i] >= '0' && word[i] <= '9') || word[i] == '?')
 	{
 		size++;
 		return (size);
@@ -157,6 +157,13 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 	i = 0;
 	while (key_arr[i])
 	{
+		if (key_arr[i][0] == '?' && !key_arr[i][1])
+		{
+			ft_printf("test");
+			value = get_exit_status();
+			val_arr[i++] = value;
+			continue ;
+		}
 		value = dict_get_value(dict, key_arr[i]);
 		if (!value)
 			val_arr[i] = ft_strdup("");
@@ -201,7 +208,7 @@ t_bool	handle_simple_word(char *new_word, char *word, int *indexes)
 
 t_bool	char_is_num(char c, int *i)
 {
-	if (c >= '0' && c <= '9')
+	if ((c >= '0' && c <= '9') || c == '?')
 	{
 		(*i)++;
 		return (TRUE);
@@ -234,7 +241,7 @@ void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes)
 			i++;
 			while (word[i] && check_char(word[i]))
 			{
-				if (word[i - 1] && word[i - 1] == '$' && char_is_num(word[i], &i))
+				if (word[i - 1] && word[i - 1] == '$' && char_is_num(word[i], &i) && word[i] != '?')
 					break ;
 				i++;
 			}

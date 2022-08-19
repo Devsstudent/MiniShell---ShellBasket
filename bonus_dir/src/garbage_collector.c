@@ -46,6 +46,12 @@ void	gc_free_node(t_gc *node)
 	}
 	else if (node->type == DICT)
 		dict_clear(node->content);
+	else if (node->type == LINE)
+		line_clear(node->content);
+	/*
+	else if (node->type = TREE)
+		tree_clear
+	*/
 	free(node);
 }
 
