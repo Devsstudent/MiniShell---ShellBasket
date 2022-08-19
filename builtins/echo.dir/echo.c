@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 14:49:21 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 16:18:02 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/19 18:15:49 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -57,6 +57,7 @@ void	exec_echo(int ac, char **argv, t_dict *env)
 		display_args(&argv[1]);
 		write(1, "\n", 1);
 	}
+	set_exit_status(0);
 }
 
 /*
