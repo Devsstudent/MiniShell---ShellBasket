@@ -6,26 +6,37 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 21:43:30 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 12:23:00 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/19 12:59:46 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-#include "sys/types.h"
-#include "dirent.h"
 
-void	go_to_path(char *path)
+void	go_to_path(char *path, t_dict *env)
 {
 	int		ret;
-	char	s[100];
+	char	buff[4097];
+	char	*pwd_key;
+	char	*pwd_value;
 
 	ret = chdir(path);
 	if (ret != 0)
+	{
 		perror("cd");
+		set_exit_status(ret);
+		return ;
+	}
 	set_exit_status(ret);
-	//ft_printf("new path = %s\n", getcwd(s, 100));
+	pwd_key = ft_strdup("PWD");
+	if (pwd_key == NULL)
+		free_exit();
+	pwd_value = getcwd(buff, 4097);
+	dict_modify(env, pwd_key, pwd_value);
+	if (pwd_value == NULL)
+		free_exit();
+	ft_printf("new path = %s\n", getcwd(buff, 4097));
 }
 
-void	exec_cd(int ac, char **argv)
+void	exec_cd(int ac, char **argv, t_dict *env)
 {
 	if (ac == 1)
 	{
@@ -39,6 +50,6 @@ void	exec_cd(int ac, char **argv)
 	}
 	else
 	{
-		go_to_path(argv[1]);
+		go_to_path(argv[1], env);
 	}
 }

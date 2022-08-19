@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/18 12:40:25 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 12:34:06 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <dirent.h>
 # include <signal.h>
 # include <string.h>
 # include <readline/readline.h>
