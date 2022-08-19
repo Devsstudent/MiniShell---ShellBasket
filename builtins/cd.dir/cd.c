@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 21:43:30 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 12:59:46 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/19 14:47:15 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -29,11 +29,12 @@ void	go_to_path(char *path, t_dict *env)
 	pwd_key = ft_strdup("PWD");
 	if (pwd_key == NULL)
 		free_exit();
-	pwd_value = getcwd(buff, 4097);
+	//see malloc in dict functions, which should we free or not
+	pwd_value = ft_strdup(getcwd(buff, 4097));
 	dict_modify(env, pwd_key, pwd_value);
 	if (pwd_value == NULL)
 		free_exit();
-	ft_printf("new path = %s\n", getcwd(buff, 4097));
+	//ft_printf("new path = %s\n", getcwd(buff, 4097));
 }
 
 void	exec_cd(int ac, char **argv, t_dict *env)
