@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gc_collector.c                                     :+:      :+:    :+:   */
+/*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 16:29:54 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/03 15:38:32 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 20:16:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -19,7 +19,7 @@ t_gc	*gc_new_node(t_type type, void *ptr)
 
 	new = (t_gc *)malloc(sizeof(t_gc));
 	if (!new)
-		return (NULL);
+		free_exit();
 	new->next = NULL;
 	new->type = type;
 	new->content = ptr;
@@ -48,10 +48,8 @@ void	gc_free_node(t_gc *node)
 		dict_clear(node->content);
 	else if (node->type == LINE)
 		line_clear(node->content);
-	/*
 	else if (node->type = TREE)
-		tree_clear
-	*/
+		tree_clear((t_leaf *)(node->content));
 	free(node);
 }
 
@@ -93,6 +91,7 @@ void	free_gc(t_gc **gc)
 		gc_free_node(*gc);
 		*gc = tmp;
 	}
+	rl_clear_history();
 }
 
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)

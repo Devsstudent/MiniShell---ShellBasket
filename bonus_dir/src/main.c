@@ -17,6 +17,7 @@ t_tree	*ms_lex_and_parse(char **line)
 
 	tree = (t_tree *) malloc(sizeof(t_tree));
 	line_lst = fill_line_lst(*line);
+	add_to_gc(LINE, line_lst, get_gc());
 	tokenization(line_lst);
 	t_block	*buff;
 	buff = line_lst->head;
@@ -71,7 +72,7 @@ void	browse_tree(t_tree *tree)
 	browse_sub_tree(buff);
 }
 
-
+int	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -79,7 +80,6 @@ int	main(int ac, char **av, char **envp)
 	t_tree	*tree;
 	t_dict	env;
 
-	g_exit_status = 0;
 	if (av[1])
 		return (1);
 	double_char_to_lst(envp, &env);

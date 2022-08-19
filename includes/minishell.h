@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/16 17:31:08 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 20:31:48 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
-
-int	g_exit_status;
+# include "global.h"
 
 typedef enum	e_type_leaf{
 	CMD,
@@ -63,19 +62,6 @@ typedef enum	e_type{
 	SIMPLE,
 	TREE
 }	t_type;
-
-typedef struct	s_leaf{
-	//head de la sous-list
-	void			*content;
-	t_bool			parentheses;
-	t_type_leaf		type;
-	struct s_leaf	*right;
-	struct s_leaf	*left;
-}					t_leaf;
-
-typedef struct	s_tree{
-	t_leaf	*head;
-}			t_tree;
 
 typedef struct	s_elem{
 	struct s_elem	*next;
@@ -116,6 +102,19 @@ typedef struct	s_lexeur {
 	void			*content;
 	struct s_lexeur	*next;
 }					t_lexeur;
+
+typedef struct	s_leaf{
+	//head de la sous-list
+	t_line			*content;
+	t_bool			parentheses;
+	t_type_leaf		type;
+	struct s_leaf	*right;
+	struct s_leaf	*left;
+}					t_leaf;
+
+typedef struct	s_tree{
+	t_leaf	*head;
+}			t_tree;
 
 void	free_exit(void);
 void	listen_to_sigs(void);
@@ -204,6 +203,7 @@ void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 /*          abstract syntax tree            */
 /********************************************/
 
+t_leaf	*new_leaf(t_line *cmd, t_type_leaf type);
 //BONUS
 
 t_bool	    check_parentheses(t_token next, t_token previous, t_token token);

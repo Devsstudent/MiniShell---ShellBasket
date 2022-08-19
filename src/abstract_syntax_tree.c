@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/15 21:57:57 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/19 21:23:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,22 +18,6 @@
 //this function should return "line" or new_struct
 
 //Function to create a pipe node
-
-t_leaf	*new_leaf(t_line *cmd, t_type_leaf type)
-{
-	t_leaf	*leaf;
-
-	leaf = (t_leaf *) malloc(sizeof(t_leaf));
-	if (!leaf)
-		free_exit();
-	if (type != PIPE_L)
-		leaf->content = cmd;
-	leaf->parentheses = FALSE;
-	leaf->type = type;
-	leaf->right = NULL;
-	leaf->left = NULL;
-	return (leaf);
-}
 
 t_line	*fill_till_pipe(t_block **buff)
 {
@@ -99,5 +83,7 @@ void	fill_ast(t_line *line, t_tree *tree)
 		tree->head = new_leaf(cmd, CMD);
 		return ;
 	}
+	else
+		line_clear(cmd);
 	loop_line_to_ast(&tree, pipe, line);
 }

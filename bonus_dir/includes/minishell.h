@@ -20,6 +20,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
+# include "global.h"
 
 typedef enum	e_type_leaf{
 	CMD,
@@ -110,7 +111,8 @@ typedef struct	s_lexeur {
 	void			*content;
 	struct s_lexeur	*next;
 }					t_lexeur;
-int	g_exit_status;
+
+
 
 void	free_exit(void);
 void	listen_to_sigs(void);
