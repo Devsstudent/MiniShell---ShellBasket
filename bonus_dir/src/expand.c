@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 13:44:35 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:01:29 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -22,7 +22,9 @@ int	total_char_to_remove(char **key_arr)
 	{
 		// + 1 for $
 		size += ft_strlen(key_arr[i]) + 1;
-		i++; } return (size);
+		i++;
+	}
+	return (size);
 }
 
 int	total_char_to_add(char **val_arr)
@@ -104,7 +106,6 @@ void	fill_key_arr(t_block *block, char **key_arr, int *indexes)
 	key_arr[j] = NULL;
 }
 
-
 int	get_nb_of_dollar(t_block *block)
 {
 	int		i;
@@ -124,6 +125,7 @@ int	get_nb_of_dollar(t_block *block)
 	}
 	return (dollar);
 }
+
 
 void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 {

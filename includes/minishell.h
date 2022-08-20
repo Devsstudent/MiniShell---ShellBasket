@@ -2,11 +2,14 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */ /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */ /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 20:31:48 by odessein         ###   ########.fr       */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
+/*   Updated: 2022/08/20 12:53:17 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -16,6 +19,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <dirent.h>
 # include <signal.h>
 # include <string.h>
 # include <readline/readline.h>
@@ -226,6 +230,11 @@ int	size_doll_val(char *word, int i);
 void	advance_if_in_s_quote(t_bool *d_quote, char *word, int *i);
 void	fill_key_arr(t_block *block, char **key_arr, int *indexes);
 int	*get_indexes_expandables(t_block *block, int dollar);
+
+void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
+void	expand(t_line *line, t_dict *env);
+void	check_dollar_in_block(t_block *block);
+
 int	get_nb_of_dollar(t_block *block);
 void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict);
 void	replace_key(char *new_word, int *j, char **val_arr);
@@ -233,7 +242,6 @@ t_bool	handle_simple_word(char *new_word, char *word, int *indexes);
 void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes);
 void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes);
 void	handle_dollar_in_block(t_block *block, t_dict *dict);
-void	expand(t_line *line, t_dict *dict);
 void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
 
 char	*get_exit_status(void);

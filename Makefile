@@ -1,3 +1,6 @@
+#don't forget the definition of CC, because default is cc, not gcc
+
+CC = gcc
 FLAG = -Wall -g -Wextra -MMD -Werror
 LIB = ./libft
 HEAD = ./includes
@@ -24,8 +27,7 @@ D_LST = $(addprefix obj/, main.d \
 			lst_utils.d \
 			lexing.d \
 			line_lst_utils.d \
-			free_exit.d \
-			singleton.d \
+			free_exit.d \ singleton.d \
 			check_symbol.d \
 			tokenization.d \
 			signal_handling.d \
