@@ -31,7 +31,6 @@ t_leaf	*new_leaf(t_line *cmd, t_type_leaf type)
 	leaf->content = NULL;
 	if (type != PIPE_L && cmd)
 		leaf->content = cmd;
-	leaf->parentheses = FALSE;
 	leaf->type = type;
 	leaf->right = NULL;
 	leaf->left = NULL;

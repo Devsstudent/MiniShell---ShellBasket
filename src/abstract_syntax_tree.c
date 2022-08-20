@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/19 21:23:18 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/20 16:54:39 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -73,7 +73,7 @@ void	fill_ast(t_line *line, t_tree *tree)
 	t_block	*buff;
 	t_line	*cmd;
 	t_bool	pipe;
-	
+
 	tree->head = NULL;
 	buff = line->head;
 	pipe = FALSE;

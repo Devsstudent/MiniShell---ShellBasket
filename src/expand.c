@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 13:44:35 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/20 17:06:51 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -22,7 +22,9 @@ int	total_char_to_remove(char **key_arr)
 	{
 		// + 1 for $
 		size += ft_strlen(key_arr[i]) + 1;
-		i++; } return (size);
+		i++;
+	}
+	return (size);
 }
 
 int	total_char_to_add(char **val_arr)
@@ -84,9 +86,7 @@ void	advance_if_in_s_quote(t_bool *d_quote, char *word, int *i)
 	}
 }
 
-void	fill_key_arr(t_block *block, char **key_arr, int *indexes)
-{
-	int	i;
+void	fill_key_arr(t_block *block, char **key_arr, int *indexes) { int	i;
 	int	j;
 	int	size_val;
 
@@ -262,7 +262,9 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes)
 	if (!new_word)
 		free_exit();
 	fill_new_word(new_word, block->word, val_arr, indexes);
+	free(block->word);
 	block->word = new_word;
+	ft_printf(0, "From l:267 of expand.c\n last value of block : %s\n", block->word);
 }
 
 void	handle_dollar_in_block(t_block *block, t_dict *dict)
