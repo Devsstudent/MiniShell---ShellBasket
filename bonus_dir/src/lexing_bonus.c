@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/16 15:12:53 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:57:20 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -150,6 +150,8 @@ void	handle_and(char *line, int *i, int *size, t_line *lst)
 		(*size) += 2;
 		fill_word(size, lst, line, *i);
 	}
+	else
+		print_syntax_error("&", 0);
 }
 
 void	handle_par(char *line, int *i, int *size, t_line *lst)
@@ -240,12 +242,12 @@ t_line	*fill_line_lst(char *line)
 	t_line	*block_lst;
 	
 	block_lst = (t_line *) malloc(sizeof(t_line));
-	if (!block_lst || !check_lines_quotes(line) 
-		|| !check_lines_parentheses(line))
-	{
-		//mettre message d'erreur
+	if (!block_lst)
 		free_exit();
-	}
+	if (!check_lines_quotes(line))
+		print_syntax_error(NULL, 2);
+	if (!check_lines_parentheses(line))
+		print_syntax_error(NULL, 1);
 	block_lst->head = NULL;
 	handle_line(line, block_lst);
 	return (block_lst);

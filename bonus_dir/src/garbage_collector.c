@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 16:29:54 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 20:16:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:14:55 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -50,7 +50,8 @@ void	gc_free_node(t_gc *node)
 		line_clear(node->content);
 	else if (node->type == TREE)
 	{
-		clean_tree(((t_tree *)(node->content))->head);
+		if (((t_tree *)(node->content))->head)
+			clean_tree(((t_tree *)(node->content))->head);
 		free(node->content);
 	}
 	free(node);

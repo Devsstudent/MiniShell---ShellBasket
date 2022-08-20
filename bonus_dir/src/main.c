@@ -7,7 +7,6 @@ void	ms_line(char **line)
 	if (!(*line))
 		free_exit();
 	add_history(*line);
-	ft_printf(0, "%p", line);
 	add_to_gc(SIMPLE, *line, get_gc());
 }
 
@@ -17,6 +16,7 @@ t_tree	*ms_lex_and_parse(char **line)
 	t_tree	*tree;
 
 	tree = (t_tree *) malloc(sizeof(t_tree));
+	tree->head = NULL;
 	add_to_gc(TREE, tree, get_gc());
 	line_lst = fill_line_lst(*line);
 	add_to_gc(LINE, line_lst, get_gc());
@@ -90,7 +90,6 @@ int	main(int ac, char **av, char **envp)
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
 		browse_ast_apply_expand(tree->head, env);
-//		browse_tree(tree);
 	}
 	return (1);
 }

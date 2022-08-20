@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 13:02:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 13:02:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:29:09 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,5 +236,6 @@ void	expand(t_line *line, t_dict *dict);
 void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
 
 char	*get_exit_status(void);
+void	print_syntax_error(char *ope, int type);
 
 #endif

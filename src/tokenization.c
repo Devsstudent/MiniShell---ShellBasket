@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/03 20:28:20 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:44:20 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -25,13 +25,13 @@ void	tokenization(t_line *line)
 	while (buff != NULL)
 	{
 		attribute_token(buff);
+		ft_printf(0, "%i\n", buff->token);
 		if (!check_symbol(buff))
 		{
 			if (buff->next)
-				ft_printf(1, "syntax error: unexpected token near field `%s`", buff->next->word);
+				print_syntax_error(buff->next->word, 0);
 			else
-				ft_printf(1, "syntax error: unexpected token near field `newline`");
-			free_exit();
+				print_syntax_error("newline", 0);
 		}
 		buff = buff->next;
 	}

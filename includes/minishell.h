@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 12:53:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:42:06 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,7 @@ void	handle_dollar_in_block(t_block *block, t_dict *dict);
 void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
 
 char	*get_exit_status(void);
+void	print_syntax_error(char *ope, int type);
 void	clean_tree(t_leaf *leaf);
 
 #endif
