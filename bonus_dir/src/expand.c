@@ -104,30 +104,6 @@ void	fill_key_arr(t_block *block, char **key_arr, int *indexes)
 	key_arr[j] = NULL;
 }
 
-int	*get_indexes_expandables(t_block *block, int dollar)
-{
-	int		i;
-	int		j;
-	int		*indexes;
-	t_bool	d_quote;
-
-	i = 0;
-	j = 0;
-	indexes = malloc(sizeof(int) * (dollar + 1));
-	if (!indexes)
-		return (NULL);
-	d_quote = FALSE;
-	while (block->word[i])
-	{
-		advance_if_in_s_quote(&d_quote, block->word, &i);
-		if (block->word[i + 1] && block->word[i] == '$' 
-				&& check_char(block->word[i + 1]))
-			indexes[j++] = i;
-		i++;
-	}
-	indexes[j] = -1;
-	return (indexes);
-}
 
 int	get_nb_of_dollar(t_block *block)
 {
@@ -262,9 +238,33 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes)
 	if (!new_word)
 		free_exit();
 	fill_new_word(new_word, block->word, val_arr, indexes);
-	ft_printf(0, "new_word: %s\n", new_word);
-	add_to_gc(SIMPLE, block->word, get_gc());
 	block->word = new_word;
+}
+
+int	*get_indexes_expandables(t_block *block, int dollar)
+{
+	int		i;
+	int		j;
+	int		*indexes;
+	t_bool	d_quote;
+
+	i = 0;
+	j = 0;
+	indexes = malloc(sizeof(int) * (dollar + 1));
+	if (!indexes)
+		free_exit();
+	add_to_gc(SIMPLE, indexes, get_gc());
+	d_quote = FALSE;
+	while (block->word[i])
+	{
+		advance_if_in_s_quote(&d_quote, block->word, &i);
+		if (block->word[i + 1] && block->word[i] == '$' 
+				&& check_char(block->word[i + 1]))
+			indexes[j++] = i;
+		i++;
+	}
+	indexes[j] = -1;
+	return (indexes);
 }
 
 void	handle_dollar_in_block(t_block *block, t_dict *dict)
@@ -277,9 +277,6 @@ void	handle_dollar_in_block(t_block *block, t_dict *dict)
 	size_double_arr = get_nb_of_dollar(block);
 	ft_printf(0, "***nb expandable = %i***\n", size_double_arr);
 	indexes = get_indexes_expandables(block, size_double_arr);
-	if (!indexes)
-		free_exit();
-	add_to_gc(SIMPLE, indexes, get_gc());
 	key_arr = (char **) malloc(sizeof(*key_arr) * (size_double_arr + 1));
 	if (!key_arr)
 		free_exit();

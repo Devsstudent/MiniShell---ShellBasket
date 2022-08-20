@@ -1,8 +1,6 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */ /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                        :::      ::::::::   */ /*   minishell.h                                        :+:      :+:    :+:   */ /*                                                    +:+ +:+         +:+     */ /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:21:43 by mbelrhaz          #+#    #+#             */
 /*   Updated: 2022/08/18 17:56:12 by odessein         ###   ########.fr       */
@@ -56,7 +54,8 @@ typedef enum	e_type{
 	DICT,
 	LINE,
 	DOUBLE,
-	SIMPLE
+	SIMPLE,
+	TREE,
 }	t_type;
 
 typedef struct	s_leaf{
@@ -132,7 +131,7 @@ t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
 /********************************************/
 
 char	**copy_env(char **env);
-t_bool	double_char_to_lst(char **d_char, t_dict *env);
+t_dict	*double_char_to_lst(char **d_char);
 t_elem	*new_elem(char *content);
 void	dict_addback(t_dict *dict, t_elem *new);
 void	dict_delone(t_dict *dict, char *key);
@@ -204,6 +203,7 @@ void	listen_to_sigs(void);
 /*          abstract syntax tree            */
 /********************************************/
 
+void		clean_tree(t_leaf *leaf);
 void		fill_ast_bonus(t_line *line, t_tree *tree);
 t_leaf		*new_leaf_bonus(t_line *sub, int lay_par);
 void		remove_parentheses(t_line *line);
@@ -212,7 +212,6 @@ t_type_leaf	get_type(t_token token);
 t_line		*fill_till_ope(t_block **buff);
 //Recusrion fill tree :
 void		test(t_leaf *leaf, t_line *line, int lay_par);
-
 
 int	total_char_to_remove(char **key_arr);
 int	total_char_to_add(char **val_arr);

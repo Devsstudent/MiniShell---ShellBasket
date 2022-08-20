@@ -123,19 +123,15 @@ void	dict_clear(t_dict *dict)
 	t_elem	*buff;
 	t_elem	*tmp;
 
-	int i;
-	i = 0;
 	buff = dict->head;
 	while (buff != NULL)
 	{
-		i++;
 		tmp = buff->next;
 		free(buff->key);
 		free(buff->value);
 		free(buff);
 		buff = tmp;
 	}
-	ft_printf(0, "%i\n", i);
 	free(dict);
 }
 

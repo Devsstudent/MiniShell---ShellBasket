@@ -13,31 +13,6 @@
 
 //When we have somthing in parentheses we should handle it as a subshell and just use the result so need to know if its in parenthese or not
 
-t_leaf	*new_leaf_bonus(t_line *sub, int lay_par)
-{
-	t_leaf	*leaf;
-
-	leaf = (t_leaf *)malloc(sizeof(t_leaf));
-	if (!leaf)
-		free_exit();
-	add_to_gc(SIMPLE, leaf, get_gc());
-	leaf->content = sub;
-	leaf->right = NULL;
-	leaf->parentheses = lay_par;
-	leaf->left = NULL;
-	if (sub != NULL)
-	{
-		if (sub->head && sub->head->token == P_OPEN)
-		{
-			remove_parentheses(sub);
-			leaf->type = PRTS;
-		}
-		else
-			leaf->type = CMD;
-	}
-	return (leaf);
-}
-
 void	remove_parentheses(t_line *line)
 {
 	t_block	*buff;
@@ -67,8 +42,6 @@ t_line	*fill_parentheses_block(t_block **buff)
 	new_sub = (t_line *) malloc(sizeof(t_line));
 	if (!new_sub)
 		free_exit();
-	else
-		add_to_gc(LINE, new_sub, get_gc());
 	new_sub->head = NULL;
 	line_cpy_till_pend(buff, new_sub);
 	return (new_sub);
@@ -91,8 +64,6 @@ t_line	*fill_till_ope(t_block **buff)
 	new_sub = (t_line *)malloc(sizeof(t_line));
 	if (!new_sub)
 		free_exit();
-	else
-		add_to_gc(LINE, new_sub, get_gc());
 	new_sub->head = NULL;
 	line_cpy_till_ope(buff, new_sub);
 	return (new_sub);

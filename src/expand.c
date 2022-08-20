@@ -262,8 +262,6 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes)
 	if (!new_word)
 		free_exit();
 	fill_new_word(new_word, block->word, val_arr, indexes);
-	ft_printf(0, "new_word: %s\n", new_word);
-	add_to_gc(SIMPLE, block->word, get_gc());
 	block->word = new_word;
 }
 

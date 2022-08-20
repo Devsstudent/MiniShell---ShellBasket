@@ -90,6 +90,5 @@ t_dict	*double_char_to_lst(char **d_char)
 		dict_addback(env, new);
 		d_char++;
 	}
-	ft_printf(0, "dict_size:%i", env->size);
 	return env;
 }

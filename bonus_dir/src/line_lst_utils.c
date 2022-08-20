@@ -55,10 +55,12 @@ void	line_clear(t_line *line)
 	while (buff != NULL)
 	{
 		tmp = buff->next;
-		free(buff->word);
+		if (buff->word)
+			free(buff->word);
 		free(buff);
 		buff = tmp;
 	}
+	free(line);
 }
 
 void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst)

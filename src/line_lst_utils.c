@@ -55,7 +55,8 @@ void	line_clear(t_line *line)
 	while (buff != NULL)
 	{
 		tmp = buff->next;
-		free(buff->word);
+		if (buff->word)
+			free(buff->word);
 		free(buff);
 		buff = tmp;
 	}

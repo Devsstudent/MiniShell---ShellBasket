@@ -18,7 +18,7 @@ t_gc	*gc_new_node(t_type type, void *ptr)
 
 	new = (t_gc *)malloc(sizeof(t_gc));
 	if (!new)
-		return (NULL);
+		free_exit();
 	new->next = NULL;
 	new->type = type;
 	new->content = ptr;
@@ -47,11 +47,6 @@ void	gc_free_node(t_gc *node)
 		dict_clear(node->content);
 	else if (node->type == LINE)
 		line_clear(node->content);
-	else if (node->type == TREE)
-	{
-		clean_tree(((t_tree *)(node->content))->head);
-		free(node->content);
-	}
 	free(node);
 }
 
@@ -93,6 +88,7 @@ void	free_gc(t_gc **gc)
 		gc_free_node(*gc);
 		*gc = tmp;
 	}
+	rl_clear_history();
 }
 
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)
