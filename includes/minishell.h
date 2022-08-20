@@ -118,6 +118,16 @@ typedef struct	s_tree{
 	t_leaf	*head;
 }			t_tree;
 
+typedef	struct	s_li_exec{
+	char			*content;
+	struct s_li_exec	*next;
+}				t_li_exec;
+
+typedef struct	s_cmd_arg{
+	t_li_exec	*head;
+	t_li_exec	*firt;
+}
+
 void	free_exit(void);
 void	listen_to_sigs(void);
 
