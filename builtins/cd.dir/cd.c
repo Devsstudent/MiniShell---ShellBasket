@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 21:43:30 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 14:47:15 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/20 17:28:28 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -41,8 +41,8 @@ void	exec_cd(int ac, char **argv, t_dict *env)
 {
 	if (ac == 1)
 	{
-		return (0);
 		set_exit_status(0);
+		return (0);
 	}
 	if (ac > 2)
 	{
