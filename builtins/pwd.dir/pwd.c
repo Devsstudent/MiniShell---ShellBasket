@@ -24,7 +24,8 @@ void	exec_pwd(int ac, char **argv, t_dict *env)
 	if (pwd_value == NULL)
 	{
 		perror("pwd");
-		set_exit_status(ERANGE);
+		//Erange 34
+		set_exit_status(34);
 		return ;
 	}
 	ft_printf("%s\n", pwd_value);

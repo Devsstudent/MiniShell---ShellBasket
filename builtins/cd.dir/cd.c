@@ -50,7 +50,5 @@ void	exec_cd(int ac, char **argv, t_dict *env)
 		set_exit_status(200);
 	}
 	else
-	{
 		go_to_path(argv[1], env);
-	}
 }
