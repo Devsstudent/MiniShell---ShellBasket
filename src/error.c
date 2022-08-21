@@ -15,3 +15,11 @@ void	print_syntax_error(char *ope, int type)
 		ft_printf(1, "syntax error: unexpected token near field `%s`\n", ope);
 	free_exit();
 }
+
+void	print_error(char *ope, int type)
+{
+	if (type == 1) //key not found in redirection
+		ft_printf(1, "shellbasket: ambiguous redirect");
+	if (type == 2)
+		ft_printf(1, "shellbasket: %s: command not found", ope);
+}

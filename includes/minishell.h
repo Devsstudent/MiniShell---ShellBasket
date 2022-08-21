@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 13:42:06 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/21 19:33:11 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <dirent.h>
 # include <signal.h>
 # include <string.h>
+# include <fcntl.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
@@ -42,10 +44,6 @@ typedef enum	e_token {
 	RED_OUT_APPEND,//3
 	HERE_DOC,//4
 	PIPE,//5
-	OR,
-	AND,
-	P_OPEN,
-	P_CLOSE,
 	CMD_ARG,//6
 	FILES,//7
 	DELIMITER//8
@@ -118,6 +116,19 @@ typedef struct	s_tree{
 	t_leaf	*head;
 }			t_tree;
 
+typedef struct	s_info{
+	char	**argv;
+	int			open_fd;
+	int		out_fd;
+	//int		tmp_fd;
+}			t_info;
+/*
+typedef	enum e_pos{
+	FIRST,
+	MID,
+	LAST
+}	t_pos;*/
+
 void	free_exit(void);
 void	listen_to_sigs(void);
 
@@ -128,7 +139,7 @@ void	listen_to_sigs(void);
 t_gc	**get_gc(void);
 t_gc	*gc_new_node(t_type type, void *ptr);
 void	gc_free_node(t_gc *node);
-void	gc_free_node_addr(void *ptr, t_gc **gc);
+void	mgc_free_node_addr(void *ptr, t_gc **gc);
 void	free_gc(t_gc **gc);
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
 
@@ -208,20 +219,12 @@ void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 t_leaf	*new_leaf(t_line *cmd, t_type_leaf type);
 //BONUS
 
-t_bool	    check_parentheses(t_token next, t_token previous, t_token token);
-t_bool	    check_and(t_token next, t_token previous, t_token token);
-t_bool	    check_or(t_token next, t_token previous, t_token token);
-t_bool	    handle_and(char *line, int *i, int *size, t_line *lst);
-t_bool	    handle_par(char *line, int *i, int *size, t_line *lst);
 t_leaf      *new_leaf_bonus(t_line *sub, int par);
-void        remove_parentheses(t_line *line);
-t_line      *fill_parentheses_block(t_block **buff);
 t_type_leaf get_type(t_token token);
 t_line      *fill_till_ope(t_block **buff);
 void        line_cpy_till_ope(t_block **buff, t_line *sub_lst);
 void        test(t_leaf *leaf, t_line *line, int parr);
 void        fill_ast_bonus(t_line *line, t_tree *tree);
-void        line_cpy_till_pend(t_block **buff, t_line *sub_lst);
 
 int	total_char_to_remove(char **key_arr);
 int	total_char_to_add(char **val_arr);
@@ -245,7 +248,22 @@ void	handle_dollar_in_block(t_block *block, t_dict *dict);
 void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
 
 char	*get_exit_status(void);
-void	print_syntax_error(char *ope, int type);
 void	clean_tree(t_leaf *leaf);
+
+/********************************************/
+/*                   errror                 */
+/********************************************/
+void	print_syntax_error(char *ope, int type);
+void	print_error(char *ope, int type);
+
+
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env);
+void	exec(t_info *exec_in, t_line *sub, t_dict *env);
+size_t	get_nb_cmd_arg(t_line *sub);
+char	**get_cmd_arg(t_line *sub);
+void	check_redirection(t_info *exec, t_line *sub);
+void	check_red_out(t_block *files, t_info *exec, t_block *red);
+void	check_red_in(t_block *files, t_info *exec);
+char	*check_cmd(char **argv, t_dict *env);
 
 #endif

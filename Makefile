@@ -19,6 +19,7 @@ OBJ = $(addprefix obj/, main.o \
 			expand.o \
 			abstract_syntax_tree.o \
 			error.o \
+			exec.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
 			ast_utils.d \
@@ -35,6 +36,7 @@ D_LST = $(addprefix obj/, main.d \
 			abstract_syntax_tree.d \
 			remove_quote_before_exec.d \
 			error.d \
+			exec.d \
 			null.d)
 NAME = minishell
 
@@ -42,10 +44,10 @@ all : $(NAME)
 
 $(NAME): $(OBJ)
 	make bonus -s -C $(LIB)
-	$(CC) $(FLAG) $(OBJ) -lreadline -L $(LIB) -lft -o $(NAME)
+	$(CC) $(FLAG) $(OBJ) -L /usr/local/opt/readline/lib  -lreadline -L $(LIB) -lft -o $(NAME)
 
 obj/%.o: src/%.c | object
-	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -c $< -o $@
+	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -I /usr/local/opt/readline/include -c $< -o $@
 
 object:
 	@mkdir -p obj
