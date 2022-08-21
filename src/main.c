@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:49:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 16:50:54 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/21 19:11:52 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -84,7 +84,10 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 	t_tree	*tree;
 	t_dict	*env;
+	t_info	*exec_info;
 
+	exec_info = (t_info *) malloc(sizeof(t_info));
+	exec_info->argv = NULL;
 	if (av[1])
 		return (1);
 	env = double_char_to_lst(envp);
@@ -102,7 +105,8 @@ int	main(int ac, char **av, char **envp)
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
 		browse_ast_apply_expand(tree->head, env);
-		browse_tree(tree);
+		exec_tree(tree->head, exec_info, env);
+//		browse_tree(tree);
 	}
 	return (1);
 }
