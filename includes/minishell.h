@@ -32,9 +32,6 @@
 typedef enum	e_type_leaf{
 	CMD,
 	PIPE_L,
-    AND_L,
-    OR_L,
-    PRTS	
 }	t_type_leaf;
 
 typedef enum	e_token {
@@ -120,6 +117,7 @@ typedef struct	s_info{
 	char	**argv;
 	int			open_fd;
 	int		out_fd;
+	int		*pid;
 	//int		tmp_fd;
 }			t_info;
 /*

@@ -35,6 +35,27 @@ t_tree	*ms_lex_and_parse(char **line)
 	return (tree);
 }
 
+void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
+{
+	t_leaf	*leaf;
+	int	size;
+
+	size = 1;
+	if (tree->head)
+		leaf = tree->head;
+	if (leaf->type == CMD)
+		exec_info->pid = (int *)malloc(sizeof(int) * size);
+	else
+	{
+		while (leaf->right->type == PIPE_L)
+		{
+			size++;
+			leaf = leaf->right;
+		}
+		exec_info->pid = (int *)malloc(sizeof(int) * size);
+	}
+}
+
 void	browse_sub_tree(t_leaf *leaf)
 {
 	ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
@@ -105,6 +126,7 @@ int	main(int ac, char **av, char **envp)
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
 		browse_ast_apply_expand(tree->head, env);
+		malloc_pid_arr(exec_info, tree);
 		exec_tree(tree->head, exec_info, env);
 //		browse_tree(tree);
 		//waitpid();
