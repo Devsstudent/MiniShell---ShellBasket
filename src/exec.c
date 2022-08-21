@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:37:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/21 19:49:52 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/21 20:43:32 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -92,6 +92,7 @@ char	**get_cmd_arg(t_line *sub)
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char	*cmd_path;
+	char	**env_bis;
 
 	check_redirection(exec_in, sub);
 	cmd_path = check_cmd(exec_in->argv, env);
@@ -100,7 +101,29 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 		print_error(exec_in->argv[0], 2);
 		return ;
 	}
+	env_bis = dict_to_double_char(env);
 	pipe_fork //checking inside abs path or not etc
+}
+
+void	pipe_fork(char *cmd_path, t_info *exec_in, char **env)
+{
+	int	pipe_fd[2];
+	//find a wait all pid after the exec so need to store each pid;
+	int	pid;
+
+	if (pipe(pipe_fd) == -1)
+		return (perror(NULL));
+	pid = fork();
+	if (pid == -1)
+		return (perror(NULL));
+	if (pid == 0)
+	{
+		if (dup2(exec_in->open_fd, pipe_fd[0]) == -1)
+			return (perror(NULL));
+		if (dup2(exec_in->out_fd, pipe_fd[1]) == -1)
+			return (perror(NULL));
+		//execve
+	}
 }
 
 char	*check_cmd(char **argv, t_dict *env)

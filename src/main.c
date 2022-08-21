@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:49:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/21 19:11:52 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/21 20:00:38 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -107,6 +107,7 @@ int	main(int ac, char **av, char **envp)
 		browse_ast_apply_expand(tree->head, env);
 		exec_tree(tree->head, exec_info, env);
 //		browse_tree(tree);
+		//waitpid();
 	}
 	return (1);
 }
