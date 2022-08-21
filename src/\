@@ -22,7 +22,6 @@
 # include <dirent.h>
 # include <signal.h>
 # include <string.h>
-# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
@@ -43,6 +42,10 @@ typedef enum	e_token {
 	RED_OUT_APPEND,//3
 	HERE_DOC,//4
 	PIPE,//5
+	OR,
+	AND,
+	P_OPEN,
+	P_CLOSE,
 	CMD_ARG,//6
 	FILES,//7
 	DELIMITER//8
@@ -115,18 +118,12 @@ typedef struct	s_tree{
 	t_leaf	*head;
 }			t_tree;
 
-typedef struct	s_info{
+typedef struct s_info{
 	char	**argv;
 	int		open_fd;
 	int		out_fd;
 	//int		tmp_fd;
 }			t_info;
-/*
-typedef	enum e_pos{
-	FIRST,
-	MID,
-	LAST
-}	t_pos;*/
 
 void	free_exit(void);
 void	listen_to_sigs(void);
