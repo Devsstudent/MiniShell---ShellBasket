@@ -241,6 +241,25 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		free_exit();
 }
 
+t_bool	check_builtins(char **argv)
+{
+	if (ft_strncmp(argv[0], "echo", 5) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "exit", 5) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "cd", 3) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "export", 7) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "env", 4) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "unset", 6) == 0)
+		return (TRUE);
+	return (FALSE);
+}
+
 //Function qui open le file + gere les "" special + retour open + access
 
 //Same for out trunc 
