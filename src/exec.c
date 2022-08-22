@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:37:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/22 18:04:06 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/22 19:55:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -105,13 +105,23 @@ size_t	get_nb_cmd_arg(t_line *sub)
 {
 	t_block	*buff;
 	size_t	size;
+	int		j;
 
 	buff = sub->head;
+	j = 0;
 	size = 0;
 	while (buff)
 	{
 		if (buff->token == CMD_ARG)
+		{
+			while (buff->word[i])
+			{
+				if (buff->word[i] == ' ' && buff->word[i + 1] && buff->word[i + 1] != ' ')
+					size++;
+				i++;
+			}
 			size++;
+		}
 		buff = buff->next;
 	}
 	//ft_printf(0, "%i", (int) size);
@@ -124,6 +134,8 @@ char	**get_cmd_arg(t_line *sub)
 	t_block		*buff;
 	char		**argv;
 	int			i;
+	int			j;
+	char		**space_or_not;
 
 	i = 0;
 	argv = (char **) malloc(sizeof(*argv) * (get_nb_cmd_arg(sub) + 1));
@@ -133,9 +145,22 @@ char	**get_cmd_arg(t_line *sub)
 	{
 		if (buff->token == CMD_ARG)
 		{
-			argv[i] = ft_strdup(buff->word);
+			argv[i] = NULL;
+			j = 0;
+			//Split a la manooo
+			space_or_not = ft_split(buff->word, ' ');
+			while (space_or_not && space_or_not[j])
+			{
+				argv[i] = sapce_or_not[j];
+				j++;
+				i++;
+			}
 			if (!argv[i])
+			{
+				free(space_or_not);
 				free_exit();
+			}
+			free(space_or_not);
 			i++;
 		}
 		buff = buff->next;
