@@ -128,6 +128,7 @@ int	main(int ac, char **av, char **envp)
 	while (ac)
 	{
 		exec_info->turn = 0;
+		exec_info->tmp_fd = -1;
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
 		browse_ast_apply_expand(tree->head, env);
@@ -136,11 +137,8 @@ int	main(int ac, char **av, char **envp)
 //		browse_tree(tree);
 		int	i;
 		i = 0;
-		close(exec_info->open_fd);
-		close(exec_info->out_fd);
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		close(STDIN_FILENO);
+		if (exec_info->tmp_fd != -1)
+			close(exec_info->tmp_fd);
 		while (i < exec_info->turn)
 		{
 			waitpid(exec_info->pid[i], NULL, 0);

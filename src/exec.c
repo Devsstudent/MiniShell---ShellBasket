@@ -11,6 +11,10 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
+t_bool	exec_builtin(char **argv, t_dict *env);
+t_bool	execve_test(char *pathname, char **argv, t_dict *env);
+size_t	get_ac(char **argv);
+t_bool	check_builtins(char **argv);
 //Brows le tree
 
 //Geree les lines cmd et arguments + les redirections
@@ -90,11 +94,10 @@ char	**get_cmd_arg(t_line *sub)
 	return (argv);
 }
 
-void	pipe_fork(char *cmd_path, t_info *exec_in, char **env, int turn);
+void	pipe_fork(char *cmd_path, t_info *exec_in, t_dict *env);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
-	char		**env_bis;
 
 	check_redirection(exec_in, sub);
 	cmd_path = check_cmd(exec_in->argv, env);
@@ -103,40 +106,65 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 		print_error(exec_in->argv[0], 2);
 		return ;
 	}
-	env_bis = dict_to_double_char(env);
-	pipe_fork(cmd_path, exec_in, env_bis, exec_in->turn);
+	pipe_fork(cmd_path, exec_in, env);
+	if (exec_in->open_fd != -1)
+		close(exec_in->open_fd);
+	if (exec_in->out_fd != -1)
+		close(exec_in->out_fd);
 	exec_in->turn++;
 }
 
-void	pipe_fork(char *cmd_path, t_info *exec_in, char **env, int turn)
+void	pipe_fork(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	int	pipe_fd[2];
 	//find a wait all pid after the exec so need to store each pid;
 
+	ft_putstr_fd(exec_in->argv[0], 1);
 	if (pipe(pipe_fd) == -1)
 		return (perror(NULL));
 	//ft_printf(0, "turn %i\n", turn);
-	exec_in->pid[turn] = fork();
-	if (exec_in->pid[turn] == -1)
+	exec_in->pid[exec_in->turn] = fork();
+	if (exec_in->pid[exec_in->turn] == -1)
 		return (perror(NULL));
-	if (exec_in->pid[turn] == 0)
+	if (exec_in->pid[exec_in->turn] == 0)
 	{
-		if (dup2(exec_in->open_fd, pipe_fd[0]) == -1)
-			return (perror(NULL));
-		if (dup2(exec_in->out_fd, pipe_fd[1]) == -1)
-			return (perror(NULL));
+		if (exec_in->open_fd != -1)
+		{
+			if (dup2(pipe_fd[0], exec_in->open_fd) == -1)
+				return (perror(NULL));
+		}
+		else
+		{
+			if (exec_in->turn > 0)
+			{
+				close(pipe_fd[0]);
+				if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
+					return (perror(NULL));
+			}
+			else
+				if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+					return (perror(NULL));
+		}
+		if (exec_in->out_fd != -1)
+		{
+			if (dup2(pipe_fd[1], exec_in->out_fd) == -1)
+				return (perror(NULL));
+		}
+		else
+			if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+				return (perror(NULL));
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
-		if (execve(cmd_path, exec_in->argv, env) == -1)
+		if (!execve_test(cmd_path, exec_in->argv, env))
 			return (perror(exec_in->argv[0]));
-		//execve
 	}
-	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	if (exec_in->open_fd != STDIN_FILENO)
-		close(exec_in->open_fd);
-	else if (exec_in->out_fd != STDOUT_FILENO)
-		close(exec_in->out_fd);
+	if (exec_in->turn > 0)
+	{
+		if (exec_in->tmp_fd != -1)
+			close(exec_in->tmp_fd);
+		exec_in->tmp_fd = pipe_fd[0];
+	}
 }
 
 char	*check_cmd(char **argv, t_dict *env)
@@ -180,8 +208,8 @@ void	check_redirection(t_info *exec, t_line *sub)
 
 	if (sub->head)
 		buff = sub->head;
-	exec->open_fd = STDIN_FILENO;
-	exec->out_fd = STDOUT_FILENO;
+	exec->open_fd = -1;
+	exec->out_fd = -1;
 	while (buff)
 	{
 		if (buff->token == RED_IN)
@@ -252,6 +280,77 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		exec->out_fd = f_open_out;
 	if (errno == 13)
 		free_exit();
+}
+
+t_bool	check_builtins(char **argv)
+{
+	if (ft_strncmp(argv[0], "echo", 5) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "exit", 5) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "cd", 3) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "export", 7) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "env", 4) == 0)
+		return (TRUE);
+	else if (ft_strncmp(argv[0], "unset", 6) == 0)
+		return (TRUE);
+	return (FALSE);
+}
+
+size_t	get_ac(char **argv)
+{
+	int	ac;
+
+	ac = 0;
+	while (argv[ac])
+		ac++;
+	return (ac);
+}
+
+t_bool	exec_builtin(char **argv, t_dict *env)
+{
+	int	ac;
+
+	(void) env;
+	ac = get_ac(argv);
+	(void) ac;
+	/*
+	if (ft_strncmp(argv[0], "echo", 5) == 0)
+		exec_echo(ac, argv, env);
+	else if (ft_strncmp(argv[0], "exit", 5) == 0)
+		exec_exit(ac, argv, env);
+	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
+		exec_pwd(ac, argv, env);
+	else if (ft_strncmp(argv[0], "cd", 3) == 0)
+		exec_cd(ac, argv, env);
+	else if (ft_strncmp(argv[0], "export", 7) == 0)
+		exec_export(ac, argv, env);
+	else if (ft_strncmp(argv[0], "env", 4) == 0)
+		exec_env(ac, argv, env);
+	else if (ft_strncmp(argv[0], "unset", 6) == 0)
+		exec_unset(ac, argv, env);
+	*/
+	return (FALSE);
+}
+//exit dans les builr in
+t_bool	execve_test(char *pathname, char **argv, t_dict *env)
+{
+	char	**env_bis;
+
+	env_bis = dict_to_double_char(env);
+	if (!exec_builtin(argv, env))
+	{
+		if (execve(pathname, argv, env_bis) == -1)
+		{
+			return (FALSE);
+		}
+	}
+	return (TRUE);
+			
 }
 
 //Function qui open le file + gere les "" special + retour open + access

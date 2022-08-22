@@ -20,8 +20,7 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <dirent.h>
-# include <signal.h>
-# include <string.h>
+# include <signal.h> # include <string.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <readline/readline.h>
@@ -119,7 +118,7 @@ typedef struct	s_info{
 	int		out_fd;
 	int		*pid;
 	int		turn;
-	//int		tmp_fd;
+	int		tmp_fd;
 }			t_info;
 /*
 typedef	enum e_pos{
