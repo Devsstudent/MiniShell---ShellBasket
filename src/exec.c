@@ -100,42 +100,59 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 	}
 	free(cmd_path);
 }
+void	get_size_word_in_word(char *word, size_t *size);
 //On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
 size_t	get_nb_cmd_arg(t_line *sub)
 {
 	t_block	*buff;
 	size_t	size;
-	int		j;
 
 	buff = sub->head;
-	j = 0;
 	size = 0;
 	while (buff)
 	{
 		if (buff->token == CMD_ARG)
-		{
-			while (buff->word[i])
-			{
-				if (buff->word[i] == ' ' && buff->word[i + 1] && buff->word[i + 1] != ' ')
-					size++;
-				i++;
-			}
-			size++;
-		}
+			get_size_word_in_word(buff->word, &size);
 		buff = buff->next;
 	}
+	write(2, ft_itoa(size), ft_strlen(ft_itoa(size)));
 	//ft_printf(0, "%i", (int) size);
 	return (size);
 }
 
+void	get_size_word_in_word(char *word, size_t *size)
+{
+	int	i;
+	t_bool	quote;
+	t_bool	d_quote;
+
+	i = 0;
+	quote = FALSE;
+	d_quote = FALSE;
+	while (word[i])
+	{
+		if (word[i] == '\"' && !d_quote)
+			d_quote = TRUE;
+		if (word[i] == '\'' && !quote)
+			quote = TRUE;
+		if (word[i] == '\'' && quote)
+			quote = FALSE;
+		if (word[i] == '\"' && d_quote)
+			d_quote = FALSE;
+		if (word[i - 1] && word[i - 1] != ' ' && word[i] == ' ' && word[i + 1] && word[i + 1] != ' ' && !quote && !d_quote)
+			(*size)++;
+		i++;
+	}
+	(*size)++;
+}
+
+void	loop_get_arg(char *word, char **argv, int *i);
 //Return un double tableau avec la commandes et arg
 char	**get_cmd_arg(t_line *sub)
 {
 	t_block		*buff;
 	char		**argv;
 	int			i;
-	int			j;
-	char		**space_or_not;
 
 	i = 0;
 	argv = (char **) malloc(sizeof(*argv) * (get_nb_cmd_arg(sub) + 1));
@@ -144,29 +161,61 @@ char	**get_cmd_arg(t_line *sub)
 	while (buff)
 	{
 		if (buff->token == CMD_ARG)
-		{
-			argv[i] = NULL;
-			j = 0;
-			//Split a la manooo
-			space_or_not = ft_split(buff->word, ' ');
-			while (space_or_not && space_or_not[j])
-			{
-				argv[i] = sapce_or_not[j];
-				j++;
-				i++;
-			}
-			if (!argv[i])
-			{
-				free(space_or_not);
-				free_exit();
-			}
-			free(space_or_not);
-			i++;
-		}
+			loop_get_arg(buff->word, argv, &i);
 		buff = buff->next;
 	}
 	argv[i] = 0;
 	return (argv);
+}
+
+void	loop_get_arg(char *word, char **argv, int *i)
+{
+	int	j;
+	int	last;
+	t_bool	quote;
+	t_bool	d_quote;
+
+	j = 0;
+	last = 0;
+	quote = FALSE;
+	d_quote = FALSE;
+	while (word[j])
+	{
+		if (word[j] == ' ' && word[j - 1] && word[j - 1] != ' ' && !d_quote && !quote)
+		{
+			argv[*i] = ft_substr(word, last, (j - last));
+			write(1, "\n", 1);
+			ft_putstr_fd(argv[*i], 2);
+			(*i)++;
+			if (word[j + 1])
+				last = j + 1;
+		}
+		while (word[j] && word[j] == ' ')
+		{
+			j++;
+			last = j;
+		}
+		if (!word[j])
+			break ;
+		if (word[j] == '\"' && !d_quote)
+			d_quote = TRUE;
+		if (word[j] == '\'' && !quote)
+			quote = TRUE;
+		if (word[j] == '\'' && quote)
+			quote = FALSE;
+		if (word[j] == '\"' && d_quote)
+			d_quote = FALSE;
+		if (word[j + 1])
+			j++;
+	}
+	
+	if (j != last)
+	{
+		argv[*i] = ft_substr(word, last, (j - last));
+		write(1, "\n", 1);
+		ft_putstr_fd(argv[*i], 2);
+		(*i)++;
+	}
 }
 
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
@@ -439,6 +488,14 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env)
 	env_bis = dict_to_double_char(env);
 	if (!exec_builtin(argv, env))
 	{
+		int	i;
+		i = 0;
+		while (argv[i])
+		{
+			write(1, "\n", 1);
+			ft_putstr_fd(argv[i], 2);
+			i++;
+		}
 		if (execve(pathname, argv, env_bis) == -1)
 		{
 			return (FALSE);
