@@ -118,6 +118,7 @@ typedef struct	s_info{
 	int			open_fd;
 	int		out_fd;
 	int		*pid;
+	int		turn;
 	//int		tmp_fd;
 }			t_info;
 /*
@@ -153,6 +154,7 @@ void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
 char	*dict_get_value(t_dict *dict, char *key);
+char	**dict_to_double_char(t_dict *dict);
 
 /********************************************/
 /*                parsing                   */

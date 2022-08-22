@@ -96,7 +96,7 @@ void	fill_key_arr(t_block *block, char **key_arr, int *indexes) { int	i;
 	{
 		size_val = size_doll_val(block->word, indexes[i]);
 		key_arr[j] = ft_substr(block->word, indexes[i] + 1, size_val);
-		ft_printf(0, "key = %s\n", key_arr[j]);
+		//ft_printf(0, "key = %s\n", key_arr[j]);
 		//KEYS OK
 		j++;
 		i++;
@@ -120,7 +120,7 @@ int	*get_indexes_expandables(t_block *block, int dollar)
 	while (block->word[i])
 	{
 		advance_if_in_s_quote(&d_quote, block->word, &i);
-		if (block->word[i + 1] && block->word[i] == '$' 
+		if (block->word[i + 1] && block->word[i] == '$'
 				&& check_char(block->word[i + 1]))
 			indexes[j++] = i;
 		i++;
@@ -141,7 +141,7 @@ int	get_nb_of_dollar(t_block *block)
 	while (block->word[i])
 	{
 		advance_if_in_s_quote(&d_quote, block->word, &i);
-		if (block->word[i] == '$' && block->word[i + 1] 
+		if (block->word[i] == '$' && block->word[i + 1]
 				&& check_char(block->word[i + 1]))
 			dollar++;
 		i++;
@@ -172,7 +172,7 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 			if (!value)
 				free_exit();
 			val_arr[i] = value;
-			//ft_printf("value = %s\n", val_arr[i]);
+			////ft_printf("value = %s\n", val_arr[i]);
 			//values OK
 		}
 		i++;
@@ -256,7 +256,7 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes)
 	char	*new_word;
 
 	size = ft_strlen(block->word) + total_char_to_add(val_arr) - total_char_to_remove(key_arr);
-	//ft_printf("SIZE = %i\n", size);
+	////ft_printf("SIZE = %i\n", size);
 	//SIZE OK
 	new_word = (char *) malloc(sizeof(*new_word) * (size + 1));
 	if (!new_word)
@@ -264,7 +264,7 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes)
 	fill_new_word(new_word, block->word, val_arr, indexes);
 	free(block->word);
 	block->word = new_word;
-	ft_printf(0, "From l:267 of expand.c\n last value of block : %s\n", block->word);
+	//ft_printf(0, "From l:267 of expand.c\n last value of block : %s\n", block->word);
 }
 
 void	handle_dollar_in_block(t_block *block, t_dict *dict)
@@ -275,7 +275,7 @@ void	handle_dollar_in_block(t_block *block, t_dict *dict)
 	int		*indexes;
 
 	size_double_arr = get_nb_of_dollar(block);
-	ft_printf(0, "***nb expandable = %i***\n", size_double_arr);
+	//ft_printf(0, "***nb expandable = %i***\n", size_double_arr);
 	indexes = get_indexes_expandables(block, size_double_arr);
 	if (!indexes)
 		free_exit();

@@ -15,7 +15,7 @@
 
 //Geree les lines cmd et arguments + les redirections
 
-//Loop d'exec : 
+//Loop d'exec :
 	//while we have redirection : in -> check les permission / l'existance des fichiers etc pour les erreurs and care if its a "" char
 	//out trunc or append -> check permission + creation if not created  car if it's a "" char
 	//Here_doc Special :)
@@ -24,6 +24,7 @@
 
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
+
 	if (!leaf)
 		return ;
 	if (leaf->type == PIPE_L)
@@ -43,7 +44,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		exec(exec_in, leaf->content, env);
 		// head = cmd on get cmd puis on exec
 	}
-	ft_printf(0, "\n\nEND\n");
+	//ft_printf(0, "\n\nEND\n");
 }
 //On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
 size_t	get_nb_cmd_arg(t_line *sub)
@@ -59,7 +60,7 @@ size_t	get_nb_cmd_arg(t_line *sub)
 			size++;
 		buff = buff->next;
 	}
-	ft_printf(0, "%i", (int) size);
+	//ft_printf(0, "%i", (int) size);
 	return (size);
 }
 
@@ -89,10 +90,11 @@ char	**get_cmd_arg(t_line *sub)
 	return (argv);
 }
 
+void	pipe_fork(char *cmd_path, t_info *exec_in, char **env, int turn);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
-	char	*cmd_path;
-	char	**env_bis;
+	char		*cmd_path;
+	char		**env_bis;
 
 	check_redirection(exec_in, sub);
 	cmd_path = check_cmd(exec_in->argv, env);
@@ -102,28 +104,39 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 		return ;
 	}
 	env_bis = dict_to_double_char(env);
-	pipe_fork //checking inside abs path or not etc
+	pipe_fork(cmd_path, exec_in, env_bis, exec_in->turn);
+	exec_in->turn++;
 }
 
-void	pipe_fork(char *cmd_path, t_info *exec_in, char **env)
+void	pipe_fork(char *cmd_path, t_info *exec_in, char **env, int turn)
 {
 	int	pipe_fd[2];
 	//find a wait all pid after the exec so need to store each pid;
-	int	pid;
 
 	if (pipe(pipe_fd) == -1)
 		return (perror(NULL));
-	pid = fork();
-	if (pid == -1)
+	//ft_printf(0, "turn %i\n", turn);
+	exec_in->pid[turn] = fork();
+	if (exec_in->pid[turn] == -1)
 		return (perror(NULL));
-	if (pid == 0)
+	if (exec_in->pid[turn] == 0)
 	{
 		if (dup2(exec_in->open_fd, pipe_fd[0]) == -1)
 			return (perror(NULL));
 		if (dup2(exec_in->out_fd, pipe_fd[1]) == -1)
 			return (perror(NULL));
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		if (execve(cmd_path, exec_in->argv, env) == -1)
+			return (perror(exec_in->argv[0]));
 		//execve
 	}
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	if (exec_in->open_fd != STDIN_FILENO)
+		close(exec_in->open_fd);
+	else if (exec_in->out_fd != STDOUT_FILENO)
+		close(exec_in->out_fd);
 }
 
 char	*check_cmd(char **argv, t_dict *env)
@@ -201,7 +214,7 @@ void	check_red_in(t_block *files, t_info *exec)
 		files->word[0] = ' ';
 		ft_bzero(files->word + 1, ft_strlen(files->word) - 1);
 	}
-	//soit on check avec access	
+	//soit on check avec access
 //->	//soit on check juste le retour de open
 	f_open = open(files->word, O_RDONLY);
 	if (f_open == -1)
@@ -226,7 +239,7 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 	}
 	else if (ft_strncmp(files->word, "\"\"", 3) == 0 || ft_strncmp(files->word, "\'\'", 3) == 0)
 	{
-		ft_printf(1, " :");
+		//ft_printf(1, " :");
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (red->token == RED_OUT_TRUNC)
@@ -243,11 +256,11 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 
 //Function qui open le file + gere les "" special + retour open + access
 
-//Same for out trunc 
+//Same for out trunc
 //Checker toutes les values du path + la commande si aucune ne fonctionne alors on regarder avec access si c'est un abspath
 
 //On exec a chaque tour la boucle si pas de open open set a 0 et out set a 1 si pas de out
 
-//Funtion special execve pour les built-in aussi : ) 
+//Funtion special execve pour les built-in aussi : )
 
 

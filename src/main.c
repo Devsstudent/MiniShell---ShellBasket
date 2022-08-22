@@ -40,25 +40,29 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 	t_leaf	*leaf;
 	int	size;
 
-	size = 1;
+	size = 0;
 	if (tree->head)
 		leaf = tree->head;
-	if (leaf->type == CMD)
-		exec_info->pid = (int *)malloc(sizeof(int) * size);
+	if (leaf && leaf->type == CMD)
+		exec_info->pid = (int *)malloc(sizeof(int));
 	else
 	{
-		while (leaf->right->type == PIPE_L)
+		while (leaf->type == PIPE_L)
 		{
 			size++;
-			leaf = leaf->right;
+			if (leaf->right)
+				leaf = leaf->right;
+			else
+				break ;
 		}
 		exec_info->pid = (int *)malloc(sizeof(int) * size);
 	}
+	//ft_printf(0, "HEREE %i\n", size);
 }
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	//ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
@@ -69,21 +73,21 @@ void	browse_sub_tree(t_leaf *leaf)
 			buff = line->head;
 			while (buff)
 			{
-				ft_printf(0, "content = %s\n", buff->word);
+				//ft_printf(0, "content = %s\n", buff->word);
 				buff = buff->next;
 			}
 		}
 	}
 	if (leaf->left != NULL)
 	{
-		ft_printf(0, "left\n");
+		//ft_printf(0, "left\n");
 		browse_sub_tree(leaf->left);
 	}
 	else
 		return ;
 	if (leaf->right != NULL)
 	{
-		ft_printf(0, "right\n");
+		//ft_printf(0, "right\n");
 		browse_sub_tree(leaf->right);
 	}
 	else
@@ -117,18 +121,31 @@ int	main(int ac, char **av, char **envp)
 	buff = env.head;
 	while (buff)
 	{
-		ft_printf("%s, %s\n", buff->key, buff->value);
+		//ft_printf("%s, %s\n", buff->key, buff->value);
 		buff = buff->next;
 	}
 	*/
 	while (ac)
 	{
+		exec_info->turn = 0;
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
 		browse_ast_apply_expand(tree->head, env);
 		malloc_pid_arr(exec_info, tree);
 		exec_tree(tree->head, exec_info, env);
 //		browse_tree(tree);
+		int	i;
+		i = 0;
+		close(exec_info->open_fd);
+		close(exec_info->out_fd);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDIN_FILENO);
+		while (i < exec_info->turn)
+		{
+			waitpid(exec_info->pid[i], NULL, 0);
+			i++;
+		}
 		//waitpid();
 	}
 	return (1);
@@ -142,7 +159,7 @@ int	main(int ac, char **av, char **envp)
 	t_elem	*new;
 	char	**arg;
 
-	arg = ft_split("COCO=COCO", '=');	
+	arg = ft_split("COCO=COCO", '=');
 	if (!double_char_to_lst(envp, &env))
 		return (1);
 	printf("here\n");

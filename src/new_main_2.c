@@ -12,7 +12,7 @@
 #include "minishell.h"
 
 t_bool	read_line(char **line)
-{	
+{
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
 		return (FALSE);
@@ -23,7 +23,7 @@ t_bool	read_line(char **line)
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	ft_printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	//ft_printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
@@ -35,21 +35,21 @@ void	browse_sub_tree(t_leaf *leaf)
 			buff = line->head;
 			while (buff)
 			{
-				ft_printf("content = %s\n", buff->word);
+				//ft_printf("content = %s\n", buff->word);
 				buff = buff->next;
 			}
 		}
 	}
 	if (leaf->left != NULL)
 	{
-		ft_printf("left\n");
+		//ft_printf("left\n");
 		browse_sub_tree(leaf->left);
 	}
 	else
 		return ;
 	if (leaf->right != NULL)
 	{
-		ft_printf("right\n");
+		//ft_printf("right\n");
 		browse_sub_tree(leaf->right);
 	}
 	else
@@ -69,26 +69,26 @@ void	browse_tree(t_tree *tree)
 {
 	t_leaf	*buff;
 	t_leaf	*buff_left;
-	
+
 	buff = tree->head;
 	while (buff)
 	{
-		ft_printf("type = %i\n", buff->type);
+		//ft_printf("type = %i\n", buff->type);
 		if (buff->left != NULL)
 		{
 			buff_left = buff->left;
 			while (buff_left != NULL)
 			{
-				ft_printf("left type = %i\n", buff_left->type);
+				//ft_printf("left type = %i\n", buff_left->type);
 				if (buff_left->left != NULL)
-					ft_printf("left type = %i\n", buff_left->left->type);
+					//ft_printf("left type = %i\n", buff_left->left->type);
 				if (buff_left->right)
-					ft_printf("right type %i\n", buff_left->right->type);
+					//ft_printf("right type %i\n", buff_left->right->type);
 				buff_left = buff_left->left;
 			}
-			
+
 		}
-			
+
 		buff = buff->right;
 	}
 }
@@ -99,7 +99,7 @@ int	main(int ac, char **av, char **envp)
 	t_line			block_lst;
 	char			*line;
 	t_tree			tree;
-	
+
 	listen_to_sigs();
 	if (av[1] && ac)
 		return (1);
@@ -111,7 +111,7 @@ int	main(int ac, char **av, char **envp)
 			free_exit();
 		if (!fill_line_lst(&block_lst, line))
 		{
-			ft_printf("malloc error\n");
+			//ft_printf("malloc error\n");
 			return (0);
 		}
 		tokenization(&block_lst);
@@ -119,7 +119,7 @@ int	main(int ac, char **av, char **envp)
 		buff = block_lst.head;
 		while (buff)
 		{
-//			ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
+//			//ft_printf("word = %s ; token = %i\n", buff->word, buff->token);
 			buff = buff->next;
 		}
 		fill_ast_bonus(&block_lst, &tree);
@@ -138,7 +138,7 @@ int	main(int ac, char **av, char **envp)
 	t_elem	*new;
 	char	**arg;
 
-	arg = ft_split("COCO=COCO", '=');	
+	arg = ft_split("COCO=COCO", '=');
 	if (!double_char_to_lst(envp, &env))
 		return (1);
 	printf("here\n");
