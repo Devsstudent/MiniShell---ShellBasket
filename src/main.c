@@ -1,12 +1,11 @@
-/* ************************************************************************** */
-/*                                                                            */
+/* ************************************************************************** */ /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:49:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/21 20:00:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/22 16:49:02 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -57,6 +56,7 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 		}
 		exec_info->pid = (int *)malloc(sizeof(int) * size);
 	}
+	add_to_gc(SIMPLE, exec_info->pid, get_gc());
 	//ft_printf(0, "HEREE %i\n", size);
 }
 
@@ -127,18 +127,38 @@ int	main(int ac, char **av, char **envp)
 	*/
 	while (ac)
 	{
+		int	stdou;
+		int	stdi;
+
 		exec_info->turn = 0;
+		exec_info->pid = NULL;
 		exec_info->tmp_fd = -1;
+		exec_info->end = FALSE;
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
 		browse_ast_apply_expand(tree->head, env);
 		malloc_pid_arr(exec_info, tree);
-		exec_tree(tree->head, exec_info, env);
+		stdi = dup(STDIN_FILENO);
+		stdou = dup(STDOUT_FILENO);
+		exec_info->stdou = stdou;
+		exec_tree(tree->head, exec_info, env, tree);
 //		browse_tree(tree);
 		int	i;
 		i = 0;
 		if (exec_info->tmp_fd != -1)
 			close(exec_info->tmp_fd);
+		if (dup2(stdi, STDIN_FILENO) == -1)
+		{
+			perror("sell");
+			continue ;
+		}
+		close(stdi);
+		if (exec_info->stdou != -1 && dup2(stdou, STDOUT_FILENO) == -1)
+		{
+			perror("basket");
+			continue ;
+		}
+		close(stdou);
 		while (i < exec_info->turn)
 		{
 			waitpid(exec_info->pid[i], NULL, 0);

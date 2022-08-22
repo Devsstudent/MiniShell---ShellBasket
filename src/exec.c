@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:37:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/21 20:43:32 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/22 18:04:06 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,6 +15,7 @@ t_bool	exec_builtin(char **argv, t_dict *env);
 t_bool	execve_test(char *pathname, char **argv, t_dict *env);
 size_t	get_ac(char **argv);
 t_bool	check_builtins(char **argv);
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2]);
 //Brows le tree
 
 //Geree les lines cmd et arguments + les redirections
@@ -25,19 +26,26 @@ t_bool	check_builtins(char **argv);
 	//Here_doc Special :)
 	//Exec les commandes / built-in
 	//With forking and piping if necessary
+void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
+void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env);
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 {
-
 	if (!leaf)
 		return ;
 	if (leaf->type == PIPE_L)
 	{
 		//EXPANNNNND OHOOOOOO
+		if (leaf == tree->head)
+			exec_in->start = TRUE;
+		else
+			exec_in->start = FALSE;
+		if (!leaf->right)
+			exec_in->end = TRUE;
 		exec_in->argv = get_cmd_arg(leaf->left->content);
 		exec(exec_in, leaf->left->content, env);
 		if (leaf->right)
-			exec_tree(leaf->right, exec_in, env);
+			exec_tree(leaf->right, exec_in, env, tree);
 		//get cmd a gauche puis call a droite again :)
 //		exec la gauche puis out dans un pipe ou pas en function d'un param
 //		Si c'est le last le fd out sera le out sinon un pipe
@@ -45,10 +53,52 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	else if (leaf->type == CMD)
 	{
 		exec_in->argv = get_cmd_arg(leaf->content);
-		exec(exec_in, leaf->content, env);
+		exec_cmd(exec_in, leaf->content, env);
 		// head = cmd on get cmd puis on exec
 	}
 	//ft_printf(0, "\n\nEND\n");
+}
+
+void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
+{
+	char		*cmd_path;
+
+	check_redirection(exec_in, sub);
+	cmd_path = check_cmd(exec_in->argv, env);
+	if (!cmd_path)
+	{
+		print_error(exec_in->argv[0], 2);
+		return ;
+	}
+	forking_cmd_alone(cmd_path, exec_in, env);
+	if (exec_in->open_fd != -1)
+		close(exec_in->open_fd);
+	if (exec_in->out_fd != -1)
+		close(exec_in->out_fd);
+	exec_in->turn++;
+}
+
+void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
+{
+	exec_in->pid[exec_in->turn] = fork();
+	if (exec_in->pid[exec_in->turn] < 0)
+		return (perror("shellbasket"));
+	if (exec_in->open_fd != -1)
+		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
+			return (perror("shellbasket"));
+	if (exec_in->out_fd != -1)
+		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
+			return (perror("shellbasket"));
+	if (exec_in->pid[exec_in->turn] == 0)
+	{
+		if (exec_in->open_fd != -1)
+			close(exec_in->open_fd);
+		if (exec_in->out_fd != -1)
+			close(exec_in->out_fd);
+		if (!execve_test(cmd_path, exec_in->argv, env))
+			return (perror(exec_in->argv[0]));
+	}
+	free(cmd_path);
 }
 //On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
 size_t	get_nb_cmd_arg(t_line *sub)
@@ -94,19 +144,25 @@ char	**get_cmd_arg(t_line *sub)
 	return (argv);
 }
 
-void	pipe_fork(char *cmd_path, t_info *exec_in, t_dict *env);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
+	int			pipe_fd[2];
 
+	if (pipe(pipe_fd) == -1)
+		return (perror("shellbasket"));
 	check_redirection(exec_in, sub);
 	cmd_path = check_cmd(exec_in->argv, env);
 	if (!cmd_path)
 	{
 		print_error(exec_in->argv[0], 2);
+		if (exec_in->tmp_fd != -1)
+			close(exec_in->tmp_fd);
+		exec_in->tmp_fd = pipe_fd[0];
+		close(pipe_fd[1]);
 		return ;
 	}
-	pipe_fork(cmd_path, exec_in, env);
+	forking(cmd_path, exec_in, env, pipe_fd);
 	if (exec_in->open_fd != -1)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd != -1)
@@ -114,57 +170,60 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	exec_in->turn++;
 }
 
-void	pipe_fork(char *cmd_path, t_info *exec_in, t_dict *env)
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 {
-	int	pipe_fd[2];
-	//find a wait all pid after the exec so need to store each pid;
-
-	ft_putstr_fd(exec_in->argv[0], 1);
-	if (pipe(pipe_fd) == -1)
-		return (perror(NULL));
-	//ft_printf(0, "turn %i\n", turn);
 	exec_in->pid[exec_in->turn] = fork();
-	if (exec_in->pid[exec_in->turn] == -1)
-		return (perror(NULL));
-	if (exec_in->pid[exec_in->turn] == 0)
+	if (exec_in->pid[exec_in->turn] < 0)
+		return (perror("shellbasket"));
+	if (exec_in->end)
 	{
-		if (exec_in->open_fd != -1)
-		{
-			if (dup2(pipe_fd[0], exec_in->open_fd) == -1)
-				return (perror(NULL));
-		}
-		else
-		{
-			if (exec_in->turn > 0)
-			{
-				close(pipe_fd[0]);
-				if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
-					return (perror(NULL));
-			}
-			else
-				if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-					return (perror(NULL));
-		}
-		if (exec_in->out_fd != -1)
-		{
-			if (dup2(pipe_fd[1], exec_in->out_fd) == -1)
-				return (perror(NULL));
-		}
-		else
-			if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-				return (perror(NULL));
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
+	}
+	if (exec_in->out_fd != -1)
+	{
+		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
+			return (perror("basket"));
+	}
+	else if (!exec_in->end)
+	{
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+			return (perror("shell"));
+	}
+	else
+	{
+		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
+			return (perror("sheet"));
+		close(exec_in->stdou);
+		exec_in->stdou = -1;
+	}
+	if (exec_in->open_fd != -1)
+	{
+		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
+			return (perror("set"));
+	}
+	else if (exec_in->tmp_fd != -1 && !exec_in->start)
+	{
+		if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
+			return (perror("lasy"));
+	}
+	if (exec_in->pid[exec_in->turn] == 0)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		if (exec_in->open_fd != -1)
+			close(exec_in->open_fd);
+		if (exec_in->out_fd != -1)
+			close(exec_in->out_fd);
+		if (exec_in->tmp_fd != -1)
+			close(exec_in->tmp_fd);
 		if (!execve_test(cmd_path, exec_in->argv, env))
 			return (perror(exec_in->argv[0]));
 	}
-	close(pipe_fd[1]);
-	if (exec_in->turn > 0)
-	{
-		if (exec_in->tmp_fd != -1)
-			close(exec_in->tmp_fd);
-		exec_in->tmp_fd = pipe_fd[0];
-	}
+	if (exec_in->tmp_fd != -1)
+		close(exec_in->tmp_fd);
+	exec_in->tmp_fd = pipe_fd[0];
+	//find a wait all pid after the exec so need to store each pid;
 }
 
 char	*check_cmd(char **argv, t_dict *env)
@@ -199,6 +258,15 @@ char	*check_cmd(char **argv, t_dict *env)
 				free_exit();
 		}
 	}
+	int	j;
+	j = 0;
+	while (path_li && path_li[j])
+	{
+		free(path_li[j]);
+		j++;
+	}
+	free(path_li);
+	add_to_gc(SIMPLE, res, get_gc());
 	return (res);
 }
 
@@ -208,6 +276,8 @@ void	check_redirection(t_info *exec, t_line *sub)
 
 	if (sub->head)
 		buff = sub->head;
+	else
+		return ;
 	exec->open_fd = -1;
 	exec->out_fd = -1;
 	while (buff)
@@ -231,9 +301,9 @@ void	check_red_in(t_block *files, t_info *exec)
 	// if (exec->out_fd != STDIN_FILENO)
 		//close (exec->out_fd);
 	//so one fd was left open
-	if (exec->open_fd != STDIN_FILENO)
+	if (exec->open_fd != -1)
 		close(exec->open_fd);
-	exec->open_fd = STDIN_FILENO;
+	exec->open_fd = -1;
 	//Va falloir revoir a fond l'expand xd ca reste la meme idee mais bon pck dans l'ideal pour l'error on a besoin de la value avant l'expand (a voir apres)
 	if (ft_strncmp(files->word, "", 2) == 0)
 		print_error(NULL, 1);
@@ -257,9 +327,9 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 {
 	int	f_open_out;
 
-	if (exec->out_fd != STDOUT_FILENO)
+	if (exec->out_fd != -1)
 		close(exec->out_fd);
-	exec->out_fd = STDOUT_FILENO;
+	exec->out_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
 	{
 		print_error(NULL, 1);
