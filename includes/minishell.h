@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/21 19:33:11 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/22 17:03:02 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,6 @@
 typedef enum	e_type_leaf{
 	CMD,
 	PIPE_L,
-    AND_L,
-    OR_L,
-    PRTS	
 }	t_type_leaf;
 
 typedef enum	e_token {
@@ -120,7 +117,12 @@ typedef struct	s_info{
 	char	**argv;
 	int			open_fd;
 	int		out_fd;
-	//int		tmp_fd;
+	int		*pid;
+	int		turn;
+	int		tmp_fd;
+	int		stdou;
+	t_bool	start;
+	t_bool	end;
 }			t_info;
 /*
 typedef	enum e_pos{
@@ -155,6 +157,7 @@ void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
 char	*dict_get_value(t_dict *dict, char *key);
+char	**dict_to_double_char(t_dict *dict);
 
 /********************************************/
 /*                parsing                   */
@@ -257,7 +260,7 @@ void	print_syntax_error(char *ope, int type);
 void	print_error(char *ope, int type);
 
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env);
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env);
 size_t	get_nb_cmd_arg(t_line *sub);
 char	**get_cmd_arg(t_line *sub);

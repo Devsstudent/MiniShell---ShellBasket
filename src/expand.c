@@ -120,7 +120,7 @@ int	*get_indexes_expandables(t_block *block, int dollar)
 	while (block->word[i])
 	{
 		advance_if_in_s_quote(&d_quote, block->word, &i);
-		if (block->word[i + 1] && block->word[i] == '$' 
+		if (block->word[i + 1] && block->word[i] == '$'
 				&& check_char(block->word[i + 1]))
 			indexes[j++] = i;
 		i++;
@@ -141,7 +141,7 @@ int	get_nb_of_dollar(t_block *block)
 	while (block->word[i])
 	{
 		advance_if_in_s_quote(&d_quote, block->word, &i);
-		if (block->word[i] == '$' && block->word[i + 1] 
+		if (block->word[i] == '$' && block->word[i + 1]
 				&& check_char(block->word[i + 1]))
 			dollar++;
 		i++;
@@ -172,7 +172,7 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 			if (!value)
 				free_exit();
 			val_arr[i] = value;
-			//ft_printf("value = %s\n", val_arr[i]);
+			////ft_printf("value = %s\n", val_arr[i]);
 			//values OK
 		}
 		i++;
@@ -256,7 +256,7 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes)
 	char	*new_word;
 
 	size = ft_strlen(block->word) + total_char_to_add(val_arr) - total_char_to_remove(key_arr);
-	//ft_printf("SIZE = %i\n", size);
+	////ft_printf("SIZE = %i\n", size);
 	//SIZE OK
 	new_word = (char *) malloc(sizeof(*new_word) * (size + 1));
 	if (!new_word)

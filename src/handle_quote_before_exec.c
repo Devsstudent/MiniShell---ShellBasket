@@ -39,7 +39,7 @@ int	size_new_word_quote(char *word)
 			size++;
 			i++;
 		}
-	} ft_printf("size : %i\n", size);
+	} //ft_printf("size : %i\n", size);
 	return (size);
 }
 
@@ -86,7 +86,7 @@ void	str_quote_parse(char *word, char *new_word)
 		}
 	}
 	new_word[j] = 0;
-	ft_printf("%s", new_word);
+	//ft_printf("%s", new_word);
 }
 
 t_bool	handle_quote(char *word)
@@ -100,7 +100,7 @@ t_bool	handle_quote(char *word)
 		return (FALSE);
 	str_quote_parse(word, new_word);
 	//block->word = new_word
-	
+
 	return (TRUE);
 }
 
@@ -114,8 +114,8 @@ int	main(void)
 	line = readline("word :");
 	handle_quote(line);
 	if (!check_lines_quotes(line))
-		ft_printf("NEED MORE QUOTE");
+		//ft_printf("NEED MORE QUOTE");
 	else
-		ft_printf("SYNTAX OK");
-	
+		//ft_printf("SYNTAX OK");
+
 }

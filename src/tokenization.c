@@ -20,12 +20,12 @@ void	tokenization(t_line *line)
 	{
 		buff->token = UNDEF;
 		buff = buff->next;
-	}	
+	}
 	buff = line->head;
 	while (buff != NULL)
 	{
 		attribute_token(buff);
-		ft_printf(0, "%i\n", buff->token);
+		//ft_printf(0, "%i\n", buff->token);
 		if (!check_symbol(buff))
 		{
 			if (buff->next)
@@ -70,7 +70,7 @@ void	attribute_token(t_block *block)
 			block->token = DELIMITER;
 		if (previous == PIPE)
 			block->token = CMD_ARG;
-		if (previous == RED_IN || previous == RED_OUT_TRUNC 
+		if (previous == RED_IN || previous == RED_OUT_TRUNC
 			|| previous == RED_OUT_APPEND)
 			block->token = FILES;
 		if (previous == DELIMITER)

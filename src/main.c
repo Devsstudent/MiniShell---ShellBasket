@@ -1,12 +1,11 @@
-/* ************************************************************************** */
-/*                                                                            */
+/* ************************************************************************** */ /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:49:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/21 19:11:52 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/22 16:49:02 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -35,9 +34,35 @@ t_tree	*ms_lex_and_parse(char **line)
 	return (tree);
 }
 
+void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
+{
+	t_leaf	*leaf;
+	int	size;
+
+	size = 0;
+	if (tree->head)
+		leaf = tree->head;
+	if (leaf && leaf->type == CMD)
+		exec_info->pid = (int *)malloc(sizeof(int));
+	else
+	{
+		while (leaf->type == PIPE_L)
+		{
+			size++;
+			if (leaf->right)
+				leaf = leaf->right;
+			else
+				break ;
+		}
+		exec_info->pid = (int *)malloc(sizeof(int) * size);
+	}
+	add_to_gc(SIMPLE, exec_info->pid, get_gc());
+	//ft_printf(0, "HEREE %i\n", size);
+}
+
 void	browse_sub_tree(t_leaf *leaf)
 {
-	ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	//ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
@@ -48,21 +73,21 @@ void	browse_sub_tree(t_leaf *leaf)
 			buff = line->head;
 			while (buff)
 			{
-				ft_printf(0, "content = %s\n", buff->word);
+				//ft_printf(0, "content = %s\n", buff->word);
 				buff = buff->next;
 			}
 		}
 	}
 	if (leaf->left != NULL)
 	{
-		ft_printf(0, "left\n");
+		//ft_printf(0, "left\n");
 		browse_sub_tree(leaf->left);
 	}
 	else
 		return ;
 	if (leaf->right != NULL)
 	{
-		ft_printf(0, "right\n");
+		//ft_printf(0, "right\n");
 		browse_sub_tree(leaf->right);
 	}
 	else
@@ -96,17 +121,50 @@ int	main(int ac, char **av, char **envp)
 	buff = env.head;
 	while (buff)
 	{
-		ft_printf("%s, %s\n", buff->key, buff->value);
+		//ft_printf("%s, %s\n", buff->key, buff->value);
 		buff = buff->next;
 	}
 	*/
 	while (ac)
 	{
+		int	stdou;
+		int	stdi;
+
+		exec_info->turn = 0;
+		exec_info->pid = NULL;
+		exec_info->tmp_fd = -1;
+		exec_info->end = FALSE;
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
 		browse_ast_apply_expand(tree->head, env);
-		exec_tree(tree->head, exec_info, env);
+		malloc_pid_arr(exec_info, tree);
+		stdi = dup(STDIN_FILENO);
+		stdou = dup(STDOUT_FILENO);
+		exec_info->stdou = stdou;
+		exec_tree(tree->head, exec_info, env, tree);
 //		browse_tree(tree);
+		int	i;
+		i = 0;
+		if (exec_info->tmp_fd != -1)
+			close(exec_info->tmp_fd);
+		if (dup2(stdi, STDIN_FILENO) == -1)
+		{
+			perror("sell");
+			continue ;
+		}
+		close(stdi);
+		if (exec_info->stdou != -1 && dup2(stdou, STDOUT_FILENO) == -1)
+		{
+			perror("basket");
+			continue ;
+		}
+		close(stdou);
+		while (i < exec_info->turn)
+		{
+			waitpid(exec_info->pid[i], NULL, 0);
+			i++;
+		}
+		//waitpid();
 	}
 	return (1);
 }
@@ -119,7 +177,7 @@ int	main(int ac, char **av, char **envp)
 	t_elem	*new;
 	char	**arg;
 
-	arg = ft_split("COCO=COCO", '=');	
+	arg = ft_split("COCO=COCO", '=');
 	if (!double_char_to_lst(envp, &env))
 		return (1);
 	printf("here\n");
