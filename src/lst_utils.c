@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/21 20:07:44 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/22 14:03:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -143,7 +143,7 @@ char	**dict_to_double_char(t_dict *dict)
 
 	i = 0;
 	buff = dict->head;
-	arr = (char **) malloc(sizeof(*ar) * (dict->size + 1));
+	arr = (char **) malloc(sizeof(*arr) * (dict->size + 1));
 	if (!arr)
 		free_exit();
 	while (i < dict->size + 1)

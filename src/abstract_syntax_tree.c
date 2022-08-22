@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 16:54:39 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/22 14:05:16 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -67,6 +67,30 @@ static void	loop_line_to_ast(t_tree **tree, t_bool pipe, t_line *line)
 		buff = buff->next;
 	}
 }
+/*
+	VERSION BETTER I THINK
+static void	loop_line_to_ast(t_leaf *leaf, t_bool pipe, t_block *buff)
+{
+	t_line	*cmd;
+
+	while (buff)
+	{
+		cmd = fill_till_pipe(&buff);
+		if (buff == NULL)
+		{
+			leaf = new_leaf(cmd, CMD);
+			return ;
+		}
+		if (buff->token == PIPE)
+		{
+			leaf = new_leaf(NULL, PIPE_L);
+			leaf->left = new_leaf(cmd, CMD);
+			loop_line_to_ast(leaf, pipe, buff);
+		}
+		buff = buff->next;
+	}
+}
+*/
 
 void	fill_ast(t_line *line, t_tree *tree)
 {
