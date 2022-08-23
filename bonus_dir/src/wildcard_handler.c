@@ -6,10 +6,10 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/23 15:45:54 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/23 16:59:38 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../libft/libft.h"
+#include "minishell.h"
 
 //expand before wildcards, so we have the right thing at hand
 //$something*, expand $something, then * is handled
@@ -20,12 +20,7 @@
 //order the list using ft_strncmp
 // we have a list
 
-#include "dirent.h"
-#include "stdio.h"
-#include "sys/types.h"
-#include "errno.h"
-
-int		get_nb_files(void)
+int	get_nb_files(void)
 {
 	DIR				*dir;
 	struct dirent	*ent;
@@ -87,9 +82,8 @@ char	**get_filenames(void)
 	size = get_nb_files();
 	filenames = (char **) malloc(sizeof(char *) * (get_nb_files() + 1));
 	if (!filenames)
-		exit(0);
-		//free_exit();
-	//add_to_gc(DOUBLE, filenames, get_gc());
+		free_exit();
+	add_to_gc(DOUBLE, filenames, get_gc());
 	if (size == 0)
 		return (filenames[0] = NULL, filenames);
 	fill_filenames(filenames, &dir, &ent);
@@ -149,7 +143,9 @@ t_bool	check_match(char *filename, char **patterns, char *word)
 	ptr = filename;
 	while (patterns[i])
 	{
-		if (i == 0 && word[0] != '*' && ft_strncmp(filename, patterns[0], ft_strlen(patterns[0])) != 0)
+		if (i == 0 && word[0] != '*' 
+				&& ft_strncmp(filename, patterns[0],
+					ft_strlen(patterns[0])) != 0)
 			return (FALSE);
 		ptr = ft_strnstr(ptr, patterns[i], ft_strlen(filename + j));
 		if (ptr == NULL)
@@ -183,28 +179,13 @@ void	select_filenames(char **filenames, char **patterns, char **matches, char *w
 	matches[j] = NULL;
 }
 
-char	**handle_wildcards(char *word)
+char	**fill_matches(char *word, char **filenames, char **patterns, char **matches)
 {
-	char	**filenames;
-	char	**matches;
-	char	**patterns;
-	int		i;
+	int	i;
 
 	i = 0;
-	if (!word)
-		return (NULL);
-	filenames = get_filenames();
-	order_filenames(filenames);
-	while (filenames[i])
-		i++;
-	matches = malloc(sizeof(*matches) * (i + 1));
-	patterns = ft_split(word, '*');
-	if (!patterns)
-		exit(0);
-		//free_exit();
 	if (patterns[0] == NULL)
 	{
-		i = 0;
 		while (filenames[i])
 		{
 			matches[i] = ft_strdup(filenames[i]);
@@ -214,11 +195,28 @@ char	**handle_wildcards(char *word)
 	}
 	else
 	{
-		if (word[ft_strlen(word) - 1] != '*')
-			select_filenames(filenames, patterns, matches, word);
-		else
-			select_filenames(filenames, patterns, matches, word);
+		select_filenames(filenames, patterns, matches, word);
 	}
+}
+
+char	**handle_wildcards(char *word)
+{
+	char	**filenames;
+	char	**matches;
+	char	**patterns;
+	int		i;
+
+	i = 0;
+	if (!word || ft_strchr(word, '*') == NULL)
+		return (NULL);
+	filenames = get_filenames();
+	order_filenames(filenames);
+	while (filenames[i])
+		i++;
+	matches = malloc(sizeof(*matches) * (i + 1));
+	patterns = ft_split(word, '*');
+	if (!patterns)
+		free_exit();
 	return (matches);
 }
 
