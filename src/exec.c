@@ -87,13 +87,13 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	if (!cmd_path)
 	{
 		print_error(exec_in->argv[0], 2);
-		if (exec_in->tmp_fd != -1)
-			close(exec_in->tmp_fd);
-		exec_in->tmp_fd = pipe_fd[0];
-		close(pipe_fd[1]);
 		return ;
 	}
 	forking(cmd_path, exec_in, env, pipe_fd);
+	close(pipe_fd[1]);
+	//if (exec_in->tmp_fd != -1)
+	//	close(exec_in->tmp_fd);
+	exec_in->tmp_fd = pipe_fd[0];
 	if (exec_in->open_fd != -1)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd != -1)

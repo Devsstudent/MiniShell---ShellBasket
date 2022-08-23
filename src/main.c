@@ -157,6 +157,7 @@ int	main(int ac, char **av, char **envp)
 			perror("basket");
 			continue ;
 		}
+		
 		close(stdou);
 		while (i < exec_info->turn)
 		{
