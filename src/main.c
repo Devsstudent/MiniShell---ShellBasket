@@ -136,7 +136,6 @@ int	main(int ac, char **av, char **envp)
 		exec_info->end = FALSE;
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
-		browse_ast_apply_expand(tree->head, env);
 		malloc_pid_arr(exec_info, tree);
 		stdi = dup(STDIN_FILENO);
 		stdou = dup(STDOUT_FILENO);
