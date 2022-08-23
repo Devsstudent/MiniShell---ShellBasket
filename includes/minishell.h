@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/22 17:03:02 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/23 20:30:29 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ typedef struct	s_gc{
 	t_type			type;
 }					t_gc;
 
-typedef struct	s_lexeur {
-	t_token			token;
+typedef struct	s_lexeur { t_token			token;
 	void			*content;
 	struct s_lexeur	*next;
 }					t_lexeur;
@@ -222,13 +221,27 @@ void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 t_leaf	*new_leaf(t_line *cmd, t_type_leaf type);
 //BONUS
 
-t_leaf      *new_leaf_bonus(t_line *sub, int par);
-t_type_leaf get_type(t_token token);
-t_line      *fill_till_ope(t_block **buff);
-void        line_cpy_till_ope(t_block **buff, t_line *sub_lst);
-void        test(t_leaf *leaf, t_line *line, int parr);
-void        fill_ast_bonus(t_line *line, t_tree *tree);
+t_leaf	*new_leaf_bonus(t_line *sub, int par);
+t_type_leaf	get_type(t_token token);
+t_line	*fill_till_ope(t_block **buff);
+void	line_cpy_till_ope(t_block **buff, t_line *sub_lst);
+void	test(t_leaf *leaf, t_line *line, int parr);
+void	fill_ast_bonus(t_line *line, t_tree *tree);
+void		clean_tree(t_leaf *leaf);
 
+/********************************************/
+/*                   errror                 */
+/********************************************/
+void	print_syntax_error(char *ope, int type);
+void	print_error(char *ope, int type);
+char	*get_exit_status(void);
+
+
+/********************************************/
+/*                 expand                   */
+/********************************************/
+//A SPLIT EN PLUSIEURS FICHIER : ) 
+void	expand(t_line *line, t_dict *env);
 int	total_char_to_remove(char **key_arr);
 int	total_char_to_add(char **val_arr);
 t_bool	check_char(char c);
@@ -236,11 +249,8 @@ int	size_doll_val(char *word, int i);
 void	advance_if_in_s_quote(t_bool *d_quote, char *word, int *i);
 void	fill_key_arr(t_block *block, char **key_arr, int *indexes);
 int	*get_indexes_expandables(t_block *block, int dollar);
-
 void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
-void	expand(t_line *line, t_dict *env);
 void	check_dollar_in_block(t_block *block);
-
 int	get_nb_of_dollar(t_block *block);
 void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict);
 void	replace_key(char *new_word, int *j, char **val_arr);
@@ -248,18 +258,10 @@ t_bool	handle_simple_word(char *new_word, char *word, int *indexes);
 void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes);
 void	expand_block(t_block *block, char **key_arr, char **val_arr, int *indexes);
 void	handle_dollar_in_block(t_block *block, t_dict *dict);
-void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env);
-
-char	*get_exit_status(void);
-void	clean_tree(t_leaf *leaf);
 
 /********************************************/
-/*                   errror                 */
+/*                   exec                   */
 /********************************************/
-void	print_syntax_error(char *ope, int type);
-void	print_error(char *ope, int type);
-
-
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env);
 size_t	get_nb_cmd_arg(t_line *sub);
@@ -268,5 +270,18 @@ void	check_redirection(t_info *exec, t_line *sub);
 void	check_red_out(t_block *files, t_info *exec, t_block *red);
 void	check_red_in(t_block *files, t_info *exec);
 char	*check_cmd(char **argv, t_dict *env);
+void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2]);
+void	get_size_word_in_word(char *word, size_t *size);
+void	loop_get_arg(char *word, char **argv, int *i);
+
+/********************************************/
+/*                 execve                   */
+/********************************************/
+t_bool	check_builtins(char **argv);
+size_t	get_ac(char **argv);
+t_bool	exec_builtin(char **argv, t_dict *env);
+t_bool	execve_test(char *pathname, char **argv, t_dict *env);
+
 
 #endif
