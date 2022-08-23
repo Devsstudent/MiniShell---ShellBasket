@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:37:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/22 19:55:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/23 18:16:58 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -80,15 +80,26 @@ void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 
 void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 {
+	int	pipe_fd[2];
+
 	exec_in->pid[exec_in->turn] = fork();
 	if (exec_in->pid[exec_in->turn] < 0)
 		return (perror("shellbasket"));
-	if (exec_in->open_fd != -1)
+	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 			return (perror("shellbasket"));
-	if (exec_in->out_fd != -1)
+	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
 			return (perror("shellbasket"));
+	if (exec_in->out_fd == -2 || exec_in->open_fd == -2)
+		if (pipe(pipe_fd) == -1)
+			return (perror("pipe in forking cmd allone"));
+	if (exec_in->out_fd == -2)
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+			return (perror("close file crashed"));
+	if (exec_in->open_fd == -2)
+		if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+			return (perror("open_file crashed"));
 	if (exec_in->pid[exec_in->turn] == 0)
 	{
 		if (exec_in->open_fd != -1)
@@ -98,44 +109,63 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 		if (!execve_test(cmd_path, exec_in->argv, env))
 			return (perror(exec_in->argv[0]));
 	}
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 	free(cmd_path);
 }
+void	get_size_word_in_word(char *word, size_t *size);
 //On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
 size_t	get_nb_cmd_arg(t_line *sub)
 {
 	t_block	*buff;
 	size_t	size;
-	int		j;
 
 	buff = sub->head;
-	j = 0;
 	size = 0;
 	while (buff)
 	{
 		if (buff->token == CMD_ARG)
-		{
-			while (buff->word[i])
-			{
-				if (buff->word[i] == ' ' && buff->word[i + 1] && buff->word[i + 1] != ' ')
-					size++;
-				i++;
-			}
-			size++;
-		}
+			get_size_word_in_word(buff->word, &size);
 		buff = buff->next;
 	}
+	write(2, ft_itoa(size), ft_strlen(ft_itoa(size)));
 	//ft_printf(0, "%i", (int) size);
 	return (size);
 }
 
+void	get_size_word_in_word(char *word, size_t *size)
+{
+	int	i;
+	t_bool	quote;
+	t_bool	d_quote;
+
+	i = 0;
+	quote = FALSE;
+	d_quote = FALSE;
+	while (word[i])
+	{
+		if (word[i] == '\"' && !d_quote)
+			d_quote = TRUE;
+		else if (word[i] == '\"' && d_quote)
+			d_quote = FALSE;
+		if (word[i] == '\'' && !quote)
+			quote = TRUE;
+		else if (word[i] == '\'' && quote)
+			quote = FALSE;
+		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && word[i + 1] && word[i + 1] != ' ' && !quote && !d_quote)
+			(*size)++;
+		i++;
+	}
+	(*size)++;
+}
+
+void	loop_get_arg(char *word, char **argv, int *i);
 //Return un double tableau avec la commandes et arg
 char	**get_cmd_arg(t_line *sub)
 {
 	t_block		*buff;
 	char		**argv;
 	int			i;
-	int			j;
-	char		**space_or_not;
 
 	i = 0;
 	argv = (char **) malloc(sizeof(*argv) * (get_nb_cmd_arg(sub) + 1));
@@ -144,29 +174,56 @@ char	**get_cmd_arg(t_line *sub)
 	while (buff)
 	{
 		if (buff->token == CMD_ARG)
-		{
-			argv[i] = NULL;
-			j = 0;
-			//Split a la manooo
-			space_or_not = ft_split(buff->word, ' ');
-			while (space_or_not && space_or_not[j])
-			{
-				argv[i] = sapce_or_not[j];
-				j++;
-				i++;
-			}
-			if (!argv[i])
-			{
-				free(space_or_not);
-				free_exit();
-			}
-			free(space_or_not);
-			i++;
-		}
+			loop_get_arg(buff->word, argv, &i);
 		buff = buff->next;
 	}
 	argv[i] = 0;
 	return (argv);
+}
+
+void	loop_get_arg(char *word, char **argv, int *i)
+{
+	int	j;
+	int	last;
+	t_bool	quote;
+	t_bool	d_quote;
+
+	j = 0;
+	last = 0;
+	quote = FALSE;
+	d_quote = FALSE;
+	while (word[j])
+	{
+		if (word[j] == ' ' && j > 0 && word[j - 1] != ' ' && !d_quote && !quote)
+		{
+			argv[*i] = ft_substr(word, last, (j - last));
+			(*i)++;
+			if (word[j + 1])
+				last = j + 1;
+		}
+		while (word[j] && word[j] == ' ')
+		{
+			j++;
+			last = j;
+		}
+		if (!word[j])
+			break ;
+		if (word[j] == '\"' && !d_quote)
+			d_quote = TRUE;
+		if (word[j] == '\'' && !quote)
+			quote = TRUE;
+		if (word[j] == '\'' && quote)
+			quote = FALSE;
+		if (word[j] == '\"' && d_quote)
+			d_quote = FALSE;
+		if (word[j])
+			j++;
+	}
+	if (j != last)
+	{
+		argv[*i] = ft_substr(word, last, (j - last));
+		(*i)++;
+	}
 }
 
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
@@ -175,7 +232,7 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	int			pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
-		return (perror("shellbasket"));
+		return (perror("pipe"));
 	check_redirection(exec_in, sub);
 	cmd_path = check_cmd(exec_in->argv, env);
 	if (!cmd_path)
@@ -199,13 +256,13 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 {
 	exec_in->pid[exec_in->turn] = fork();
 	if (exec_in->pid[exec_in->turn] < 0)
-		return (perror("shellbasket"));
+		return (perror("shebasket"));
 	if (exec_in->end)
 	{
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 	}
-	if (exec_in->out_fd != -1)
+	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 	{
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
 			return (perror("basket"));
@@ -217,12 +274,15 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 	}
 	else
 	{
-		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
-			return (perror("sheet"));
-		close(exec_in->stdou);
-		exec_in->stdou = -1;
+		if (exec_in->out_fd != -2)
+		{
+			if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
+				return (perror("sheet"));
+			close(exec_in->stdou);
+			exec_in->stdou = -1;
+		}
 	}
-	if (exec_in->open_fd != -1)
+	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 	{
 		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 			return (perror("set"));
@@ -236,9 +296,9 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 	{
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
-		if (exec_in->open_fd != -1)
+		if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 			close(exec_in->open_fd);
-		if (exec_in->out_fd != -1)
+		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 			close(exec_in->out_fd);
 		if (exec_in->tmp_fd != -1)
 			close(exec_in->tmp_fd);
@@ -295,6 +355,7 @@ char	*check_cmd(char **argv, t_dict *env)
 	return (res);
 }
 
+t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type);
 void	check_redirection(t_info *exec, t_line *sub)
 {
 	t_block	*buff;
@@ -308,14 +369,54 @@ void	check_redirection(t_info *exec, t_line *sub)
 	while (buff)
 	{
 		if (buff->token == RED_IN)
-			check_red_in(buff->next, exec);
+		{
+			if (!check_ambiguous(buff->next->word, exec, FALSE))
+				check_red_in(buff->next, exec);
+		}
 		else if (buff->token == RED_OUT_TRUNC || buff->token == RED_OUT_APPEND)
-			check_red_out(buff->next, exec, buff);
+		{
+			if (!check_ambiguous(buff->next->word, exec, TRUE))
+				check_red_out(buff->next, exec, buff);
+		}
 		/*
 		else if (buff->token == HERE_DOC)
 			*/
 		buff = buff->next;
 	}
+}
+
+t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
+{
+	int	i;
+	t_bool	quote;
+	t_bool	d_quote;
+
+	i = 0;
+	quote = FALSE;
+	d_quote = FALSE;
+	while (word[i])
+	{
+		ft_putchar_fd(word[i], 2);
+		if (word[i] == '\"' && !d_quote)
+			d_quote = TRUE;
+		else if (word[i] == '\"' && d_quote)
+			d_quote = FALSE;
+		if (word[i] == '\'' && !quote)
+			quote = TRUE;
+		else if (word[i] == '\'' && quote)
+			quote = FALSE;
+		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && !quote && !d_quote)
+		{
+			if (type)
+				exec_in->out_fd = -2;
+			if (!type)
+				exec_in->open_fd = -2;
+			write(2, "ambiguous redirect :)", 21);
+			return (TRUE);
+		}
+		i++;
+	}
+	return (FALSE);
 }
 
 void	check_red_in(t_block *files, t_info *exec)
@@ -362,6 +463,7 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 	}
 	else if (ft_strncmp(files->word, "\"\"", 3) == 0 || ft_strncmp(files->word, "\'\'", 3) == 0)
 	{
+		write(2, " :", 2);
 		//ft_printf(1, " :");
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
@@ -439,6 +541,10 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env)
 	env_bis = dict_to_double_char(env);
 	if (!exec_builtin(argv, env))
 	{
+		int	i;
+		i = 0;
+		while (argv[i])
+			i++;
 		if (execve(pathname, argv, env_bis) == -1)
 		{
 			return (FALSE);
