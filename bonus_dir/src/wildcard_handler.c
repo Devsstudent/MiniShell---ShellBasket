@@ -6,10 +6,10 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/22 23:21:19 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/23 15:45:54 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "minishell.h"
+#include "../../libft/libft.h"
 
 //expand before wildcards, so we have the right thing at hand
 //$something*, expand $something, then * is handled
@@ -19,6 +19,11 @@
 
 //order the list using ft_strncmp
 // we have a list
+
+#include "dirent.h"
+#include "stdio.h"
+#include "sys/types.h"
+#include "errno.h"
 
 int		get_nb_files(void)
 {
@@ -82,8 +87,9 @@ char	**get_filenames(void)
 	size = get_nb_files();
 	filenames = (char **) malloc(sizeof(char *) * (get_nb_files() + 1));
 	if (!filenames)
-		free_exit();
-	add_to_gc(DOUBLE, filenames, get_gc());
+		exit(0);
+		//free_exit();
+	//add_to_gc(DOUBLE, filenames, get_gc());
 	if (size == 0)
 		return (filenames[0] = NULL, filenames);
 	fill_filenames(filenames, &dir, &ent);
@@ -101,13 +107,8 @@ int	get_min(char **filenames, int i)
 	min = j;
 	while (filenames[j])
 	{
-		if (!filenames[j + 1])
-		{
-			j++;
-			continue;
-		}
-		size = ft_strlen(filenames[j + 1] + 1);
-		cmp = ft_strncmp(filenames[j + 1], filenames[j], size);
+		size = ft_strlen(filenames[j]) + 1;
+		cmp = ft_strncmp(filenames[j], filenames[min], size);
 		if (cmp <= 0)
 			min = j;
 		j++;
@@ -137,7 +138,7 @@ void	order_filenames(char **filenames)
 	}
 }
 
-t_bool	check_match(char *filename, char **patterns, t_bool end_pat)
+t_bool	check_match(char *filename, char **patterns, char *word)
 {
 	int		i;
 	int		j;
@@ -148,48 +149,50 @@ t_bool	check_match(char *filename, char **patterns, t_bool end_pat)
 	ptr = filename;
 	while (patterns[i])
 	{
+		if (i == 0 && word[0] != '*' && ft_strncmp(filename, patterns[0], ft_strlen(patterns[0])) != 0)
+			return (FALSE);
 		ptr = ft_strnstr(ptr, patterns[i], ft_strlen(filename + j));
 		if (ptr == NULL)
 			return (FALSE);
 		ptr += ft_strlen(patterns[i]);
-		if (patterns[i + 1] == NULL && end_pat == TRUE)
-			if (*(ptr + 1) == '\0')
-				return (TRUE);
+		if (patterns[i + 1] == NULL && word[ft_strlen(word) - 1] != '*')
+			if (*(ptr + 1) != '\0')
+				return (FALSE);
 		i++;
 	}
 	return (TRUE);
 }
 
-void	select_filenames(char **filenames, char **patterns, char **matches, t_bool end_pat)
+void	select_filenames(char **filenames, char **patterns, char **matches, char *word)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
+
 	while (filenames[i])
 	{
-		if (check_match(filenames[i], patterns, end_pat))
+		if (check_match(filenames[i], patterns, word))
 		{
 			matches[j] = ft_strdup(filenames[i]);
 			j++;
 		}
 		i++;
 	}
+	matches[j] = NULL;
 }
 
-char	**handle_wildcards(t_block *block)
+char	**handle_wildcards(char *word)
 {
-	char	*word;
 	char	**filenames;
 	char	**matches;
 	char	**patterns;
 	int		i;
 
 	i = 0;
-	if (!block->word)
+	if (!word)
 		return (NULL);
-	word = block->word;
 	filenames = get_filenames();
 	order_filenames(filenames);
 	while (filenames[i])
@@ -197,7 +200,8 @@ char	**handle_wildcards(t_block *block)
 	matches = malloc(sizeof(*matches) * (i + 1));
 	patterns = ft_split(word, '*');
 	if (!patterns)
-		free_exit();
+		exit(0);
+		//free_exit();
 	if (patterns[0] == NULL)
 	{
 		i = 0;
@@ -207,14 +211,27 @@ char	**handle_wildcards(t_block *block)
 			i++;
 		}
 		matches[i] = NULL;
-		free(word);
 	}
 	else
 	{
 		if (word[ft_strlen(word) - 1] != '*')
-			select_filenames(filenames, patterns, matches, TRUE);
+			select_filenames(filenames, patterns, matches, word);
 		else
-			select_filenames(filenames, patterns, matches, FALSE);
+			select_filenames(filenames, patterns, matches, word);
 	}
 	return (matches);
+}
+
+int	main(void)
+{
+	char	**files;
+
+	files = handle_wildcards("*o*t");
+	int	i = 0;
+	while (files[i])
+	{
+		printf("%s\n", files[i]);
+		i++;
+	}
+	printf("THIS IS THE END\n");
 }
