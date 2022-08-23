@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:16:09 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/23 17:40:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/23 18:57:08 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,7 +15,7 @@ void	exec_unset(int ac, char **argv, t_dict *env)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (i < ac)
 	{
 		dict_delone(argv[i]);

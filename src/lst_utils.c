@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/22 14:03:52 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/23 21:27:12 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -54,6 +54,20 @@ t_elem	*new_elem(char *content)
 		return (NULL);
 	}
 	loop_copy_env(elems_env, buff, new_elem);
+	return (new_elem);
+}
+
+t_elem	*create_elem(char *key, char *value)
+{
+	t_elem	*new_elem;
+
+	new_elem = (t_elem *)malloc(sizeof(t_elem));
+	if (!new_elem)
+		free_exit();
+	elem->next = NULL;
+	elem->prev = NULL;
+	elem->key = key;
+	elem->value = value;
 	return (new_elem);
 }
 
@@ -133,32 +147,6 @@ void	dict_clear(t_dict *dict)
 		buff = tmp;
 	}
 	free(dict);
-}
-
-char	**dict_to_double_char(t_dict *dict)
-{
-	char	**arr;
-	t_elem	*buff;
-	int		i;
-
-	i = 0;
-	buff = dict->head;
-	arr = (char **) malloc(sizeof(*arr) * (dict->size + 1));
-	if (!arr)
-		free_exit();
-	while (i < dict->size + 1)
-	{
-		arr[i] = ft_strjoin(ft_strdup(buff->key), "=");
-		if (!arr[i])
-			free_exit();
-		arr[i] = ft_strjoin(arr[i], ft_strdup(buff->value));
-		if (!arr[i])
-			free_exit();
-		buff = buff->next;
-		i++;
-	}
-	arr[i] = NULL;
-	return (arr);
 }
 
 char	*dict_get_value(t_dict *dict, char *key)
