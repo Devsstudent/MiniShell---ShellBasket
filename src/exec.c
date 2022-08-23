@@ -86,6 +86,8 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	cmd_path = check_cmd(exec_in->argv, env);
 	if (!cmd_path)
 	{
+		close(pipe_fd[1]);
+		close(pipe_fd[0]);
 		print_error(exec_in->argv[0], 2);
 		return ;
 	}
