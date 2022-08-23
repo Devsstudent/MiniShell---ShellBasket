@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:37:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/23 18:16:58 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/23 19:48:17 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -35,13 +35,13 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 		return ;
 	if (leaf->type == PIPE_L)
 	{
-		//EXPANNNNND OHOOOOOO
 		if (leaf == tree->head)
 			exec_in->start = TRUE;
 		else
 			exec_in->start = FALSE;
 		if (!leaf->right)
 			exec_in->end = TRUE;
+		expand(leaf->left->content, env);
 		exec_in->argv = get_cmd_arg(leaf->left->content);
 		exec(exec_in, leaf->left->content, env);
 		if (leaf->right)
@@ -52,6 +52,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 	}
 	else if (leaf->type == CMD)
 	{
+		expand(leaf->content, env);
 		exec_in->argv = get_cmd_arg(leaf->content);
 		exec_cmd(exec_in, leaf->content, env);
 		// head = cmd on get cmd puis on exec
@@ -82,6 +83,8 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	int	pipe_fd[2];
 
+	if (pipe(pipe_fd) == -1)
+		return (perror("pipe in forking cmd allone"));
 	exec_in->pid[exec_in->turn] = fork();
 	if (exec_in->pid[exec_in->turn] < 0)
 		return (perror("shellbasket"));
@@ -91,9 +94,6 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
 			return (perror("shellbasket"));
-	if (exec_in->out_fd == -2 || exec_in->open_fd == -2)
-		if (pipe(pipe_fd) == -1)
-			return (perror("pipe in forking cmd allone"));
 	if (exec_in->out_fd == -2)
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 			return (perror("close file crashed"));
