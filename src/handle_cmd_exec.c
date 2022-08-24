@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 12:58:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 19:13:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -124,6 +124,8 @@ char	*check_cmd(char **argv, t_dict *env)
 	char	*res;
 	char	*buff;
 
+	if (!argv[0])
+		return (NULL);
 	if (check_builtins(argv))
 		return (argv[0]);
 	i = 0;
@@ -149,6 +151,8 @@ char	*check_cmd(char **argv, t_dict *env)
 			if (!res)
 				free_exit();
 		}
+		else
+			return (NULL);
 	}
 	int	j;
 	j = 0;

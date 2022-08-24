@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 15:22:35 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/24 22:36:12 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -27,6 +27,7 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 	if (dict_get_value(env, key) == NULL)
 	{
 		elem = create_elem(key, value);
+		ft_putstr_fd("je suis la \n", 1);
 		dict_addback(env, elem);
 	}
 	else
@@ -41,7 +42,6 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 		else
 			dict_modify(env, key, value);
 	}
-	//free(key);
 }
 
 void	do_your_thing(char *arg, t_bool append, t_dict *env)
@@ -57,7 +57,6 @@ void	do_your_thing(char *arg, t_bool append, t_dict *env)
 	if (ptr == NULL)
 		return ;
 	key = ft_substr(arg, 0, ptr - arg);
-	//ft_putstr_fd(ft_itoa(ptr - arg), 2);
 	if (!key)
 		free_exit();
 	if (append)
@@ -69,6 +68,17 @@ void	do_your_thing(char *arg, t_bool append, t_dict *env)
 	do_the_last_thing(key, value, append, env);
 }
 
+void	handle_key(char *key, t_dict *env)
+{
+	t_elem	*elem;
+
+	if (dict_get_value(env, key) == NULL)
+	{
+		elem = create_elem(key, NULL);
+		dict_addback(env, elem);
+	}
+}
+
 void	export_arg(char *arg, t_dict *env)
 {
 	int		i;
@@ -76,44 +86,67 @@ void	export_arg(char *arg, t_dict *env)
 
 	i = 0;
 	append = FALSE;
-	if (!ft_isalnum(arg[0]) && arg[0] != '_')
+	if (!(ft_isalpha(arg[0]) || arg[0] == '_'))
 	{
 		ft_putstr_fd("hellbasket: export: not a valid identifier\n", 2);
+		g_exit_status = 1;
 		return ;
 	}
 	while (arg[i])
 	{
 		if (arg[i] == '=')
 			break ;
-	//	ft_putchar_fd(arg[i], 2);
 		if (!ft_isalnum(arg[i]) && arg[i] != '+' && arg[i] != '_')
 		{
-//			ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
 			ft_putstr_fd("ellbasket: export: not a valid identifier\n", 2);
+			g_exit_status = 1;
 			return ;
 		}
 		if (arg[i] == '+' && arg[i + 1] != '=')
 		{
-//			ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
 			ft_putstr_fd("basket: export: not a valid identifier\n", 2);
+			g_exit_status = 1;
 			return ;
 		}
 		else if (arg[i] == '+')
 			append = TRUE;
 		i++;
 	}
-	do_your_thing(arg, append, env);
+	if (arg[i] == '\0')
+		handle_key(ft_strdup(arg), env);
+	else
+	{
+		ft_putstr_fd("hrer\n", 2);
+		do_your_thing(arg, append, env);
+	}
+	g_exit_status = 0;
+}
+
+void	display_export_env(t_dict *env)
+{
+	int		i;
+	char	**vars;
+
+	i = 0;
+	vars = dict_to_double_char_export(env);
+	while (vars[i])
+	{
+		ft_putstr_fd(vars[i], 1);
+		write(1, "\n", 1);
+		i++;
+	}
 }
 
 void	exec_export(int ac, char **argv, t_dict *env)
 {
-	int	i;
+	int		i;
 
 	if (ac == 1)
 	{
 		//man says the results are unspecified when no arguments are given
-		//display all va in the copy of env for export : ) 
-		errno = 0;
+		//display all va in the copy of env for export : )
+		display_export_env(env);
+		g_exit_status = 0;
 		return ;
 	}
 	i = 1;
@@ -122,5 +155,4 @@ void	exec_export(int ac, char **argv, t_dict *env)
 		export_arg(argv[i], env);
 		i++;
 	}
-	errno = 0;
 }

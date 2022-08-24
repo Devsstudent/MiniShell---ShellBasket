@@ -6,13 +6,16 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 16:38:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 22:16:13 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 t_bool	check_builtins(char **argv)
 {
+	//besoin d'une protection contre NULL
+	//if (argv[0] == NULL)
+	//	return (FALSE);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		return (TRUE);
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
@@ -75,7 +78,7 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork)
 {
 	char	**env_bis;
 
-	env_bis = dict_to_double_char(env);
+	env_bis = dict_to_double_char_env(env);
 	if (!exec_builtin(argv, env, fork))
 	{
 		int	i;

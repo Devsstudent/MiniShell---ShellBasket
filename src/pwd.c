@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 13:54:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 16:44:26 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 19:26:10 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,10 +24,10 @@ void	exec_pwd(int ac, char **argv, t_dict *env)
 	{
 		perror("pwd");
 		//Erange 34
-		errno = 34;
+		g_exit_status = 34;
 		return ;
 	}
 	ft_putstr_fd(buff, 1);
 	write(1, "\n", 1);
-	errno = 0;
+	g_exit_status = 0;
 }

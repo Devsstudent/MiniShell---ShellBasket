@@ -29,7 +29,9 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	cmd_path = check_cmd(exec_in->argv, env);
 	if (!cmd_path)
 	{
-		print_error(exec_in->argv[0], 2);
+		//added for not writing the error in case of line empty
+		if (exec_in->argv[0])
+			print_error(exec_in->argv[0], 2);
 		return ;
 	}
 	ac = get_ac(exec_in->argv);

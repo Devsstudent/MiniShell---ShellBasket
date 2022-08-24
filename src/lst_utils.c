@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 12:29:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 22:43:26 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -162,7 +162,7 @@ char	*dict_get_value(t_dict *dict, char *key)
 		return (NULL);
 }
 
-char	**dict_to_double_char(t_dict *dict)
+char	**dict_to_double_char_export(t_dict *dict)
 {
 	char	**arr;
 	t_elem	*buff;
@@ -176,6 +176,43 @@ char	**dict_to_double_char(t_dict *dict)
 	add_to_gc(DOUBLE, arr, get_gc());
 	while (i < dict->size)
 	{
+		if (buff->value)
+		{
+			arr[i] = ft_strjoin(ft_strdup(buff->key), "=");
+			if (!arr[i])
+				free_exit();
+			arr[i] = ft_strjoin(arr[i], ft_strdup(buff->value));
+			if (!arr[i])
+				free_exit();
+		}
+		else
+			arr[i] = ft_strdup(buff->key);
+		buff = buff->next;
+		i++;
+	}
+	arr[i] = NULL;
+	return (arr);
+}
+
+char	**dict_to_double_char_env(t_dict *dict)
+{
+	char	**arr;
+	t_elem	*buff;
+	int		i;
+
+	i = 0;
+	buff = dict->head;
+	arr = (char **) malloc(sizeof(*arr) * (dict->size + 1));
+	if (!arr)
+		free_exit();
+	add_to_gc(DOUBLE, arr, get_gc());
+	while (buff)
+	{
+		if (!buff->value)
+		{
+			buff = buff->next;
+			continue ;
+		}
 		arr[i] = ft_strjoin(ft_strdup(buff->key), "=");
 		if (!arr[i])
 			free_exit();
