@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:21:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/19 18:09:48 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/20 17:57:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //#include "minishell.h"
@@ -16,7 +16,7 @@
 #include "stdlib.h"
 #include "string.h"
 
-int	arg_is_num(char *arg)
+static int	arg_is_num(char *arg)
 {
 	int		i;
 
@@ -32,7 +32,7 @@ int	arg_is_num(char *arg)
 	return (1);
 }
 
-int	arg_is_ll(char *arg)
+static int	arg_is_ll(char *arg)
 {
 	size_t	num;
 	int		i;
@@ -55,7 +55,7 @@ int	arg_is_ll(char *arg)
 	return (1);
 }
 
-long long	ft_atoll(char *arg)
+static long long	ft_atoll(char *arg)
 {
 	size_t		num;
 	int			i;
@@ -80,24 +80,24 @@ void	exec_exit(int ac, char **argv/*, t_dict *env*/)
 	long long	exit_status;
 
 	printf("exit\n");
-
+	//if too many arguments and argument 1 is numeric, no exit is performed, too many args
+	//if too many arguments and argument 1 is not numeric, exit is performed, status 2
 	//if too many arguments, the status is 1, exit is printed but not exit is performed
-	if (ac > 2)
-	{
-		printf("shellbasket: exit: too many arguments\n");
-		//set_exit_status(1);
-		exit_status = 1;
-		return ;
-	}
-
 	//if not numeric argument, the status is 2, exit is performed
-	else if (ac == 2)
+	if (ac >= 2)
 	{
 		if (!arg_is_num(argv[1]) || !arg_is_ll(argv[1]))
 		{
 			printf("shellbasket: exit: %s: numeric argument required\n", argv[1]);
 			exit_status = 2;
 			//set_exit_status(2);
+		}
+		else if (ac > 2)
+		{
+			printf("shellbasket: exit: too many arguments\n");
+			//set_exit_status(1);
+			exit_status = 1;
+			return ;
 		}
 		else
 		{

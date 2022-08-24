@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 13:03:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/23 21:27:12 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -54,6 +54,20 @@ t_elem	*new_elem(char *content)
 		return (NULL);
 	}
 	loop_copy_env(elems_env, buff, new_elem);
+	return (new_elem);
+}
+
+t_elem	*create_elem(char *key, char *value)
+{
+	t_elem	*new_elem;
+
+	new_elem = (t_elem *)malloc(sizeof(t_elem));
+	if (!new_elem)
+		free_exit();
+	elem->next = NULL;
+	elem->prev = NULL;
+	elem->key = key;
+	elem->value = value;
 	return (new_elem);
 }
 
