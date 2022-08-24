@@ -21,6 +21,7 @@ t_block	*new_block(char *word)
 	new_block->word = word;
 	new_block->next = NULL;
 	new_block->prev = NULL;
+	new_block->crash = FALSE;
 	return (new_block);
 }
 

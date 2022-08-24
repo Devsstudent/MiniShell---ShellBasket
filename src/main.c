@@ -140,6 +140,7 @@ int	main(int ac, char **av, char **envp)
 		stdi = dup(STDIN_FILENO);
 		stdou = dup(STDOUT_FILENO);
 		exec_info->stdou = stdou;
+		browse_line_check_red_in(tree->head, env);
 		exec_tree(tree->head, exec_info, env, tree);
 //		browse_tree(tree);
 		int	i;

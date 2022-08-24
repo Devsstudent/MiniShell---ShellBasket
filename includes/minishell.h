@@ -72,6 +72,7 @@ typedef struct	s_block{
 	struct s_block	*next;
 	struct s_block	*prev;
 	t_token			token;
+	t_bool			crash;
 	//Maybe useful to store env_var in a lst for the expand
 //	t_env			*env_list;
 	char			*word;
@@ -293,4 +294,7 @@ void	exec_unset(int ac, char **argv, t_dict *env);
 void	exec_export(int ac, char **argv, t_dict *env);
 void	exec_env(int ac, char **argv, t_dict *env);
 void	exec_pwd(int ac, char **argv, t_dict *env);
+
+
+void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);
 #endif

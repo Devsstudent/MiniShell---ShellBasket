@@ -11,13 +11,55 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
+static t_bool	check_ambiguous_bis(t_block *buff)
+{
+	int	i;
+	t_bool	quote;
+	t_bool	d_quote;
+	char	*word;
+
+	word = buff->word;
+	i = 0;
+	quote = FALSE;
+	d_quote = FALSE;
+	if (!word[i])
+	{
+		write(2, "ambiguous redirect :)", 21);
+		return (TRUE);
+	}
+	while (word[i])
+	{
+		ft_putchar_fd(word[i], 2);
+		if (word[i] == '\"' && !d_quote)
+			d_quote = TRUE;
+		else if (word[i] == '\"' && d_quote)
+			d_quote = FALSE;
+		if (word[i] == '\'' && !quote)
+			quote = TRUE;
+		else if (word[i] == '\'' && quote)
+			quote = FALSE;
+		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && !quote && !d_quote)
+		{
+			write(2, "ambiguous redirect :)", 21);
+			return (TRUE);
+		}
+		i++;
+	}
+	return (FALSE);
+}
+static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool crash)
 {
 	int	i;
 	t_bool	quote;
 	t_bool	d_quote;
 
 	i = 0;
+	if (crash)
+	{
+	//	ft_putstr_fd("testest", 2);
+		exec_in->open_fd = -2;
+		return (TRUE);
+	}
 	quote = FALSE;
 	d_quote = FALSE;
 	while (word[i])
@@ -58,12 +100,12 @@ void	check_redirection(t_info *exec, t_line *sub)
 	{
 		if (buff->token == RED_IN)
 		{
-			if (!check_ambiguous(buff->next->word, exec, FALSE))
+			if (!check_ambiguous(buff->next->word, exec, FALSE, buff->next->crash))
 				check_red_in(buff->next, exec);
 		}
 		else if (buff->token == RED_OUT_TRUNC || buff->token == RED_OUT_APPEND)
 		{
-			if (!check_ambiguous(buff->next->word, exec, TRUE))
+			if (!check_ambiguous(buff->next->word, exec, TRUE, FALSE))
 				check_red_out(buff->next, exec, buff);
 		}
 		/*
@@ -94,11 +136,15 @@ void	check_red_in(t_block *files, t_info *exec)
 	}
 	//soit on check avec access
 //->	//soit on check juste le retour de open
-	f_open = open(files->word, O_RDONLY);
-	if (f_open == -1)
-		perror(files->word);
+	if (!files->crash)
+	{
+		f_open = open(files->word, O_RDONLY);
+		if (f_open == -1)
+			perror(files->word);
+		else
+			exec->open_fd = f_open;
+	}
 	else
-		exec->open_fd = f_open;
 	if (errno == 13)
 		free_exit();
 }
@@ -131,4 +177,88 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		exec->out_fd = f_open_out;
 	if (errno == 13)
 		free_exit();
+}
+
+void	browse_line_check_red_in(t_leaf *leaf, t_dict *env)
+{
+	t_block	*buff;
+	struct stat	statbuff;
+
+	if (!leaf)
+		return ;
+	if (leaf->type == PIPE_L)
+	{
+		buff = leaf->left->content->head;
+		while (buff)
+		{
+			if (buff->token == RED_IN)
+			{
+				expand(leaf->left->content, env);
+				if (check_ambiguous_bis(buff->next))
+				{
+					buff->next->crash = TRUE;
+					buff = buff->next;
+					continue ;
+				}
+				if (access(buff->next->word, R_OK) == 0)
+				{
+					if (stat(buff->next->word, &statbuff) == -1)
+						perror("stat broslinecheck");
+					if ((statbuff.st_mode & S_IFMT) != S_IFREG)
+					{
+						ft_putstr_fd(buff->next->word, 2);
+						ft_putstr_fd(": Not a file\n", 2);
+						buff->next->crash = TRUE;
+					}
+				}
+				else
+				{
+					
+					ft_putstr_fd(buff->next->word, 2);
+					ft_putstr_fd(": No such file or directory\n", 2);
+					buff->next->crash = TRUE;
+				}
+			}
+			buff = buff->next;
+		}
+		if (leaf->right)
+			browse_line_check_red_in(leaf->right, env);
+	}
+	else if (leaf->type == CMD)
+	{
+		buff = leaf->content->head;
+		while (buff)
+		{
+			if (buff->token == RED_IN)
+			{
+				expand(leaf->content, env);
+				if (check_ambiguous_bis(buff->next))
+				{
+					buff = buff->next;
+					buff->next->crash = TRUE;
+					continue ;
+				}
+				if (access(buff->next->word, R_OK) == 0)
+				{
+					if (stat(buff->next->word, &statbuff) == -1)
+						perror("stat broslinecheck");
+					if ((statbuff.st_mode & S_IFMT) != S_IFREG)
+					{
+						ft_putstr_fd(buff->next->word, 2);
+						ft_putstr_fd(": Not a file\n", 2);
+						buff->next->crash = TRUE;
+					}
+				}
+				else
+				{
+					
+					ft_putstr_fd(buff->next->word, 2);
+					ft_putstr_fd(": No such file or directory\n", 2);
+					buff->next->crash = TRUE;
+				}
+			}
+			buff = buff->next;
+		}
+	}
+
 }
