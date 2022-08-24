@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 16:43:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 19:44:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <string.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"

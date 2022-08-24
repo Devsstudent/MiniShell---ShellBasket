@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 12:58:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 19:50:45 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -123,6 +123,7 @@ char	*check_cmd(char **argv, t_dict *env)
 	int		i;
 	char	*res;
 	char	*buff;
+	struct stat	statbuff;
 
 	if (check_builtins(argv))
 		return (argv[0]);
@@ -145,6 +146,13 @@ char	*check_cmd(char **argv, t_dict *env)
 	{
 		if (access(argv[0], X_OK) == 0)
 		{
+			if (stat(argv[0], &statbuff) == -1)
+			{
+				perror("stat");
+				return (NULL);
+			}
+			if ((statbuff.st_mode & S_IFMT) != S_IFREG)
+				return (NULL);
 			res = ft_strdup(argv[0]);
 			if (!res)
 				free_exit();
