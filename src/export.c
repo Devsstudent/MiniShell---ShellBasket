@@ -24,16 +24,16 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 	char	*new_value;
 	char	*old_value;
 
-	if (dict_get_value(env, key) == NULL)
+	if (dict_get_key(env, key) == NULL)
 	{
 		elem = create_elem(key, value);
 		dict_addback(env, elem);
 	}
 	else
 	{
-		if (append)
+		old_value = ft_strdup(dict_get_value(env, key));
+		if (append && old_value)
 		{
-			old_value = ft_strdup(dict_get_value(env, key));
 			new_value = ft_strjoin(old_value, value);
 			free(value); //see if alright or not, free or not ?
 			dict_modify(env, key, new_value);
@@ -139,8 +139,6 @@ void	exec_export(int ac, char **argv, t_dict *env)
 
 	if (ac == 1)
 	{
-		//man says the results are unspecified when no arguments are given
-		//display all va in the copy of env for export : )
 		display_export_env(env);
 		g_exit_status = 0;
 		return ;
