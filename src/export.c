@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 22:36:12 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/24 22:47:46 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -27,7 +27,6 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 	if (dict_get_value(env, key) == NULL)
 	{
 		elem = create_elem(key, value);
-		ft_putstr_fd("je suis la \n", 1);
 		dict_addback(env, elem);
 	}
 	else
@@ -115,10 +114,7 @@ void	export_arg(char *arg, t_dict *env)
 	if (arg[i] == '\0')
 		handle_key(ft_strdup(arg), env);
 	else
-	{
-		ft_putstr_fd("hrer\n", 2);
 		do_your_thing(arg, append, env);
-	}
 	g_exit_status = 0;
 }
 
