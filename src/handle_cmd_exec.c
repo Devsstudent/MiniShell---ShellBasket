@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/23 20:31:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 12:58:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -124,7 +124,8 @@ char	*check_cmd(char **argv, t_dict *env)
 	char	*res;
 	char	*buff;
 
-	//builtins
+	if (check_builtins(argv))
+		return (argv[0]);
 	i = 0;
 	res = NULL;
 	path_li = ft_split(dict_get_value(env, "PATH"), ':');
@@ -157,6 +158,5 @@ char	*check_cmd(char **argv, t_dict *env)
 		j++;
 	}
 	free(path_li);
-	add_to_gc(SIMPLE, res, get_gc());
 	return (res);
 }

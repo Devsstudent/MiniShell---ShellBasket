@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/23 20:13:30 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 12:42:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -44,17 +44,10 @@ t_bool	exec_builtin(char **argv, t_dict *env)
 {
 	int	ac;
 
-	(void) env;
 	ac = get_ac(argv);
-	(void) ac;
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 	{
 		exec_echo(ac, argv, env);
-		return (TRUE);
-	}
-	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-	{
-		exec_exit(ac, argv, env);
 		return (TRUE);
 	}
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
@@ -62,25 +55,9 @@ t_bool	exec_builtin(char **argv, t_dict *env)
 		exec_pwd(ac, argv, env);
 		return (TRUE);
 	}
-	else if (ft_strncmp(argv[0], "cd", 3) == 0)
-	{
-		write(1, "GROUUU", 7);
-		exec_cd(ac, argv, env);
-		return (TRUE);
-	}
-	else if (ft_strncmp(argv[0], "export", 7) == 0)
-	{
-		exec_export(ac, argv, env);
-		return (TRUE);
-	}
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
 	{
 		exec_env(ac, argv, env);
-		return (TRUE);
-	}
-	else if (ft_strncmp(argv[0], "unset", 6) == 0)
-	{
-		exec_unset(ac, argv, env);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -103,5 +80,4 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env)
 		}
 	}
 	return (TRUE);
-			
 }

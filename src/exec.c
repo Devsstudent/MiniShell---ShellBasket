@@ -1,12 +1,10 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                                            */ /*                                                        :::      ::::::::   */ /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:37:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/23 20:21:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 12:53:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -25,6 +23,7 @@
 static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
+	int			ac;
 
 	check_redirection(exec_in, sub);
 	cmd_path = check_cmd(exec_in->argv, env);
@@ -33,7 +32,25 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 		print_error(exec_in->argv[0], 2);
 		return ;
 	}
-	forking_cmd_alone(cmd_path, exec_in, env);
+	ac = get_ac(exec_in->argv);
+	if (ft_strncmp(cmd_path, "exit", 5) == 0)
+	{
+		exec_exit(ac, exec_in->argv, env);
+	}
+	else if (ft_strncmp(cmd_path, "cd", 3) == 0)
+	{
+		exec_cd(ac, exec_in->argv, env);
+	}
+	else if (ft_strncmp(cmd_path, "export", 7) == 0)
+	{
+		exec_export(ac, exec_in->argv, env);
+	}
+	else if (ft_strncmp(cmd_path, "unset", 6) == 0)
+	{
+		exec_unset(ac, exec_in->argv, env);
+	}
+	else
+		forking_cmd_alone(cmd_path, exec_in, env);
 	if (exec_in->open_fd != -1)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd != -1)
@@ -79,6 +96,8 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
 	int			pipe_fd[2];
+	int	ac;
+
 
 	if (pipe(pipe_fd) == -1)
 		return (perror("pipe"));
@@ -91,7 +110,24 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 		print_error(exec_in->argv[0], 2);
 		return ;
 	}
-	forking(cmd_path, exec_in, env, pipe_fd);
+	ac = get_ac(exec_in->argv);
+	/*
+	if (ft_strncmp(cmd_path, "exit", 5) == 0)
+	{
+		exec_exit(ac, exec_in->argv, env);
+	}*/
+	/*
+	if (ft_strncmp(cmd_path, "cd", 3) == 0)
+	{
+		exec_cd(ac, exec_in->argv, env);
+	}
+	*/
+	if (ft_strncmp(cmd_path, "export", 7) == 0)
+		exec_export(ac, exec_in->argv, env);
+	else if (ft_strncmp(cmd_path, "unset", 6) == 0)
+		exec_unset(ac, exec_in->argv, env);
+	else
+		forking(cmd_path, exec_in, env, pipe_fd);
 	close(pipe_fd[1]);
 	//if (exec_in->tmp_fd != -1)
 	//	close(exec_in->tmp_fd);

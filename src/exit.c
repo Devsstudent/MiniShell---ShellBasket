@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:21:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/20 17:57:34 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 12:50:23 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -106,7 +106,6 @@ void	exec_exit(int ac, char **argv, t_dict *env)
 			//set_exit_status(exit_status);
 		}
 	}
-	exit(exit_status);
 	//free_exit(get_exit_status());
 }
 /*
