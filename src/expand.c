@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/21 19:17:49 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/24 16:21:01 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -159,7 +159,10 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 	{
 		if (key_arr[i][0] == '?' && !key_arr[i][1])
 		{
-			value = get_exit_status();
+			value = ft_itoa(errno);
+			if (!value)
+				free_exit();
+			add_to_gc(SIMPLE, value, get_gc());
 			val_arr[i++] = value;
 			continue ;
 		}

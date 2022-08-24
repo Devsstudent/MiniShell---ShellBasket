@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/* ************************************************************************* */
 /*                                                                            */ /*                                                        :::      ::::::::   */ /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
@@ -34,21 +34,19 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	}
 	ac = get_ac(exec_in->argv);
 	if (ft_strncmp(cmd_path, "exit", 5) == 0)
-	{
 		exec_exit(ac, exec_in->argv, env);
-	}
 	else if (ft_strncmp(cmd_path, "cd", 3) == 0)
-	{
 		exec_cd(ac, exec_in->argv, env);
-	}
 	else if (ft_strncmp(cmd_path, "export", 7) == 0)
-	{
 		exec_export(ac, exec_in->argv, env);
-	}
 	else if (ft_strncmp(cmd_path, "unset", 6) == 0)
-	{
 		exec_unset(ac, exec_in->argv, env);
-	}
+	else if (ft_strncmp(cmd_path, "pwd", 4) == 0)
+		exec_pwd(ac, exec_in->argv, env);
+	else if (ft_strncmp(cmd_path, "env", 4) == 0)
+		exec_env(ac, exec_in->argv, env);
+	else if (ft_strncmp(cmd_path, "echo", 5) == 0)
+		exec_echo(ac, exec_in->argv, env);
 	else
 		forking_cmd_alone(cmd_path, exec_in, env);
 	if (exec_in->open_fd != -1)
@@ -96,7 +94,6 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
 	int			pipe_fd[2];
-	int	ac;
 
 
 	if (pipe(pipe_fd) == -1)
@@ -110,24 +107,7 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 		print_error(exec_in->argv[0], 2);
 		return ;
 	}
-	ac = get_ac(exec_in->argv);
-	/*
-	if (ft_strncmp(cmd_path, "exit", 5) == 0)
-	{
-		exec_exit(ac, exec_in->argv, env);
-	}*/
-	/*
-	if (ft_strncmp(cmd_path, "cd", 3) == 0)
-	{
-		exec_cd(ac, exec_in->argv, env);
-	}
-	*/
-	if (ft_strncmp(cmd_path, "export", 7) == 0)
-		exec_export(ac, exec_in->argv, env);
-	else if (ft_strncmp(cmd_path, "unset", 6) == 0)
-		exec_unset(ac, exec_in->argv, env);
-	else
-		forking(cmd_path, exec_in, env, pipe_fd);
+	forking(cmd_path, exec_in, env, pipe_fd);
 	close(pipe_fd[1]);
 	//if (exec_in->tmp_fd != -1)
 	//	close(exec_in->tmp_fd);

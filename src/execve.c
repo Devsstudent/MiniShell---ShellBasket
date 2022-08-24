@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 12:42:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 16:38:09 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -40,35 +40,43 @@ size_t	get_ac(char **argv)
 	return (ac);
 }
 
-t_bool	exec_builtin(char **argv, t_dict *env)
+t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 {
 	int	ac;
+	t_bool	no_built;
 
+	no_built = FALSE;
 	ac = get_ac(argv);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
-	{
 		exec_echo(ac, argv, env);
-		return (TRUE);
-	}
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
-	{
 		exec_pwd(ac, argv, env);
-		return (TRUE);
-	}
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
-	{
 		exec_env(ac, argv, env);
-		return (TRUE);
-	}
-	return (FALSE);
+	else if (ft_strncmp(argv[0], "exit", 5) == 0)
+		exec_exit(ac, argv, env);
+	else if (ft_strncmp(argv[0], "unset", 5) == 0)
+		exec_unset(ac, argv, env);
+	else if (ft_strncmp(argv[0], "export", 5) == 0)
+		exec_export(ac, argv, env);
+	else if (ft_strncmp(argv[0], "cd", 5) == 0)
+		exec_cd(ac, argv, env);
+	else
+		no_built = TRUE;
+	if (no_built)
+		return (FALSE);
+	else if (fork)
+		exit(1);
+	return (TRUE);
 }
+
 //exit dans les builr in
-t_bool	execve_test(char *pathname, char **argv, t_dict *env)
+t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork)
 {
 	char	**env_bis;
 
 	env_bis = dict_to_double_char(env);
-	if (!exec_builtin(argv, env))
+	if (!exec_builtin(argv, env, fork))
 	{
 		int	i;
 		i = 0;

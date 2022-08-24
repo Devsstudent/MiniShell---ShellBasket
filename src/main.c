@@ -144,8 +144,7 @@ int	main(int ac, char **av, char **envp)
 //		browse_tree(tree);
 		int	i;
 		i = 0;
-		if (exec_info->tmp_fd != -1)
-			close(exec_info->tmp_fd);
+		if (exec_info->tmp_fd != -1) close(exec_info->tmp_fd);
 		if (dup2(stdi, STDIN_FILENO) == -1)
 		{
 			perror("sell");

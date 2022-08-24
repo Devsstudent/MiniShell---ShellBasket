@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/23 20:30:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 16:43:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,8 +281,8 @@ void	loop_get_arg(char *word, char **argv, int *i);
 /********************************************/
 t_bool	check_builtins(char **argv);
 size_t	get_ac(char **argv);
-t_bool	exec_builtin(char **argv, t_dict *env);
-t_bool	execve_test(char *pathname, char **argv, t_dict *env);
+t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork);
+t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork);
 
 
 void	exec_cd(int ac, char **argv, t_dict *env);
