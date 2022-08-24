@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 21:43:30 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 12:51:00 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 15:03:21 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -28,10 +28,10 @@ void	go_to_path(char *path, t_dict *env)
 	if (ret != 0)
 	{
 		perror("cd");
-		g_exit_status = ret;
+		errno = ret;
 		return ;
 	}
-	g_exit_status = ret;
+	errno = ret;
 	pwd_key = ft_strdup("PWD");
 	if (pwd_key == NULL)
 	{
@@ -53,13 +53,13 @@ void	exec_cd(int ac, char **argv, t_dict *env)
 {
 	if (ac == 1)
 	{
-		g_exit_status = 0;
+		errno = 0;
 		return ;
 	}
 	if (ac > 2)
 	{
 		ft_putstr_fd("cd: I only accept a relative or absolute path\n", 2);
-		g_exit_status = 200;
+		errno = 200;
 	}
 	else
 		go_to_path(argv[1], env);

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 12:52:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 15:22:35 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -33,9 +33,9 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 	{
 		if (append)
 		{
-			old_value = dict_get_value(env, key);
+			old_value = ft_strdup(dict_get_value(env, key));
 			new_value = ft_strjoin(old_value, value);
-			//free(value); //see if alright or not, free or not ?
+			free(value); //see if alright or not, free or not ?
 			dict_modify(env, key, new_value);
 		}
 		else

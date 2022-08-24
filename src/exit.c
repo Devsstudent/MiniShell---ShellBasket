@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:21:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 12:50:23 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/24 15:05:39 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -87,21 +87,21 @@ void	exec_exit(int ac, char **argv, t_dict *env)
 		if (!arg_is_num(argv[1]) || !arg_is_ll(argv[1]))
 		{
 	//		printf("shellbasket: exit: %s: numeric argument required\n", argv[1]);
-			exit_status = 2;
+			errno = 2;
 			//set_exit_status(2);
 		}
 		else if (ac > 2)
 		{
 	//		printf("shellbasket: exit: too many arguments\n");
 			//set_exit_status(1);
-			exit_status = 1;
+			errno = 1;
 			return ;
 		}
 		else
 		{
 			exit_status = ft_atoll(argv[1]);
 		//	printf("exit status = %lld\n", exit_status);
-			exit_status = (u_int8_t)exit_status;
+			errno = (u_int8_t)exit_status;
 		//	printf("final exit status = %d\n", exit_status);
 			//set_exit_status(exit_status);
 		}
