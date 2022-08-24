@@ -157,6 +157,7 @@ void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
 char	*dict_get_value(t_dict *dict, char *key);
 char	**dict_to_double_char(t_dict *dict);
+t_elem	*create_elem(char *key, char *value);
 
 /********************************************/
 /*                parsing                   */
@@ -284,4 +285,11 @@ t_bool	exec_builtin(char **argv, t_dict *env);
 t_bool	execve_test(char *pathname, char **argv, t_dict *env);
 
 
+void	exec_cd(int ac, char **argv, t_dict *env);
+void	exec_echo(int ac, char **argv, t_dict *env);
+void	exec_exit(int ac, char **argv, t_dict *env);
+void	exec_unset(int ac, char **argv, t_dict *env);
+void	exec_export(int ac, char **argv, t_dict *env);
+void	exec_env(int ac, char **argv, t_dict *env);
+void	exec_pwd(int ac, char **argv, t_dict *env);
 #endif

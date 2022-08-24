@@ -64,10 +64,10 @@ t_elem	*create_elem(char *key, char *value)
 	new_elem = (t_elem *)malloc(sizeof(t_elem));
 	if (!new_elem)
 		free_exit();
-	elem->next = NULL;
-	elem->prev = NULL;
-	elem->key = key;
-	elem->value = value;
+	new_elem->next = NULL;
+	new_elem->prev = NULL;
+	new_elem->key = key;
+	new_elem->value = value;
 	return (new_elem);
 }
 

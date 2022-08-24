@@ -9,12 +9,8 @@
 /*   Updated: 2022/08/20 17:57:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-//#include "minishell.h"
-#include "unistd.h"
-#include "stdio.h"
+#include "minishell.h"
 #include "limits.h"
-#include "stdlib.h"
-#include "string.h"
 
 static int	arg_is_num(char *arg)
 {
@@ -75,9 +71,11 @@ static long long	ft_atoll(char *arg)
 		return ((long long)(num));
 }
 
-void	exec_exit(int ac, char **argv/*, t_dict *env*/)
+void	exec_exit(int ac, char **argv, t_dict *env)
 {
 	long long	exit_status;
+
+	(void) env;
 
 	printf("exit\n");
 	//if too many arguments and argument 1 is numeric, no exit is performed, too many args
@@ -88,13 +86,13 @@ void	exec_exit(int ac, char **argv/*, t_dict *env*/)
 	{
 		if (!arg_is_num(argv[1]) || !arg_is_ll(argv[1]))
 		{
-			printf("shellbasket: exit: %s: numeric argument required\n", argv[1]);
+	//		printf("shellbasket: exit: %s: numeric argument required\n", argv[1]);
 			exit_status = 2;
 			//set_exit_status(2);
 		}
 		else if (ac > 2)
 		{
-			printf("shellbasket: exit: too many arguments\n");
+	//		printf("shellbasket: exit: too many arguments\n");
 			//set_exit_status(1);
 			exit_status = 1;
 			return ;
@@ -102,18 +100,19 @@ void	exec_exit(int ac, char **argv/*, t_dict *env*/)
 		else
 		{
 			exit_status = ft_atoll(argv[1]);
-			printf("exit status = %lld\n", exit_status);
+		//	printf("exit status = %lld\n", exit_status);
 			exit_status = (u_int8_t)exit_status;
-			printf("final exit status = %d\n", exit_status);
+		//	printf("final exit status = %d\n", exit_status);
 			//set_exit_status(exit_status);
 		}
 	}
 	exit(exit_status);
 	//free_exit(get_exit_status());
 }
-
+/*
 int	main(int ac, char **argv)
 {
 	exec_exit(ac, argv);
 	return (0);
 }
+*/

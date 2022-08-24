@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/23 17:38:52 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/23 17:49:50 by mbelrhaz         ###   ########.fr       */
+/*   Created: 2022/08/19 13:54:45 by mbelrhaz          #+#    #+#             */
+/*   Updated: 2022/08/20 17:34:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-int	exec_env(int ac, char **argv, t_dict *env)
+void	exec_pwd(int ac, char **argv, t_dict *env)
 {
-	int		i;
-	char	**double_arr_env;
+	int		ret;
+	char	buff[4097];
+	char	*pwd_value;
 
 	(void)ac;
 	(void)argv;
-	i = 0;
-	double_arr_env = dict_to_double_char(env);
-	while (double_arr_env[i])
+	(void)env;
+	(void)ret;
+	pwd_value = getcwd(buff, 4097);
+	if (pwd_value == NULL)
 	{
-		ft_putstr_fd(double_arr_env[i], 1);
-		write(1, "\n", 1);
-		i++;
+		perror("pwd");
+		//Erange 34
+		g_exit_status = 34;
+		return ;
 	}
-	errno = 0;
+	g_exit_status = 0;
 }

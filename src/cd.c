@@ -18,7 +18,7 @@ void	go_to_path(char *path, t_dict *env)
 	char	*pwd_key;
 	char	*pwd_value;
 
-	ret = access(path);
+	ret = access(path, F_OK);
 	if (ret == -1)
 	{
 		perror("shellbasket");
@@ -28,10 +28,10 @@ void	go_to_path(char *path, t_dict *env)
 	if (ret != 0)
 	{
 		perror("cd");
-		set_exit_status(ret);
+		g_exit_status = ret;
 		return ;
 	}
-	set_exit_status(ret);
+	g_exit_status = ret;
 	pwd_key = ft_strdup("PWD");
 	if (pwd_key == NULL)
 		free_exit();
@@ -47,13 +47,13 @@ void	exec_cd(int ac, char **argv, t_dict *env)
 {
 	if (ac == 1)
 	{
-		set_exit_status(0);
-		return (0);
+		g_exit_status = 0;
+		return ;
 	}
 	if (ac > 2)
 	{
 		ft_putstr_fd("cd: I only accept a relative or absolute path\n", 2);
-		set_exit_status(200);
+		g_exit_status = 200;
 	}
 	else
 		go_to_path(argv[1], env);

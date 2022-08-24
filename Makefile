@@ -24,6 +24,13 @@ OBJ = $(addprefix obj/, main.o \
 			execve.o \
 			handle_cmd_exec.o \
 			redirection.o \
+			cd.o \
+			echo.o \
+			env.o \
+			unset.o \
+			exit.o \
+			export.o \
+			pwd.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
 			ast_utils.d \
@@ -45,6 +52,13 @@ D_LST = $(addprefix obj/, main.d \
 			handle_cmd_exec.d \
 			redirection.d \
 			exec.d \
+			cd.d \
+			echo.d \
+			env.d \
+			unset.d \
+			exit.d \
+			export.d \
+			pwd.d \
 			null.d)
 NAME = minishell
 

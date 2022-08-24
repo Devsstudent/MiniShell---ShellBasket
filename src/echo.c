@@ -57,7 +57,7 @@ void	exec_echo(int ac, char **argv, t_dict *env)
 		display_args(&argv[1]);
 		write(1, "\n", 1);
 	}
-	set_exit_status(0);
+	g_exit_status = 0;
 }
 
 /*

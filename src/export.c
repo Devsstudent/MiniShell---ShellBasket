@@ -47,7 +47,6 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 
 void	do_your_thing(char *arg, t_bool append, t_dict *env)
 {
-	int		i;
 	char	*ptr;
 	char	*key;
 	char	*value;
@@ -67,10 +66,10 @@ void	do_your_thing(char *arg, t_bool append, t_dict *env)
 		value = ft_substr(ptr, 1, ft_strlen(ptr));
 	if (value == NULL)
 		return ;
-	do_the_last_thing(key, value, append);
+	do_the_last_thing(key, value, append, env);
 }
 
-void	export_arg(char *arg)
+void	export_arg(char *arg, t_dict *env)
 {
 	int		i;
 	t_bool	append;
@@ -79,19 +78,19 @@ void	export_arg(char *arg)
 	append = FALSE;
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 	{
-		ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
+//		ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
 		return ;
 	}
 	while (arg[i])
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '+' && arg[i] != '_')
 		{
-			ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
+//			ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
 			return ;
 		}
 		if (arg[i] == '+' && arg[i + 1] != '=')
 		{
-			ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
+//			ft_printf("shellbasket: export: `%s': not a valid identifier\n", arg);
 			return ;
 		}
 		else if (arg[i] == '+')
@@ -100,7 +99,7 @@ void	export_arg(char *arg)
 			break ;
 		i++;
 	}
-	do_your_thing(arg, append);
+	do_your_thing(arg, append, env);
 }
 
 void	exec_export(int ac, char **argv, t_dict *env)
@@ -116,7 +115,7 @@ void	exec_export(int ac, char **argv, t_dict *env)
 	i = 1;
 	while (i < ac)
 	{
-		export_arg(argv[i]);
+		export_arg(argv[i], env);
 		i++;
 	}
 	errno = 0;
