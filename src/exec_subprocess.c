@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 19:17:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/25 12:56:19 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -89,6 +89,11 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 		if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
 			return (perror("lasy"));
 	}
+	/*
+	else if (exec_in->open_fd == -2)
+	{
+		
+	}*/
 	if (exec_in->pid[exec_in->turn] == 0)
 	{
 		close(pipe_fd[0]);

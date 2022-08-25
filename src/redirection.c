@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 12:23:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/25 13:00:27 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -56,7 +56,6 @@ static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool c
 	i = 0;
 	if (crash)
 	{
-	//	ft_putstr_fd("testest", 2);
 		exec_in->open_fd = -2;
 		return (TRUE);
 	}
@@ -123,6 +122,14 @@ void	check_red_in(t_block *files, t_info *exec)
 	// if (exec->out_fd != STDIN_FILENO)
 		//close (exec->out_fd);
 	//so one fd was left open
+	/*
+	if (files->crash)
+	{
+		exec->open_fd = -2;
+		return ;
+	}*/
+	write(2, "HERE", 4);
+	ft_putstr_fd(files->word, 2);
 	if (exec->open_fd != -1)
 		close(exec->open_fd);
 	exec->open_fd = -1;
@@ -144,8 +151,7 @@ void	check_red_in(t_block *files, t_info *exec)
 		else
 			exec->open_fd = f_open;
 	}
-	else
-	if (errno == 13)
+	else if (errno == 13)
 		free_exit();
 }
 
@@ -224,12 +230,10 @@ void	browse_line_check_red_in(t_leaf *leaf, t_dict *env)
 		return ;
 	if (leaf->type == PIPE_L)
 	{
-		if (leaf->content)
-			check_red_in_sub(leaf->content, env);
+		check_red_in_sub(leaf->left->content, env);
 		if (leaf->right)
 			browse_line_check_red_in(leaf->right, env);
 	}
 	else if (leaf->type == CMD)
-		if (leaf->content)
-			check_red_in_sub(leaf->content, env);
+		check_red_in_sub(leaf->content, env);
 }

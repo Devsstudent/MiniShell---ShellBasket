@@ -34,9 +34,10 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 		i++;
 	}
 	cmd_path = check_cmd(exec_in->argv, env);
-	if (!cmd_path)
+	if (!cmd_path|| exec_in->open_fd == -2)
 	{
-		print_error(exec_in->argv[0], 2);
+		if (exec_in->open_fd != -2 && !cmd_path)
+			print_error(exec_in->argv[0], 2);
 		return ;
 	}
 	ac = get_ac(exec_in->argv);
@@ -114,11 +115,12 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
 		i++;
 	}
-	if (!cmd_path)
+	if (!cmd_path || exec_in->open_fd == -2)
 	{
 		close(pipe_fd[1]);
-		close(pipe_fd[0]);
-		print_error(exec_in->argv[0], 2);
+		exec_in->tmp_fd = pipe_fd[0];
+		if (exec_in->open_fd != -2 && !cmd_path)
+			print_error(exec_in->argv[0], 2);
 		return ;
 	}
 	forking(cmd_path, exec_in, env, pipe_fd);
