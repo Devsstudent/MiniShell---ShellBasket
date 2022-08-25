@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 22:47:46 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/25 12:33:58 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -71,7 +71,7 @@ void	handle_key(char *key, t_dict *env)
 {
 	t_elem	*elem;
 
-	if (dict_get_value(env, key) == NULL)
+	if (dict_get_key(env, key) == NULL)
 	{
 		elem = create_elem(key, NULL);
 		dict_addback(env, elem);
