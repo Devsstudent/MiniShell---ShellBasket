@@ -31,10 +31,10 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 	}
 	else
 	{
-		old_value = ft_strdup(dict_get_value(env, key));
+		old_value = dict_get_value(env, key);
 		if (append && old_value)
 		{
-			new_value = ft_strjoin(old_value, value);
+			new_value = ft_strjoin(ft_strdup(old_value), value);
 			free(value); //see if alright or not, free or not ?
 			dict_modify(env, key, new_value);
 		}
