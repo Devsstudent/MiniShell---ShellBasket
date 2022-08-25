@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 19:44:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/25 13:09:20 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,9 @@ void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
 char	*dict_get_value(t_dict *dict, char *key);
-char	**dict_to_double_char(t_dict *dict);
+char	*dict_get_key(t_dict *dict, char *key);
+char	**dict_to_double_char_env(t_dict *dict);
+char	**dict_to_double_char_export(t_dict *dict);
 t_elem	*create_elem(char *key, char *value);
 
 /********************************************/
@@ -200,7 +202,7 @@ t_bool check_pipe(t_token next, t_token previous);
 t_bool check_symbol(t_block *block);
 
 //tokenization
-void	tokenization(t_line *line);
+t_bool	tokenization(t_line *line);
 t_token	get_next_token(t_block *next_block);
 void	attribute_token(t_block *block);
 t_token	get_previous_token(t_block *block);

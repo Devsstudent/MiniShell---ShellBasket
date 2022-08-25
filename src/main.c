@@ -28,8 +28,11 @@ t_tree	*ms_lex_and_parse(char **line)
 	tree = (t_tree *) malloc(sizeof(t_tree));
 	add_to_gc(TREE, tree, get_gc());
 	line_lst = fill_line_lst(*line);
+	if (line_lst == NULL)
+		return (NULL);
 	add_to_gc(LINE, line_lst, get_gc());
-	tokenization(line_lst);
+	if (!tokenization(line_lst))
+		return (NULL);
 	fill_ast(line_lst, tree);
 	return (tree);
 }
@@ -136,6 +139,11 @@ int	main(int ac, char **av, char **envp)
 		exec_info->end = FALSE;
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
+		if (tree == NULL)
+		{
+			//free necessary things
+			continue ;
+		}
 		malloc_pid_arr(exec_info, tree);
 		stdi = dup(STDIN_FILENO);
 		stdou = dup(STDOUT_FILENO);

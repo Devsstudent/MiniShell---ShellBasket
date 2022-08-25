@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 21:43:30 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 15:03:21 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/24 20:44:11 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,20 +18,23 @@ void	go_to_path(char *path, t_dict *env)
 	char	*pwd_key;
 	char	*pwd_value;
 
+	/*
 	ret = access(path, F_OK);
 	if (ret == -1)
 	{
 		perror("shellbasket");
+		g_exit_status = ret;
 		return ;
 	}
+	*/
 	ret = chdir(path);
 	if (ret != 0)
 	{
 		perror("cd");
-		errno = ret;
+		g_exit_status = errno;
 		return ;
 	}
-	errno = ret;
+	g_exit_status = errno;
 	pwd_key = ft_strdup("PWD");
 	if (pwd_key == NULL)
 	{
@@ -53,13 +56,13 @@ void	exec_cd(int ac, char **argv, t_dict *env)
 {
 	if (ac == 1)
 	{
-		errno = 0;
+		g_exit_status = 0;
 		return ;
 	}
 	if (ac > 2)
 	{
 		ft_putstr_fd("cd: I only accept a relative or absolute path\n", 2);
-		errno = 200;
+		g_exit_status = 200;
 	}
 	else
 		go_to_path(argv[1], env);
