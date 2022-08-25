@@ -24,8 +24,15 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
 	int			ac;
+	int			i;
 
+	i = 0;
 	check_redirection(exec_in, sub);
+	while (exec_in->argv[i])
+	{
+		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
+		i++;
+	}
 	cmd_path = check_cmd(exec_in->argv, env);
 	if (!cmd_path)
 	{
@@ -94,11 +101,18 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
 	int			pipe_fd[2];
+	int		i;
 
 
+	i = 0;
 	if (pipe(pipe_fd) == -1)
 		return (perror("pipe"));
 	check_redirection(exec_in, sub);
+	while (exec_in->argv[i])
+	{
+		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
+		i++;
+	}
 	cmd_path = check_cmd(exec_in->argv, env);
 	if (!cmd_path)
 	{

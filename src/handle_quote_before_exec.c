@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		size_till_next_char(char *word, char c, int *i)
+static int		size_till_next_char(char *word, char c, int *i)
 {
 	int	size;
 
@@ -15,14 +15,14 @@ int		size_till_next_char(char *word, char c, int *i)
 	return (size);
 }
 
-int	size_new_word_quote(char *word)
+static int	size_new_word_quote(char *word)
 {
 	int		size;
 	int		i;
 
 	size = 0;
 	i = 0;
-	while (i < ft_strlen(word))
+	while ((size_t) i < ft_strlen(word))
 	{
 		if (word[i] == '\'')
 		{
@@ -43,13 +43,13 @@ int	size_new_word_quote(char *word)
 	return (size);
 }
 
-void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
+static void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
 {
 	char	c;
 
 	if (*i > 0)
 		c = word[*i - 1];
-	while (*i < ft_strlen(word) && word[*i] != c)
+	while ((size_t) *i < ft_strlen(word) && word[*i] != c)
 	{
 		new_word[*j] = word[*i];
 		(*j)++;
@@ -59,14 +59,14 @@ void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
 		(*i)++;
 }
 
-void	str_quote_parse(char *word, char *new_word)
+static void	str_quote_parse(char *word, char *new_word)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	while (i < ft_strlen(word))
+	while ((size_t) i < ft_strlen(word))
 	{
 		if (word[i] == '\'')
 		{
@@ -89,7 +89,7 @@ void	str_quote_parse(char *word, char *new_word)
 	//ft_printf("%s", new_word);
 }
 
-t_bool	handle_quote(char *word)
+char	*handle_quote(char *word)
 {
 	char	*new_word;
 	int		size;
@@ -97,25 +97,8 @@ t_bool	handle_quote(char *word)
 	size = size_new_word_quote(word);
 	new_word = malloc(sizeof(*new_word) * size + 1);
 	if (!new_word)
-		return (FALSE);
+		free_exit();
 	str_quote_parse(word, new_word);
-	//block->word = new_word
-
-	return (TRUE);
-}
-
-
-int	main(void)
-{
-	char	*line;
-	int		size;
-
-	size = 0;
-	line = readline("word :");
-	handle_quote(line);
-	if (!check_lines_quotes(line))
-		//ft_printf("NEED MORE QUOTE");
-	else
-		//ft_printf("SYNTAX OK");
-
+	free(word);
+	return (new_word);
 }

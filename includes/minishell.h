@@ -185,11 +185,11 @@ t_line	*fill_line_lst(char *line);
 /*             remove_quotes                */
 /********************************************/
 
-void	remove_useless_quote(t_block *word);
-void	str_quote_parse(char *word, char *new_word);
-void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j);
-size_t	size_new_word_quote(char *word);
-size_t	size_till_next_char(char *word, char c, size_t *i);
+//void	remove_useless_quote(t_block *word);
+//void	str_quote_parse(char *word, char *new_word);
+//void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j);
+//size_t	size_new_word_quote(char *word);
+//size_t	size_till_next_char(char *word, char c, size_t *i);
 
 /********************************************/
 /*              tokenization                */
@@ -297,4 +297,5 @@ void	exec_pwd(int ac, char **argv, t_dict *env);
 
 
 void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);
+char	*handle_quote(char *word);
 #endif
