@@ -94,6 +94,10 @@ char	*handle_quote(char *word)
 	char	*new_word;
 	int		size;
 
+	if (word && ft_strlen(word) >= 2 && word[0] == '\"' && word[1] == '\"'&& !word[2])
+		return (word);
+	if (word && ft_strlen(word) >= 2 && word[0] == '\'' && word[1] == '\''&& !word[2])
+		return (word);
 	size = size_new_word_quote(word);
 	new_word = malloc(sizeof(*new_word) * size + 1);
 	if (!new_word)

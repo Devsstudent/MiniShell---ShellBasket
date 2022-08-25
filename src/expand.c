@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 19:29:26 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/25 13:57:45 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -308,6 +308,7 @@ void	expand(t_line *line, t_dict *env)
 		buff = buff->next;
 	}
 }
+
 
 void	browse_ast_apply_expand(t_leaf *leaf, t_dict *env)
 {

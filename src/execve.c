@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 22:16:13 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/25 14:21:52 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -57,7 +57,7 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
 		exec_env(ac, argv, env);
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		exec_exit(ac, argv, env);
+		exec_exit(ac, argv, env, 0);
 	else if (ft_strncmp(argv[0], "unset", 5) == 0)
 		exec_unset(ac, argv, env);
 	else if (ft_strncmp(argv[0], "export", 5) == 0)

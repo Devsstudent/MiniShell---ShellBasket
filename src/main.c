@@ -10,14 +10,17 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	ms_line(char **line)
+t_bool	ms_line(char **line)
 {
 	listen_to_sigs();
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
 		free_exit();
+	if (*line &&  !(*line[0]))
+		return (TRUE);
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
+	return (FALSE);
 }
 
 t_tree	*ms_lex_and_parse(char **line)
@@ -65,7 +68,7 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	//ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	//ft_printf(0, "(TRUE)type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
@@ -137,7 +140,8 @@ int	main(int ac, char **av, char **envp)
 		exec_info->pid = NULL;
 		exec_info->tmp_fd = -1;
 		exec_info->end = FALSE;
-		ms_line(&line);
+		if (ms_line(&line))
+			continue ;
 		tree = ms_lex_and_parse(&line);
 		if (tree == NULL)
 		{

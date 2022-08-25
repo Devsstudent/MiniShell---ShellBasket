@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 13:10:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/25 14:11:48 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -84,29 +84,29 @@ void	loop_get_arg(char *word, char **argv, int *i)
 	j = 0;
 	last = 0;
 	quote = FALSE;
-	d_quote = FALSE; while (word[j]) {
+	d_quote = FALSE;
+	while (word[j])
+	{
 		if (word[j] == ' ' && j > 0 && word[j - 1] != ' ' && !d_quote && !quote)
 		{
 			argv[*i] = ft_substr(word, last, (j - last));
+			ft_putstr_fd(argv[*i], 2);
 			(*i)++;
 			if (word[j + 1])
 				last = j + 1;
 		}
 		while (word[j] && word[j] == ' ')
-		{
 			j++;
-			last = j;
-		}
 		if (!word[j])
 			break ;
 		if (word[j] == '\"' && !d_quote)
 			d_quote = TRUE;
+		else if (word[j] == '\"' && d_quote)
+			d_quote = FALSE;
 		if (word[j] == '\'' && !quote)
 			quote = TRUE;
-		if (word[j] == '\'' && quote)
+		else if (word[j] == '\'' && quote)
 			quote = FALSE;
-		if (word[j] == '\"' && d_quote)
-			d_quote = FALSE;
 		if (word[j])
 			j++;
 	}

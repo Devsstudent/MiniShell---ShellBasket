@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 13:09:20 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/25 14:22:43 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,7 +291,7 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork);
 
 void	exec_cd(int ac, char **argv, t_dict *env);
 void	exec_echo(int ac, char **argv, t_dict *env);
-void	exec_exit(int ac, char **argv, t_dict *env);
+void	exec_exit(int ac, char **argv, t_dict *env, t_bool display_exit);
 void	exec_unset(int ac, char **argv, t_dict *env);
 void	exec_export(int ac, char **argv, t_dict *env);
 void	exec_env(int ac, char **argv, t_dict *env);

@@ -42,7 +42,7 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	}
 	ac = get_ac(exec_in->argv);
 	if (ft_strncmp(cmd_path, "exit", 5) == 0)
-		exec_exit(ac, exec_in->argv, env);
+		exec_exit(ac, exec_in->argv, env, 1);
 	else if (ft_strncmp(cmd_path, "cd", 3) == 0)
 		exec_cd(ac, exec_in->argv, env);
 	else if (ft_strncmp(cmd_path, "export", 7) == 0)
