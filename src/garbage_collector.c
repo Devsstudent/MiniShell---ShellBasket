@@ -122,3 +122,19 @@ t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)
 	buff->next = new;
 	return (TRUE);
 }
+
+t_bool	free_each_turn(t_gc **gc)
+{
+	t_gc	*tmp;
+
+//Clean tous sauf l'environnemnt
+	if (!gc)
+		return ;
+	while (*gc)
+	{
+		tmp = (*gc)->next;
+		if (tmp->type != ENV)
+			gc_free_node(*gc);
+		*gc = tmp;
+	}
+}

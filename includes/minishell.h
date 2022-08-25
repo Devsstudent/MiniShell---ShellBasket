@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 14:22:43 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/25 18:55:06 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef enum	e_quote{
 }	t_quote;
 
 typedef enum	e_type{
+	ENV,
 	DICT,
 	LINE,
 	DOUBLE,
@@ -116,12 +117,13 @@ typedef struct	s_tree{
 
 typedef struct	s_info{
 	char	**argv;
-	int			open_fd;
+	int		open_fd;
 	int		out_fd;
 	int		*pid;
 	int		turn;
 	int		tmp_fd;
 	int		stdou;
+	int		stdi;
 	t_bool	start;
 	t_bool	end;
 }			t_info;
@@ -296,6 +298,7 @@ void	exec_unset(int ac, char **argv, t_dict *env);
 void	exec_export(int ac, char **argv, t_dict *env);
 void	exec_env(int ac, char **argv, t_dict *env);
 void	exec_pwd(int ac, char **argv, t_dict *env);
+void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
 
 
 void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);

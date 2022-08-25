@@ -6,8 +6,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:49:15 by odessein          #+#    #+#             */
 /*   Updated: 2022/08/22 16:49:02 by odessein         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/*                                                                            */ /* ************************************************************************** */
 #include "minishell.h"
 
 t_bool	ms_line(char **line)
@@ -108,6 +107,25 @@ void	browse_tree(t_tree *tree)
 	browse_sub_tree(buff);
 }
 
+t_info	*init_exec_info(void)
+{
+	t_info	*exec_info;
+
+	exec_info = (t_info *) malloc(sizeof(t_info));
+	//Free exec_info
+	exec_info->argv = NULL;
+	exec_info->turn = 0;
+	exec_info->pid = NULL;
+	exec_info->tmp_fd = -1;
+	exec_info->end = FALSE;
+	exec_info->stdi = dup(STDIN_FILENO);
+	exec_info->stdou = dup(STDOUT_FILENO);
+	return (exec_info);
+	//penser a closes et a reset a chaque tour
+}
+
+void	wait_sub_process(t_info *exec_info);
+
 int	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
@@ -117,8 +135,6 @@ int	main(int ac, char **av, char **envp)
 	t_dict	*env;
 	t_info	*exec_info;
 
-	exec_info = (t_info *) malloc(sizeof(t_info));
-	exec_info->argv = NULL;
 	if (av[1])
 		return (1);
 	env = double_char_to_lst(envp);
@@ -133,13 +149,7 @@ int	main(int ac, char **av, char **envp)
 	*/
 	while (ac)
 	{
-		int	stdou;
-		int	stdi;
-
-		exec_info->turn = 0;
-		exec_info->pid = NULL;
-		exec_info->tmp_fd = -1;
-		exec_info->end = FALSE;
+		exec_info = init_exec_info();
 		if (ms_line(&line))
 			continue ;
 		tree = ms_lex_and_parse(&line);
@@ -149,37 +159,35 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		}
 		malloc_pid_arr(exec_info, tree);
-		stdi = dup(STDIN_FILENO);
-		stdou = dup(STDOUT_FILENO);
-		exec_info->stdou = stdou;
 		browse_line_check_red_in(tree->head, env);
 		exec_tree(tree->head, exec_info, env, tree);
+		wait_sub_process(exec_info);
 //		browse_tree(tree);
-		int	i;
-		i = 0;
-		if (exec_info->tmp_fd != -1) close(exec_info->tmp_fd);
-		if (dup2(stdi, STDIN_FILENO) == -1)
-		{
-			perror("sell");
-			continue ;
-		}
-		close(stdi);
-		if (exec_info->stdou != -1 && dup2(stdou, STDOUT_FILENO) == -1)
-		{
-			perror("basket");
-			continue ;
-		}
-		
-		close(stdou);
-		while (i < exec_info->turn)
-		{
-			waitpid(exec_info->pid[i], NULL, 0);
-			i++;
-		}
-		//waitpid();
 	}
 	return (1);
 }
+
+void	wait_sub_process(t_info *exec_info)
+{
+	int	i;
+
+	i = 0;
+	if (exec_info->tmp_fd != -1)
+		close(exec_info->tmp_fd);
+	if (dup2(exec_info->stdi, STDIN_FILENO) == -1)
+		perror("sell");
+	close(exec_info->stdi);
+	if (exec_info->stdou != -1 && dup2(exec_info->stdou, STDOUT_FILENO) == -1)
+		perror("basket");
+	if (exec_info->stdou != -1)
+		close(exec_info->stdou);
+	while (i < exec_info->turn)
+	{
+		waitpid(exec_info->pid[i], NULL, 0);
+		i++;
+	}
+}
+
 
 /*
 int	main(int ac, char **av, char **envp)

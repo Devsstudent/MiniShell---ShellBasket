@@ -23,7 +23,6 @@
 static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
-	int			ac;
 	int			i;
 
 	i = 0;
@@ -40,23 +39,7 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 			print_error(exec_in->argv[0], 2);
 		return ;
 	}
-	ac = get_ac(exec_in->argv);
-	if (ft_strncmp(cmd_path, "exit", 5) == 0)
-		exec_exit(ac, exec_in->argv, env, 1);
-	else if (ft_strncmp(cmd_path, "cd", 3) == 0)
-		exec_cd(ac, exec_in->argv, env);
-	else if (ft_strncmp(cmd_path, "export", 7) == 0)
-		exec_export(ac, exec_in->argv, env);
-	else if (ft_strncmp(cmd_path, "unset", 6) == 0)
-		exec_unset(ac, exec_in->argv, env);
-	else if (ft_strncmp(cmd_path, "pwd", 4) == 0)
-		exec_pwd(ac, exec_in->argv, env);
-	else if (ft_strncmp(cmd_path, "env", 4) == 0)
-		exec_env(ac, exec_in->argv, env);
-	else if (ft_strncmp(cmd_path, "echo", 5) == 0)
-		exec_echo(ac, exec_in->argv, env);
-	else
-		forking_cmd_alone(cmd_path, exec_in, env);
+	execve_cmd_alone(cmd_path, env, exec_in);
 	if (exec_in->open_fd != -1)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd != -1)
@@ -105,16 +88,13 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	int		i;
 
 
-	i = 0;
+	i = -1;
 	if (pipe(pipe_fd) == -1)
 		return (perror("pipe"));
 	check_redirection(exec_in, sub);
 	cmd_path = check_cmd(exec_in->argv, env);
-	while (exec_in->argv[i])
-	{
+	while (exec_in->argv[++i])
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
-		i++;
-	}
 	if (!cmd_path || exec_in->open_fd == -2)
 	{
 		close(pipe_fd[1]);
