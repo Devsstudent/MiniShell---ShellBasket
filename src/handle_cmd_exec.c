@@ -130,7 +130,7 @@ char	*check_cmd(char **argv, t_dict *env)
 	i = 0;
 	res = NULL;
 	path_li = ft_split(dict_get_value(env, "PATH"), ':');
-	while (path_li[i])
+	while (path_li && path_li[i])
 	{
 		buff = ft_strjoin(ft_strdup(path_li[i]), "/");
 		buff = ft_strjoin(buff, argv[0]);
@@ -158,13 +158,16 @@ char	*check_cmd(char **argv, t_dict *env)
 				free_exit();
 		}
 	}
-	int	j;
-	j = 0;
-	while (path_li && path_li[j])
+	if (path_li)
 	{
-		free(path_li[j]);
-		j++;
+		int	j;
+		j = 0;
+		while (path_li && path_li[j])
+		{
+			free(path_li[j]);
+			j++;
+		}
+		free(path_li);
 	}
-	free(path_li);
 	return (res);
 }
