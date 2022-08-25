@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/23 20:21:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/25 12:23:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -179,86 +179,57 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		free_exit();
 }
 
-void	browse_line_check_red_in(t_leaf *leaf, t_dict *env)
+static void	check_red_in_sub(t_line *sub_line, t_dict *env)
 {
 	t_block	*buff;
 	struct stat	statbuff;
 
+	buff = sub_line->head;
+	while (buff)
+	{
+		if (buff->token == RED_IN)
+		{
+			expand(sub_line, env);
+			if (check_ambiguous_bis(buff->next))
+			{
+				buff->next->crash = TRUE;
+				buff = buff->next;
+				continue ;
+			}
+			if (access(buff->next->word, R_OK) == 0)
+			{
+				if (stat(buff->next->word, &statbuff) == -1)
+					perror("stat broslinecheck");
+				if ((statbuff.st_mode & S_IFMT) != S_IFREG)
+				{
+					ft_putstr_fd(buff->next->word, 2);
+					ft_putstr_fd(": Not a file\n", 2);
+					buff->next->crash = TRUE;
+				}
+			}
+			else
+			{
+				ft_putstr_fd(buff->next->word, 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
+				buff->next->crash = TRUE;
+			}
+		}
+		buff = buff->next;
+	}
+}
+
+void	browse_line_check_red_in(t_leaf *leaf, t_dict *env)
+{
 	if (!leaf)
 		return ;
 	if (leaf->type == PIPE_L)
 	{
-		buff = leaf->left->content->head;
-		while (buff)
-		{
-			if (buff->token == RED_IN)
-			{
-				expand(leaf->left->content, env);
-				if (check_ambiguous_bis(buff->next))
-				{
-					buff->next->crash = TRUE;
-					buff = buff->next;
-					continue ;
-				}
-				if (access(buff->next->word, R_OK) == 0)
-				{
-					if (stat(buff->next->word, &statbuff) == -1)
-						perror("stat broslinecheck");
-					if ((statbuff.st_mode & S_IFMT) != S_IFREG)
-					{
-						ft_putstr_fd(buff->next->word, 2);
-						ft_putstr_fd(": Not a file\n", 2);
-						buff->next->crash = TRUE;
-					}
-				}
-				else
-				{
-					
-					ft_putstr_fd(buff->next->word, 2);
-					ft_putstr_fd(": No such file or directory\n", 2);
-					buff->next->crash = TRUE;
-				}
-			}
-			buff = buff->next;
-		}
+		if (leaf->content)
+			check_red_in_sub(leaf->content, env);
 		if (leaf->right)
 			browse_line_check_red_in(leaf->right, env);
 	}
 	else if (leaf->type == CMD)
-	{
-		buff = leaf->content->head;
-		while (buff)
-		{
-			if (buff->token == RED_IN)
-			{
-				expand(leaf->content, env);
-				if (check_ambiguous_bis(buff->next))
-				{
-					buff = buff->next;
-					buff->next->crash = TRUE;
-					continue ;
-				}
-				if (access(buff->next->word, R_OK) == 0)
-				{
-					if (stat(buff->next->word, &statbuff) == -1)
-						perror("stat broslinecheck");
-					if ((statbuff.st_mode & S_IFMT) != S_IFREG)
-					{
-						ft_putstr_fd(buff->next->word, 2);
-						ft_putstr_fd(": Not a file\n", 2);
-						buff->next->crash = TRUE;
-					}
-				}
-				else
-				{
-					
-					ft_putstr_fd(buff->next->word, 2);
-					ft_putstr_fd(": No such file or directory\n", 2);
-					buff->next->crash = TRUE;
-				}
-			}
-			buff = buff->next;
-		}
-	}
-
+		if (leaf->content)
+			check_red_in_sub(leaf->content, env);
 }

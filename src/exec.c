@@ -108,12 +108,12 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	if (pipe(pipe_fd) == -1)
 		return (perror("pipe"));
 	check_redirection(exec_in, sub);
+	cmd_path = check_cmd(exec_in->argv, env);
 	while (exec_in->argv[i])
 	{
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
 		i++;
 	}
-	cmd_path = check_cmd(exec_in->argv, env);
 	if (!cmd_path)
 	{
 		close(pipe_fd[1]);
