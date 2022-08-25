@@ -156,6 +156,7 @@ void	dict_delone(t_dict *dict, char *key);
 void	dict_modify(t_dict	*dict, char *key, char *value);
 void	dict_clear(t_dict *dict);
 char	*dict_get_value(t_dict *dict, char *key);
+char	*dict_get_key(t_dict *dict, char *key);
 char	**dict_to_double_char_env(t_dict *dict);
 char	**dict_to_double_char_export(t_dict *dict);
 t_elem	*create_elem(char *key, char *value);
