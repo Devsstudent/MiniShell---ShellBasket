@@ -112,6 +112,7 @@ t_info	*init_exec_info(void)
 	t_info	*exec_info;
 
 	exec_info = (t_info *) malloc(sizeof(t_info));
+	add_to_gc(SIMPLE, exec_info, get_gc());
 	//Free exec_info
 	exec_info->argv = NULL;
 	exec_info->turn = 0;
@@ -163,6 +164,7 @@ int	main(int ac, char **av, char **envp)
 		exec_tree(tree->head, exec_info, env, tree);
 		wait_sub_process(exec_info);
 //		browse_tree(tree);
+		free_each_turn(get_gc());
 	}
 	return (1);
 }
@@ -183,7 +185,7 @@ void	wait_sub_process(t_info *exec_info)
 		close(exec_info->stdou);
 	while (i < exec_info->turn)
 	{
-		waitpid(exec_info->pid[i], NULL, 0);
+		waitpid(exec_info->pid[i], &g_exit_status, 0);
 		i++;
 	}
 }

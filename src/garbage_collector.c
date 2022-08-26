@@ -43,7 +43,7 @@ void	gc_free_node(t_gc *node)
 		}
 		free(node->content);
 	}
-	else if (node->type == DICT)
+	else if (node->type == ENV)
 		dict_clear(node->content);
 	else if (node->type == LINE)
 		line_clear(node->content);
@@ -126,15 +126,25 @@ t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)
 t_bool	free_each_turn(t_gc **gc)
 {
 	t_gc	*tmp;
+	t_gc	*head;
 
 //Clean tous sauf l'environnemnt
 	if (!gc)
-		return ;
+		return 1;
+	head = *gc;
 	while (*gc)
 	{
 		tmp = (*gc)->next;
-		if (tmp->type != ENV)
+		if ((*gc)->type != ENV)
 			gc_free_node(*gc);
+		else
+		{
+			head = *gc;
+			head->next = NULL;
+		}
 		*gc = tmp;
 	}
+	if (head)
+		*gc = head;
+	return 1;
 }

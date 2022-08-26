@@ -80,7 +80,7 @@ t_dict	*double_char_to_lst(char **d_char)
 	env->size = 0;
 	env->head = NULL;
 	env->last = NULL;
-	add_to_gc(DICT, env, get_gc());
+	add_to_gc(ENV, env, get_gc());
 	while (*d_char != 0)
 	{
 		new = new_elem(*d_char);

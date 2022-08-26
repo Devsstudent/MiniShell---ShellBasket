@@ -147,6 +147,7 @@ void	gc_free_node(t_gc *node);
 void	mgc_free_node_addr(void *ptr, t_gc **gc);
 void	free_gc(t_gc **gc);
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
+t_bool	free_each_turn(t_gc **gc);
 
 /********************************************/
 /*                environment               */

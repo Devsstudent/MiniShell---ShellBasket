@@ -55,6 +55,7 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 		if (!execve_test(cmd_path, exec_in->argv, env, 1))
 		{
 			perror(exec_in->argv[0]);
+			g_exit_status = errno;
 			exit(1);
 		}
 	}
@@ -130,6 +131,7 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 		if (!execve_test(cmd_path, exec_in->argv, env, 1))
 		{
 			perror(exec_in->argv[0]);
+			g_exit_status = errno;
 			exit(1);
 		}
 	}

@@ -162,7 +162,6 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 			value = ft_itoa(g_exit_status);
 			if (!value)
 				free_exit();
-			add_to_gc(SIMPLE, value, get_gc());
 			val_arr[i++] = value;
 			continue ;
 		}

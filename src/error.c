@@ -30,6 +30,7 @@ void	print_error(char *ope, int type)
 	{
 		write(2, "shellbasket: command not found\n", 31);
 		g_exit_status = 127;
+		ft_putnbr_fd(g_exit_status, 2);
 	}
 		//ft_printf(1, "shellbasket: %s: command not found\n", ope);
 }
