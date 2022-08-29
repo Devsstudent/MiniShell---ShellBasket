@@ -22,7 +22,8 @@ t_bool	ms_line(char **line)
 	return (FALSE);
 }
 
-t_tree	*ms_lex_and_parse(char **line)
+
+t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 {
 	t_line	*line_lst;
 	t_tree	*tree;
@@ -36,6 +37,8 @@ t_tree	*ms_lex_and_parse(char **line)
 	if (!tokenization(line_lst))
 		return (NULL);
 	fill_ast(line_lst, tree);
+	exec_in->fd_arr_size = total_block(tree->head);
+	exec_in->fd_arr = malloc(sizeof(int) * exec_in->fd_arr_size);
 	return (tree);
 }
 
@@ -112,9 +115,10 @@ t_info	*init_exec_info(void)
 	t_info	*exec_info;
 
 	exec_info = (t_info *) malloc(sizeof(t_info));
-	add_to_gc(SIMPLE, exec_info, get_gc());
 	//Free exec_info
 	exec_info->argv = NULL;
+	exec_info->fd_arr = NULL;
+	exec_info->fd_arr_size = 0;
 	exec_info->turn = 0;
 	exec_info->pid = NULL;
 	exec_info->tmp_fd = -1;
@@ -153,18 +157,14 @@ int	main(int ac, char **av, char **envp)
 		exec_info = init_exec_info();
 		if (ms_line(&line))
 			continue ;
-		tree = ms_lex_and_parse(&line);
-		if (tree == NULL)
-		{
-			//free necessary things
-			continue ;
-		}
+		tree = ms_lex_and_parse(&line, exec_info);
+		parse_here_doc(tree->head, exec_info->fd_arr, 0);
 		malloc_pid_arr(exec_info, tree);
 		browse_line_check_red_in(tree->head, env);
 		exec_tree(tree->head, exec_info, env, tree);
 		wait_sub_process(exec_info);
 //		browse_tree(tree);
-		free_each_turn(get_gc());
+		free_each_turn(get_gc(), exec_info);
 	}
 	return (1);
 }

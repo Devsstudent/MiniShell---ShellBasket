@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 18:27:42 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/29 18:22:50 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -65,6 +65,7 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 	else
 		forking_cmd_alone(cmd_path, exec_in, env);
 }
+
 t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork) {
 	int	ac;
 	t_bool	no_built;

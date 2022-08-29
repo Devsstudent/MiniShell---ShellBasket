@@ -32,9 +32,7 @@ void	gc_free_node(t_gc *node)
 	i  = 0;
 	if (!node)
 		return ;
-	if (node->type == SIMPLE)
-		free(node->content);
-	else if (node->type == DOUBLE)
+	if (node->type == DOUBLE)
 	{
 		while (((char **)(node->content))[i])
 		{
@@ -53,6 +51,8 @@ void	gc_free_node(t_gc *node)
 			clean_tree(((t_tree *)(node->content))->head);
 		free(node->content);
 	}
+	else if (node->type == SIMPLE)
+		free(node->content);
 	free(node);
 }
 
@@ -123,7 +123,26 @@ t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)
 	return (TRUE);
 }
 
-t_bool	free_each_turn(t_gc **gc)
+void	remove_tmp_file(int file_nb, int *fd_arr)
+{
+	int i;
+	char	*num;
+	char	*name;
+
+	i = 0;
+	while (i < file_nb)
+	{
+		num = ft_itoa(i);
+		name = ft_strjoin(ft_strdup(".tmp_here_doc_"), num);
+		unlink(name);
+		free(name);
+		free(num);
+		i++;
+	}
+	free(fd_arr);
+}
+
+t_bool	free_each_turn(t_gc **gc, t_info *exec_in)
 {
 	t_gc	*tmp;
 	t_gc	*head;
@@ -146,5 +165,7 @@ t_bool	free_each_turn(t_gc **gc)
 	}
 	if (head)
 		*gc = head;
+	remove_tmp_file(exec_in->fd_arr_size, exec_in->fd_arr);
+	free(exec_in);
 	return 1;
 }

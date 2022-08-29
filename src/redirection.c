@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 13:00:27 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/29 18:44:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -47,6 +47,7 @@ static t_bool	check_ambiguous_bis(t_block *buff)
 	}
 	return (FALSE);
 }
+
 static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool crash)
 {
 	int	i;
@@ -85,6 +86,7 @@ static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool c
 	}
 	return (FALSE);
 }
+
 void	check_redirection(t_info *exec, t_line *sub)
 {
 	t_block	*buff;
@@ -107,29 +109,45 @@ void	check_redirection(t_info *exec, t_line *sub)
 			if (!check_ambiguous(buff->next->word, exec, TRUE, FALSE))
 				check_red_out(buff->next, exec, buff);
 		}
-		/*
 		else if (buff->token == HERE_DOC)
-			*/
+		{
+			exec->open_fd = exec->fd_arr[exec->turn];
+			//else
+			//	expand_here_doc_content(exec);
+			//Expand le contenu du fd si il y a des quotes
+			//on doit read 1 char par 1 char
+			//et mettre le fd a open_fd a celui du here_doc
+		}
 		buff = buff->next;
 	}
 }
+
+/*
+void	expand_here_doc_content(t_info *exec)
+{
+	char	buffer;
+
+	buffer = 1;
+	while (buffer)
+	{
+		//Comment on fait la ?
+		if (buffer == '$')
+		{
+			//Maybe we can open another tmp file copy all content, and copy the corntent into the first one with the expand done xD
+			//Join tous les char apres qui ne sont pas des separateurs
+			//ensuite on expand
+			//mais ensuite rajouter le content au fd c'est chaud
+			//
+		}
+		read(exec->fd_arr[exec->turn], buffer, 1);
+	}
+}
+*/
 
 void	check_red_in(t_block *files, t_info *exec)
 {
 	int	f_open;
 
-	//before it was :
-	// if (exec->out_fd != STDIN_FILENO)
-		//close (exec->out_fd);
-	//so one fd was left open
-	/*
-	if (files->crash)
-	{
-		exec->open_fd = -2;
-		return ;
-	}*/
-	write(2, "HERE", 4);
-	ft_putstr_fd(files->word, 2);
 	if (exec->open_fd != -1)
 		close(exec->open_fd);
 	exec->open_fd = -1;

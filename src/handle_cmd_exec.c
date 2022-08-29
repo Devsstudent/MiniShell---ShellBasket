@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 14:11:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/29 19:10:41 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -139,6 +139,7 @@ char	*check_cmd(char **argv, t_dict *env)
 		if (access(buff, X_OK) == 0)
 		{
 			res = buff;
+			add_to_gc(SIMPLE, res, get_gc());
 			break;
 		}
 		free(buff);

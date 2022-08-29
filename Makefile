@@ -32,6 +32,7 @@ OBJ = $(addprefix obj/, main.o \
 			export.o \
 			pwd.o \
 			handle_quote_before_exec.o \
+			here_doc.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
 			ast_utils.d \
@@ -60,6 +61,7 @@ D_LST = $(addprefix obj/, main.d \
 			exit.d \
 			export.d \
 			pwd.d \
+			here_doc.d \
 			handle_quote_before_exec.d \
 			null.d)
 NAME = minishell

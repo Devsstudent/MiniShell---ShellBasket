@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:50:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/25 18:55:06 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/29 17:02:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ typedef struct	s_info{
 	int		open_fd;
 	int		out_fd;
 	int		*pid;
+	int		*fd_arr;
+	int		fd_arr_size;
 	int		turn;
 	int		tmp_fd;
 	int		stdou;
@@ -147,7 +149,7 @@ void	gc_free_node(t_gc *node);
 void	mgc_free_node_addr(void *ptr, t_gc **gc);
 void	free_gc(t_gc **gc);
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
-t_bool	free_each_turn(t_gc **gc);
+t_bool	free_each_turn(t_gc **gc, t_info *exec_in);
 
 /********************************************/
 /*                environment               */
@@ -304,4 +306,6 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
 
 void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);
 char	*handle_quote(char *word);
+int	total_block(t_leaf *leaf);
+void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn);
 #endif

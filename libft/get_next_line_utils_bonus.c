@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 15:18:36 by odessein          #+#    #+#             */
-/*   Updated: 2022/06/02 15:54:51 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/29 17:10:15 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,4 @@ size_t	ft_len_till_nl(const char *s)
 	if (s[size] == '\n')
 		size++;
 	return (size);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t	i;
-	char	*temp;
-
-	i = 0;
-	temp = (char *) s;
-	while (i < n)
-	{
-		temp[i] = '\0';
-		i++;
-	}
 }
