@@ -11,13 +11,6 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	go_to_path(char *path, t_dict *env)
-{
-	int		ret;
-	char	buff[4097];
-	char	*pwd_key;
-	char	*pwd_value;
-
 	/*
 	ret = access(path, F_OK);
 	if (ret == -1)
@@ -27,6 +20,13 @@ void	go_to_path(char *path, t_dict *env)
 		return ;
 	}
 	*/
+void	go_to_path(char *path, t_dict *env)
+{
+	int		ret;
+	char	buff[4097];
+	char	*pwd_key;
+	char	*pwd_value;
+
 	ret = chdir(path);
 	if (ret != 0)
 	{
@@ -36,20 +36,8 @@ void	go_to_path(char *path, t_dict *env)
 	}
 	g_exit_status = errno;
 	pwd_key = ft_strdup("PWD");
-	if (pwd_key == NULL)
-	{
-		ft_putstr_fd("crash strdup cd.c go_to_path", 2);
-		free_exit();
-	}
-	//see malloc in dict functions, which should we free or not
 	pwd_value = ft_strdup(getcwd(buff, 4097));
 	dict_modify(env, pwd_key, pwd_value);
-	if (pwd_value == NULL)
-	{
-		ft_putstr_fd("crash strdup cd.c go_to_path", 2);
-		free_exit();
-	}
-	//ft_printf("new path = %s\n", getcwd(buff, 4097));
 }
 
 void	exec_cd(int ac, char **argv, t_dict *env)

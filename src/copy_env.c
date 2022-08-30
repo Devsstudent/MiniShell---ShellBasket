@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 int	**size_env(char **env)
 {
 	int		**xy;
@@ -69,7 +69,7 @@ char	**copy_env(char **env)
 	}
 	env[i] = NULL;
 	return(new_env);
-}
+}*/
 
 t_dict	*double_char_to_lst(char **d_char)
 {

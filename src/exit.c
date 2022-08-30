@@ -71,11 +71,9 @@ static long long	ft_atoll(char *arg)
 		return ((long long)(num));
 }
 
-void	exec_exit(int ac, char **argv, t_dict *env, t_bool display_exit)
+void	exec_exit(int ac, char **argv, t_bool display_exit)
 {
 	long long	exit_status;
-
-	(void) env;
 
 	if (display_exit)
 		ft_putstr_fd("exit\n", 1);

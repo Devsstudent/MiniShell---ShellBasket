@@ -52,6 +52,15 @@ static t_bool	check_ambiguous_bis(t_block *buff)
 	return (FALSE);
 }
 
+void	ambiguous_case(t_bool type, t_info *exec_in)
+{
+	if (type)
+		exec_in->out_fd = -2;
+	if (!type)
+ 		exec_in->open_fd = -2;
+	write(2, "ambiguous redirect :)", 21);
+}
+
 static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool crash)
 {
 	int	i;
@@ -70,11 +79,7 @@ static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool c
 		check_quote(&d_quote, &quote, word[i]);
 		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && !quote && !d_quote)
 		{
-			if (type)
-				exec_in->out_fd = -2;
-			if (!type)
-				exec_in->open_fd = -2;
-			write(2, "ambiguous redirect :)", 21);
+			ambiguous_case(type, exec_in);
 			return (TRUE);
 		}
 	}
@@ -104,14 +109,7 @@ void	check_redirection(t_info *exec, t_line *sub)
 				check_red_out(buff->next, exec, buff);
 		}
 		else if (buff->token == HERE_DOC)
-		{
 			exec->open_fd = exec->fd_arr[exec->turn];
-			//else
-			//	expand_here_doc_content(exec);
-			//Expand le contenu du fd si il y a des quotes
-			//on doit read 1 char par 1 char
-			//et mettre le fd a open_fd a celui du here_doc
-		}
 		buff = buff->next;
 	}
 }
@@ -175,14 +173,10 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		close(exec->out_fd);
 	exec->out_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
-	{
-		print_error(NULL, 1);
-		return ;
-	}
+		return print_error(NULL, 1);
 	else if (ft_strncmp(files->word, "\"\"", 3) == 0 || ft_strncmp(files->word, "\'\'", 3) == 0)
 	{
 		write(2, " :", 2);
-		//ft_printf(1, " :");
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (red->token == RED_OUT_TRUNC)
@@ -197,10 +191,32 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		free_exit();
 }
 
+void	check_file_permission(t_block *buff)
+{
+	struct stat	statbuff;
+
+	if (access(buff->next->word, R_OK) == 0)
+	{
+		if (stat(buff->next->word, &statbuff) == -1)
+			perror("stat broslinecheck");
+		if ((statbuff.st_mode & S_IFMT) != S_IFREG)
+		{
+			ft_putstr_fd(buff->next->word, 2);
+			ft_putstr_fd(": Not a file\n", 2);
+			buff->next->crash = TRUE;
+		}
+	}
+	else
+	{
+		ft_putstr_fd(buff->next->word, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		buff->next->crash = TRUE;
+	}
+}
+
 static void	check_red_in_sub(t_line *sub_line, t_dict *env)
 {
 	t_block	*buff;
-	struct stat	statbuff;
 
 	buff = sub_line->head;
 	while (buff)
@@ -214,23 +230,7 @@ static void	check_red_in_sub(t_line *sub_line, t_dict *env)
 				buff = buff->next;
 				continue ;
 			}
-			if (access(buff->next->word, R_OK) == 0)
-			{
-				if (stat(buff->next->word, &statbuff) == -1)
-					perror("stat broslinecheck");
-				if ((statbuff.st_mode & S_IFMT) != S_IFREG)
-				{
-					ft_putstr_fd(buff->next->word, 2);
-					ft_putstr_fd(": Not a file\n", 2);
-					buff->next->crash = TRUE;
-				}
-			}
-			else
-			{
-				ft_putstr_fd(buff->next->word, 2);
-				ft_putstr_fd(": No such file or directory\n", 2);
-				buff->next->crash = TRUE;
-			}
+			check_file_permission(buff);
 		}
 		buff = buff->next;
 	}

@@ -30,6 +30,7 @@ OBJ = $(addprefix obj/, main.o \
 			unset.o \
 			exit.o \
 			export.o \
+			ft_strdup.o \
 			pwd.o \
 			handle_quote_before_exec.o \
 			here_doc.o \
@@ -60,6 +61,7 @@ D_LST = $(addprefix obj/, main.d \
 			unset.d \
 			exit.d \
 			export.d \
+			ft_strdup.d \
 			pwd.d \
 			here_doc.d \
 			handle_quote_before_exec.d \

@@ -79,14 +79,9 @@ static void	str_quote_parse(char *word, char *new_word)
 			str_cp_till_quote(word, new_word, &i, &j);
 		}
 		else
-		{
-			new_word[j] = word[i];
-			j++;
-			i++;
-		}
+			new_word[j++] = word[i++];
 	}
 	new_word[j] = 0;
-	//ft_printf("%s", new_word);
 }
 
 char	*handle_quote(char *word)

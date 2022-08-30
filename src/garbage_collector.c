@@ -25,22 +25,27 @@ t_gc	*gc_new_node(t_type type, void *ptr)
 	return (new);
 } 
 
-void	gc_free_node(t_gc *node)
+void	free_double_arr(t_gc *node)
 {
 	size_t	i;
 
-	i  = 0;
+	i = 0;
+	while (((char **)(node->content))[i])
+	{
+		free(((char **)(node->content))[i]);
+		i++;
+	}
+	free(node->content);
+	
+	
+}
+void	gc_free_node(t_gc *node)
+{
+
 	if (!node)
 		return ;
 	if (node->type == DOUBLE)
-	{
-		while (((char **)(node->content))[i])
-		{
-			free(((char **)(node->content))[i]);
-			i++;
-		}
-		free(node->content);
-	}
+		free_double_arr(node);
 	else if (node->type == ENV)
 		dict_clear(node->content);
 	else if (node->type == LINE)

@@ -296,7 +296,7 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork);
 
 void	exec_cd(int ac, char **argv, t_dict *env);
 void	exec_echo(int ac, char **argv, t_dict *env);
-void	exec_exit(int ac, char **argv, t_dict *env, t_bool display_exit);
+void	exec_exit(int ac, char **argv, t_bool display_exit);
 void	exec_unset(int ac, char **argv, t_dict *env);
 void	exec_export(int ac, char **argv, t_dict *env);
 void	exec_env(int ac, char **argv, t_dict *env);

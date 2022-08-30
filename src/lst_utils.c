@@ -175,18 +175,23 @@ char	*dict_get_key(t_dict *dict, char *key)
 		return (NULL);
 }
 
+void	init_dict_to_double(int *i, t_elem **buff, char ***arr, t_dict *dict)
+{
+	*i = 0;
+	*buff = dict->head;
+	*arr = (char **) malloc(sizeof(*arr) * (dict->size + 1));
+	if (!(*arr))
+		free_exit();
+	add_to_gc(DOUBLE, *arr, get_gc());
+}
+
 char	**dict_to_double_char_export(t_dict *dict)
 {
 	char	**arr;
 	t_elem	*buff;
 	int		i;
 
-	i = 0;
-	buff = dict->head;
-	arr = (char **) malloc(sizeof(*arr) * (dict->size + 1));
-	if (!arr)
-		free_exit();
-	add_to_gc(DOUBLE, arr, get_gc());
+	init_dict_to_double(&i, &buff, &arr, dict);
 	while (i < dict->size)
 	{
 		if (buff->value)
@@ -213,12 +218,7 @@ char	**dict_to_double_char_env(t_dict *dict)
 	t_elem	*buff;
 	int		i;
 
-	i = 0;
-	buff = dict->head;
-	arr = (char **) malloc(sizeof(*arr) * (dict->size + 1));
-	if (!arr)
-		free_exit();
-	add_to_gc(DOUBLE, arr, get_gc());
+	init_dict_to_double(&i, &buff, &arr, dict);
 	while (buff)
 	{
 		if (!buff->value)
