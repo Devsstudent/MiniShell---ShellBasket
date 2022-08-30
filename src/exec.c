@@ -20,6 +20,23 @@
 	//Exec les commandes / built-in
 	//With forking and piping if necessary
 
+static t_bool	check_cmd_in_sub(t_line *sub)
+{
+	t_block *buff;
+
+	if (!sub)
+		return (FALSE);
+	buff = sub->head;
+	while (buff)
+	{
+		if (buff->token == CMD_ARG)
+			return (TRUE);
+		buff = buff->next;
+	}
+	return (FALSE);
+}
+
+
 static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
@@ -34,9 +51,9 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	}
 	cmd_path = check_cmd(exec_in->argv, env);
 	add_to_gc(SIMPLE, cmd_path, get_gc());
-	if (!cmd_path|| exec_in->open_fd == -2)
+	if (!cmd_path || exec_in->open_fd == -2)
 	{
-		if (exec_in->open_fd != -2 && !cmd_path)
+		if (exec_in->open_fd != -2 && !cmd_path && check_cmd_in_sub(sub))
 			print_error(exec_in->argv[0], 2);
 		return ;
 	}
@@ -77,13 +94,13 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 //On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
 //Return un double tableau avec la commandes et arg
 
-t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path)
+t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path, t_line *sub)
 {
 	if (!cmd_path || exec_in->open_fd == -2)
 	{
 		close(pipe_fd[1]);
 		exec_in->tmp_fd = pipe_fd[0];
-		if (exec_in->open_fd != -2 && !cmd_path)
+		if (exec_in->open_fd != -2 && !cmd_path && check_cmd_in_sub(sub))
 			print_error(exec_in->argv[0], 2);
 		return (TRUE);
 	}
@@ -103,7 +120,7 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	cmd_path = check_cmd(exec_in->argv, env);
 	while (exec_in->argv[++i])
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
-	if (command_not_found(pipe_fd, exec_in, cmd_path))
+	if (command_not_found(pipe_fd, exec_in, cmd_path, sub))
 		return ;
 	forking(cmd_path, exec_in, env, pipe_fd);
 	close(pipe_fd[1]);

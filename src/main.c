@@ -8,7 +8,6 @@
 /*   Updated: 2022/08/22 16:49:02 by odessein         ###   ########.fr       */
 /*                                                                            */ /* ************************************************************************** */
 #include "minishell.h"
-#include "global.h"
 
 t_bool	ms_line(char **line)
 {
