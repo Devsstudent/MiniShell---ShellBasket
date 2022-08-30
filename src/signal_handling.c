@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:02:58 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/30 17:33:51 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/30 18:47:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -22,6 +22,7 @@ void	sigint_handler(int signum)
 	if (g_exit_status == -800)
 	{
 		g_exit_status = 0;
+		write(0, "\n", 1);
 		return ;
 	}
 	if (signum == SIGINT)
