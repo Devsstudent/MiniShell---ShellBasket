@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/29 18:22:50 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/30 15:24:56 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -14,8 +14,8 @@
 t_bool	check_builtins(char **argv)
 {
 	//besoin d'une protection contre NULL
-	//if (argv[0] == NULL)
-	//	return (FALSE);
+	if (argv[0] == NULL)
+		return (FALSE);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		return (TRUE);
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
@@ -66,11 +66,12 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 		forking_cmd_alone(cmd_path, exec_in, env);
 }
 
-t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork) {
+t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
+{
 	int	ac;
-	t_bool	no_built;
+	t_bool	yo;
 
-	no_built = FALSE;
+	yo = FALSE;
 	ac = get_ac(argv);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		exec_echo(ac, argv, env);
@@ -86,9 +87,9 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork) {
 		exec_export(ac, argv, env);
 	else if (ft_strncmp(argv[0], "cd", 5) == 0)
 		exec_cd(ac, argv, env);
-	else
-		no_built = TRUE;
-	if (no_built)
+	else 
+		yo = TRUE;
+	if (yo)
 		return (FALSE);
 	else if (fork)
 		exit(1);

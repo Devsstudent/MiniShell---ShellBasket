@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/29 18:31:39 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:48:55 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -64,13 +64,10 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	free(cmd_path);
 }
 
-
-t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2])
+static t_bool	dup_stdout(t_info *exec_in, int pipe_fd[2])
 {
-	//Gerer les erreurs et afficher perror return un booleen
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 	{
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
@@ -91,17 +88,36 @@ t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2])
 			exec_in->stdou = -1;
 		}
 	}
+	return (TRUE);
+}
+
+
+t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2])
+{
+	//Gerer les erreurs et afficher perror return un booleen
+	if (!dup_stdout(exec_in, pipe_fd))
+		return (FALSE);
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 	{
 		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 			return (perror_false("set"));
 	}
 	else if (exec_in->tmp_fd != -1 && !exec_in->start)
-	{
 		if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
 			return (perror_false("lasy"));
-	}
 	return (TRUE);
+}
+
+static void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2])
+{
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
+		close(exec_in->open_fd);
+	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
+		close(exec_in->out_fd);
+	if (exec_in->tmp_fd != -1)
+		close(exec_in->tmp_fd);
 }
 
 void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
@@ -116,21 +132,9 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 	}
 	if (!dup_in_pipe(exec_in, pipe_fd))
 		return ;
-	/*
-	else if (exec_in->open_fd == -2)
-	{
-		
-	}*/
 	if (exec_in->pid[exec_in->turn] == 0)
 	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
-			close(exec_in->open_fd);
-		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
-			close(exec_in->out_fd);
-		if (exec_in->tmp_fd != -1)
-			close(exec_in->tmp_fd);
+		close_subprocess_fd(exec_in, pipe_fd);
 		if (!execve_test(cmd_path, exec_in->argv, env, 1))
 		{
 			perror(exec_in->argv[0]);
@@ -141,5 +145,4 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 	if (exec_in->tmp_fd != -1)
 		close(exec_in->tmp_fd);
 	exec_in->tmp_fd = pipe_fd[0];
-	//find a wait all pid after the exec so need to store each pid;
 }

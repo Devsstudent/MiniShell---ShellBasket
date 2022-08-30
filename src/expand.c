@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/25 13:57:45 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:40:58 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -149,20 +149,25 @@ int	get_nb_of_dollar(t_block *block)
 	return (dollar);
 }
 
+void	check_null_val(char *val)
+{
+	if (!val)
+		free_exit();
+}
+
 void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 {
 	int		i;
 	char	*value;
 
-	i = 0;
-	while (key_arr[i])
+	i = -1;
+	while (key_arr[++i])
 	{
 		if (key_arr[i][0] == '?' && !key_arr[i][1])
 		{
 			value = ft_itoa(g_exit_status);
-			if (!value)
-				free_exit();
-			val_arr[i++] = value;
+			check_null_val(value);
+			val_arr[i] = value;
 			continue ;
 		}
 		value = dict_get_value(dict, key_arr[i]);
@@ -171,13 +176,9 @@ void	fill_val_arr(char **key_arr, char **val_arr, t_dict *dict)
 		else
 		{
 			value = ft_strdup(value);
-			if (!value)
-				free_exit();
+			check_null_val(value);
 			val_arr[i] = value;
-			////ft_printf("value = %s\n", val_arr[i]);
-			//values OK
 		}
-		i++;
 	}
 	val_arr[i] = NULL;
 }

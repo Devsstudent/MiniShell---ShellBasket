@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:43:59 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/29 17:53:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/30 14:45:15 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -109,7 +109,7 @@ void	remove_useless_quote(t_block *block)
 	if (!new_word)
 		free_exit();
 	str_quote_parse(block->word, new_word);
-	add_to_gc(SIMPLE, block->word, get_gc());
+//	add_to_gc(SIMPLE, block->word, get_gc());
 	block->word = new_word;
 }
 

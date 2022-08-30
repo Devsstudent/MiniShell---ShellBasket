@@ -33,6 +33,7 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 		i++;
 	}
 	cmd_path = check_cmd(exec_in->argv, env);
+	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (!cmd_path|| exec_in->open_fd == -2)
 	{
 		if (exec_in->open_fd != -2 && !cmd_path)
@@ -64,29 +65,36 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 		exec(exec_in, leaf->left->content, env);
 		if (leaf->right)
 			exec_tree(leaf->right, exec_in, env, tree);
-		//get cmd a gauche puis call a droite again :)
-//		exec la gauche puis out dans un pipe ou pas en function d'un param
-//		Si c'est le last le fd out sera le out sinon un pipe
 	}
 	else if (leaf->type == CMD)
 	{
 		expand(leaf->content, env);
 		exec_in->argv = get_cmd_arg(leaf->content);
 		exec_cmd(exec_in, leaf->content, env);
-		// head = cmd on get cmd puis on exec
 	}
-	//ft_printf(0, "\n\nEND\n");
 }
 
 //On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
 //Return un double tableau avec la commandes et arg
+
+t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path)
+{
+	if (!cmd_path || exec_in->open_fd == -2)
+	{
+		close(pipe_fd[1]);
+		exec_in->tmp_fd = pipe_fd[0];
+		if (exec_in->open_fd != -2 && !cmd_path)
+			print_error(exec_in->argv[0], 2);
+		return (TRUE);
+	}
+	return (FALSE);
+}
 
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
 	int			pipe_fd[2];
 	int		i;
-
 
 	i = -1;
 	if (pipe(pipe_fd) == -1)
@@ -95,23 +103,16 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	cmd_path = check_cmd(exec_in->argv, env);
 	while (exec_in->argv[++i])
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
-	if (!cmd_path || exec_in->open_fd == -2)
-	{
-		close(pipe_fd[1]);
-		exec_in->tmp_fd = pipe_fd[0];
-		if (exec_in->open_fd != -2 && !cmd_path)
-			print_error(exec_in->argv[0], 2);
+	if (command_not_found(pipe_fd, exec_in, cmd_path))
 		return ;
-	}
 	forking(cmd_path, exec_in, env, pipe_fd);
 	close(pipe_fd[1]);
-	//if (exec_in->tmp_fd != -1)
-	//	close(exec_in->tmp_fd);
 	exec_in->tmp_fd = pipe_fd[0];
 	if (exec_in->open_fd != -1)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd != -1)
 		close(exec_in->out_fd);
+	free(cmd_path);
 	exec_in->turn++;
 }
 

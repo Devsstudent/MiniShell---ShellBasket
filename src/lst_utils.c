@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 22:43:26 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/30 15:13:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -229,7 +229,7 @@ char	**dict_to_double_char_env(t_dict *dict)
 		arr[i] = ft_strjoin(ft_strdup(buff->key), "=");
 		if (!arr[i])
 			free_exit();
-		arr[i] = ft_strjoin(arr[i], ft_strdup(buff->value));
+		arr[i] = ft_strjoin(arr[i], buff->value);
 		if (!arr[i])
 			free_exit();
 		buff = buff->next;

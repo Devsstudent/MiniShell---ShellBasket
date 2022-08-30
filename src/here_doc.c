@@ -39,6 +39,8 @@ int	total_block(t_leaf *leaf)
 
 void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn)
 {
+	if (!leaf)
+		return ;
 	if (leaf->type == PIPE_L)
 	{
 		check_here_doc(leaf->left->content, turn, fd_arr);

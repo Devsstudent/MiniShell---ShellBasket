@@ -6,44 +6,48 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/29 18:44:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:13:07 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
+static void	check_quote(t_bool *d_quote, t_bool *quote, char word)
+{
+	
+	if (word == '\"' && !(*d_quote))
+		*d_quote = TRUE;
+	else if (word == '\"' && *d_quote)
+		*d_quote = FALSE;
+	if (word == '\'' && !(*quote))
+		*quote = TRUE;
+	else if (word == '\'' && *quote)
+		*quote = FALSE;
+}
+
 static t_bool	check_ambiguous_bis(t_block *buff)
 {
-	int	i;
+	int		i;
 	t_bool	quote;
 	t_bool	d_quote;
 	char	*word;
 
 	word = buff->word;
-	i = 0;
+	i = -1;
 	quote = FALSE;
 	d_quote = FALSE;
-	if (!word[i])
+	if (!word[0])
 	{
 		write(2, "ambiguous redirect :)", 21);
 		return (TRUE);
 	}
-	while (word[i])
+	while (word[++i])
 	{
-		ft_putchar_fd(word[i], 2);
-		if (word[i] == '\"' && !d_quote)
-			d_quote = TRUE;
-		else if (word[i] == '\"' && d_quote)
-			d_quote = FALSE;
-		if (word[i] == '\'' && !quote)
-			quote = TRUE;
-		else if (word[i] == '\'' && quote)
-			quote = FALSE;
+		check_quote(&d_quote, &quote, word[i]);
 		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && !quote && !d_quote)
 		{
 			write(2, "ambiguous redirect :)", 21);
 			return (TRUE);
 		}
-		i++;
 	}
 	return (FALSE);
 }
@@ -54,25 +58,16 @@ static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool c
 	t_bool	quote;
 	t_bool	d_quote;
 
-	i = 0;
-	if (crash)
+	quote = FALSE;
+	d_quote = FALSE;
+	if ((i = -1) && crash)
 	{
 		exec_in->open_fd = -2;
 		return (TRUE);
 	}
-	quote = FALSE;
-	d_quote = FALSE;
-	while (word[i])
+	while (word[++i])
 	{
-		ft_putchar_fd(word[i], 2);
-		if (word[i] == '\"' && !d_quote)
-			d_quote = TRUE;
-		else if (word[i] == '\"' && d_quote)
-			d_quote = FALSE;
-		if (word[i] == '\'' && !quote)
-			quote = TRUE;
-		else if (word[i] == '\'' && quote)
-			quote = FALSE;
+		check_quote(&d_quote, &quote, word[i]);
 		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && !quote && !d_quote)
 		{
 			if (type)
@@ -82,7 +77,6 @@ static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool c
 			write(2, "ambiguous redirect :)", 21);
 			return (TRUE);
 		}
-		i++;
 	}
 	return (FALSE);
 }

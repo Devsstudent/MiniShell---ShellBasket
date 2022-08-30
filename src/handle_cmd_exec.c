@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/29 19:10:41 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/30 15:40:14 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,7 +24,6 @@ size_t	get_nb_cmd_arg(t_line *sub)
 			get_size_word_in_word(buff->word, &size);
 		buff = buff->next;
 	}
-	//ft_printf(0, "%i", (int) size);
 	return (size);
 }
 
@@ -47,7 +46,8 @@ void	get_size_word_in_word(char *word, size_t *size)
 			quote = TRUE;
 		else if (word[i] == '\'' && quote)
 			quote = FALSE;
-		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && word[i + 1] && word[i + 1] != ' ' && !quote && !d_quote)
+		if (i > 0 && word[i - 1] != ' ' && word[i] == ' '
+				&& word[i + 1] && word[i + 1] != ' ' && !quote && !d_quote)
 			(*size)++;
 		i++;
 	}
@@ -74,6 +74,28 @@ char	**get_cmd_arg(t_line *sub)
 	return (argv);
 }
 
+t_bool	check_quote(t_bool *d_quote, t_bool *quote, char word)
+{
+	if (word == '\"' && !(*d_quote))
+		*d_quote = TRUE;
+	else if (word == '\"' && *d_quote)
+		*d_quote = FALSE;
+	if (word == '\'' && !(*quote))
+		*quote = TRUE;
+	else if (word == '\'' && *quote)
+		*quote = FALSE;
+	return (TRUE);
+}
+
+void	init_loop_get_arg(int *j, int *last, t_bool *quote, t_bool *d_quote)
+{
+	*j = 0;
+	*last = 0;
+	*quote = FALSE;
+	*d_quote = FALSE;
+}
+
+
 void	loop_get_arg(char *word, char **argv, int *i)
 {
 	int	j;
@@ -81,91 +103,89 @@ void	loop_get_arg(char *word, char **argv, int *i)
 	t_bool	quote;
 	t_bool	d_quote;
 
-	j = 0;
-	last = 0;
-	quote = FALSE;
-	d_quote = FALSE;
+	init_loop_get_arg(&j, &last, &quote, &d_quote);
 	while (word[j])
 	{
 		if (word[j] == ' ' && j > 0 && word[j - 1] != ' ' && !d_quote && !quote)
 		{
 			argv[*i] = ft_substr(word, last, (j - last));
-			ft_putstr_fd(argv[*i], 2);
 			(*i)++;
 			if (word[j + 1])
 				last = j + 1;
 		}
 		while (word[j] && word[j] == ' ')
 			j++;
-		if (!word[j])
+		if (!word[j] && check_quote(&d_quote, &quote, word[j]))
 			break ;
-		if (word[j] == '\"' && !d_quote)
-			d_quote = TRUE;
-		else if (word[j] == '\"' && d_quote)
-			d_quote = FALSE;
-		if (word[j] == '\'' && !quote)
-			quote = TRUE;
-		else if (word[j] == '\'' && quote)
-			quote = FALSE;
-		if (word[j])
+		else
 			j++;
 	}
 	if (j != last)
+		argv[((*i)++)] = ft_substr(word, last, (j - last));
+}
+
+t_bool	check_abs_path(char *cmd, char **res)
+{
+	struct stat	statbuff;
+
+	if (!(*res))
 	{
-		argv[*i] = ft_substr(word, last, (j - last));
-		(*i)++;
+		if (access(cmd, X_OK) == 0)
+		{
+			if (stat(cmd, &statbuff) == -1)
+			{
+				perror("stat");
+				return (FALSE);
+			}
+			if ((statbuff.st_mode & S_IFMT) != S_IFREG)
+				return (FALSE);
+			*res = ft_strdup(cmd);
+			if (!(*res))
+				free_exit();
+		}
+		else
+			return (FALSE);
+	}
+	return (TRUE);
+}
+
+void	check_cmd_path(char **res, char ***path_li, char **argv, t_dict *env)
+{
+	int		i;
+	char	*buff;
+
+	i = 0;
+	*path_li = ft_split(dict_get_value(env, "PATH"), ':');
+	while (*path_li && (*path_li)[i])
+	{
+		buff = ft_strjoin(ft_strdup((*path_li)[i]), "/");
+		buff = ft_strjoin(buff, argv[0]);
+		if (access(buff, X_OK) == 0)
+		{
+			*res = buff;
+			break;
+		}
+		free(buff);
+		i++;
 	}
 }
 
 char	*check_cmd(char **argv, t_dict *env)
 {
 	char	**path_li;
-	int		i;
+	int		j;
 	char	*res;
-	char	*buff;
-	struct stat	statbuff;
 
 	if (!argv[0])
 		return (NULL);
 	if (check_builtins(argv))
-		return (argv[0]);
-	i = 0;
+		return (ft_strdup(argv[0]));
 	res = NULL;
-	path_li = ft_split(dict_get_value(env, "PATH"), ':');
-	while (path_li && path_li[i])
-	{
-		buff = ft_strjoin(ft_strdup(path_li[i]), "/");
-		buff = ft_strjoin(buff, argv[0]);
-		if (access(buff, X_OK) == 0)
-		{
-			res = buff;
-			add_to_gc(SIMPLE, res, get_gc());
-			break;
-		}
-		free(buff);
-		i++;
-	}
-	if (!res)
-	{
-		if (access(argv[0], X_OK) == 0)
-		{
-			if (stat(argv[0], &statbuff) == -1)
-			{
-				perror("stat");
-				return (NULL);
-			}
-			if ((statbuff.st_mode & S_IFMT) != S_IFREG)
-				return (NULL);
-			res = ft_strdup(argv[0]);
-			if (!res)
-				free_exit();
-		}
-		else
-			return (NULL);
-	}
+	check_cmd_path(&res, &path_li, argv, env);
+	if (!check_abs_path(argv[0], &res))
+		return (NULL);
 	if (path_li)
 	{
-		int	j;
 		j = 0;
 		while (path_li && path_li[j])
 		{
