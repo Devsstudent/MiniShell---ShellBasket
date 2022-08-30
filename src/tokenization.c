@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 18:37:13 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/30 17:54:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -25,7 +25,7 @@ t_bool	tokenization(t_line *line)
 	while (buff != NULL)
 	{
 		attribute_token(buff);
-		//ft_printf(0, "%i\n", buff->token);
+		//printf("%i\n", buff->token);
 		if (!check_symbol(buff))
 		{
 			if (buff->next)

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 18:31:59 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:34:38 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -178,7 +178,7 @@ t_line	*fill_line_lst(char *line)
 	if (!block_lst)
 		free_exit();
 	if (!check_lines_quotes(line))
-		return (print_syntax_error(NULL, 1), NULL);
+		return (free(block_lst), print_syntax_error(NULL, 1), NULL);
 	block_lst->head = NULL;
 	handle_line(line, block_lst);
 	return (block_lst);

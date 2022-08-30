@@ -95,6 +95,8 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 	char	*num;
 	char	*name;
 	//A revoir pck faut aussi geree les quotes au milieux du mot mdrr
+
+	g_exit_status = -800;
 	new_delim = ft_strjoin(ft_strdup(delim), "\n");
 	add_to_gc(SIMPLE, new_delim, get_gc());
 	write(1, "> ", 2);
