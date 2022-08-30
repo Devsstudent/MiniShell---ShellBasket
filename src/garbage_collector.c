@@ -45,7 +45,7 @@ void	gc_free_node(t_gc *node)
 		dict_clear(node->content);
 	else if (node->type == LINE)
 		line_clear(node->content);
-	else if (node->type == TREE)
+	else if (node->type == TREE && node->content != NULL)
 	{
 		if (((t_tree *)(node->content))->head)
 			clean_tree(((t_tree *)(node->content))->head);
