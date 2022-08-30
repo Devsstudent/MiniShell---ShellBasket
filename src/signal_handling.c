@@ -6,13 +6,24 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:02:58 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/08 19:28:53 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/30 17:33:51 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
+/*
+ * we set g_exit_status to -800 to indicate that we are in a here_doc
+ * if we are in a heredoc, the function sigint_handler shouldn't be called twice
+ * so we ignore one call
+*/
+
 void	sigint_handler(int signum)
 {
+	if (g_exit_status == -800)
+	{
+		g_exit_status = 0;
+		return ;
+	}
 	if (signum == SIGINT)
 	{
 		write(0, "\n", 1);
