@@ -115,6 +115,7 @@ t_info	*init_exec_info(void)
 	t_info	*exec_info;
 
 	exec_info = (t_info *) malloc(sizeof(t_info));
+	//sometimes exec_info isn't freed
 	//Free exec_info
 	exec_info->argv = NULL;
 	exec_info->fd_arr = NULL;
@@ -167,6 +168,7 @@ int	main(int ac, char **av, char **envp)
 void	wait_sub_process(t_info *exec_info)
 {
 	int	i;
+	int	w_status;
 
 	i = 0;
 	if (exec_info->tmp_fd != -1)
@@ -178,9 +180,11 @@ void	wait_sub_process(t_info *exec_info)
 		perror("basket");
 	if (exec_info->stdou != -1)
 		close(exec_info->stdou);
-	while (i < exec_info->turn)
+	while (i < exec_info->turn - 1)
 	{
-		waitpid(exec_info->pid[i], &g_exit_status, 0);
+		waitpid(exec_info->pid[i], &w_status, 0);
+		if (WIFSIGNALED(w_status))
+			g_exit_status = 130;
 		i++;
 	}
 }

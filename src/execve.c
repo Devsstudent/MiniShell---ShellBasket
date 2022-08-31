@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/30 15:24:56 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/31 16:30:53 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -98,6 +98,7 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork)
 	int		i;
 
 	env_bis = dict_to_double_char_env(env);
+
 	if (!exec_builtin(argv, env, fork))
 	{
 		i = 0;

@@ -94,7 +94,7 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 	char	*num;
 	char	*name;
 
-	g_exit_status = -800;
+	errno = 140;
 	new_delim = ft_strjoin(ft_strdup(delim), "\n");
 	add_to_gc(SIMPLE, new_delim, get_gc());
 	write(1, "> ", 2);
