@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/30 16:34:38 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/08/31 20:07:11 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -38,7 +38,7 @@ static t_bool	check_lines_quotes(char *line)
 	return (TRUE);
 }
 
-static t_bool	not_in_quote(char *line, int i)
+t_bool	not_in_quote(char *line, int i)
 {
 	static t_quote	quote;
 
@@ -55,67 +55,7 @@ static t_bool	not_in_quote(char *line, int i)
 	return (FALSE);
 }
 
-void	fill_word(int *size, t_line *lst, char *line, int i)
-{
-	char	*word;
-	t_block	*buff;
-	int		j;
 
-	j = *size - 1;
-	if (*size == 0)
-		return ;
-	word = malloc(sizeof(*word) * (*size + 1));
-	if (!word)
-		free_exit();
-	while (j >= 0)
-		word[j--] = line[i--];
-	word[*size] = '\0';
-	buff = new_block(word);
-	line_lst_addback(lst, buff);
-	*size = 0;
-}
-
-void	handle_pipe(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i >= 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	(*size) += 1;
-	fill_word(size, lst, line, *i);
-}
-
-void	handle_red_o(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i >= 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	if (line[*i + 1] && line[*i + 1] == '>')
-	{
-		(*i)++;
-		(*size) += 2;
-		fill_word(size, lst, line, *i);
-	}
-	else
-	{
-		(*size) += 1;
-		fill_word(size, lst, line, *i);
-	}
-}
-
-void	handle_red_i(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i >= 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	if (line[*i + 1] && line[*i + 1] == '<')
-	{
-		(*i)++;
-		(*size) += 2;
-		fill_word(size, lst, line, *i);
-	}
-	else
-	{
-		(*size) += 1;
-		fill_word(size, lst, line, *i);
-	}
-}
 //Not possible to have single &
 //Taking care ()
 //Check || && ();
@@ -132,43 +72,12 @@ void	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 		(*size)++;
 }
 
-static void	handle_space(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i > 0 && (line[*i - 1]))
-		fill_word(size, lst, line, *i - 1);
-	*size = 0;
-}
-
 void	analyse_word(char *line, int *i, int *size_word, t_line *lst)
 {
 	if (line[*i] == ' ')
 		handle_space(line, i, size_word, lst);
 	else
 		analyse_symbol(line, i, size_word, lst);
-}
-
-void	handle_line(char *line, t_line *lst)
-{
-	int		i;
-	int		size_word;
-	t_bool	not_quote;
-
-	i = 0;
-	size_word = 0;
-	while (line[i] != 0)
-	{
-		not_quote = not_in_quote(line, i);
-		if (!not_quote)
-			size_word++;
-		if (not_quote && (line[i] == '\'' || line[i] == '\"')
-			&& size_word++ && i++)
-			continue ;
-		if (not_quote && line[i] != 0)
-			analyse_word(line, &i, &size_word, lst);
-		if (line[i] != 0)
-			i++;
-	}
-	fill_word(&size_word, lst, line, i - 1);
 }
 
 t_line	*fill_line_lst(char *line)

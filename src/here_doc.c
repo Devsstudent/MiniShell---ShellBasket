@@ -1,22 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/31 20:04:23 by odessein          #+#    #+#             */
+/*   Updated: 2022/08/31 21:23:45 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
-
-//Cree un tmp file pour chaque block qui contient des here_doc
-
-//Malloc un tableau de fd pour chaque line avec le nombre de sub_line
-
-//Si plusieurs heredoc on ecrit dans le premier puis le deuxieme etc
-
-//TRUNC pas APPEND dcp
-
-//ReChecker le content du fd pour expand les value si on doit expand 
-
-//Le fd du file sera le fd du infile dans les redirections
-
-//Ensuite on close tous les tmp file dans la free_each_turn
-
-//a Checker
-void	check_here_doc(t_line *sub, int turn, int *fd_arr);
-void	create_tmp(int *fd_arr, int turn); void	fill_here_doc(char *delim, int turn, int *fd_arr);
 
 int	total_block(t_leaf *leaf)
 {
@@ -40,6 +33,8 @@ void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn)
 {
 	if (!leaf)
 		return ;
+	if (g_exit_status == 140)
+		return ;
 	if (leaf->type == PIPE_L)
 	{
 		check_here_doc(leaf->left->content, turn, fd_arr);
@@ -58,6 +53,8 @@ void	check_here_doc(t_line *sub, int turn, int *fd_arr)
 	buff = sub->head;
 	while (buff)
 	{
+		if (g_exit_status == 140)
+			return ;
 		if (buff->token == HERE_DOC)
 		{
 			create_tmp(fd_arr, turn);
@@ -146,7 +143,6 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 	}
 	if (!line)
 		write(2, "warning: here-document at some line delimited by end-of-file\n", 61);
-	g_exit_status = 0;
 	free(line);
 	close(fd_arr[turn]);
 	num = ft_itoa(turn);

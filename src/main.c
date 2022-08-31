@@ -1,12 +1,15 @@
-/* ************************************************************************** */ /*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/20 12:49:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/22 16:49:02 by odessein         ###   ########.fr       */
-/*                                                                            */ /* ************************************************************************** */
+/*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
+/*   Updated: 2022/08/31 21:25:51 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_bool	ms_line(char **line)
@@ -14,14 +17,16 @@ t_bool	ms_line(char **line)
 	listen_to_sigs();
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
+	{
+		write(2, "exit\n", 5);
 		free_exit();
+	}
 	if (*line &&  !(*line[0]))
 		return (TRUE);
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
 	return (FALSE);
 }
-
 
 t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 {
@@ -156,6 +161,12 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		}
 		parse_here_doc(tree->head, exec_info->fd_arr, 0);
+		if (g_exit_status == 140)
+		{
+			g_exit_status = 130;
+			free_each_turn(get_gc(), exec_info);
+			continue ;
+		}
 		malloc_pid_arr(exec_info, tree);
 		browse_line_check_red_in(tree->head, env);
 		exec_tree(tree->head, exec_info, env, tree);

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/31 19:52:19 by odessein          #+#    #+#             */
+/*   Updated: 2022/08/31 19:52:22 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 
 char	*get_exit_status(void)
@@ -29,4 +40,10 @@ void	print_error(char *ope, int type)
 		write(2, "shellbasket: command not found\n", 31);
 		g_exit_status = 127;
 	}
+}
+
+t_bool	perror_false(char *str)
+{
+	perror(str);
+	return (FALSE);
 }
