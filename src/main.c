@@ -180,7 +180,9 @@ void	wait_sub_process(t_info *exec_info)
 		perror("basket");
 	if (exec_info->stdou != -1)
 		close(exec_info->stdou);
-	while (i < exec_info->turn - 1)
+	if (check_builtins(exec_info->argv) && exec_info->turn == 1)
+		i++;
+	while (i < exec_info->turn)
 	{
 		waitpid(exec_info->pid[i], &w_status, 0);
 		if (WIFSIGNALED(w_status))

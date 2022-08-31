@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/30 13:13:07 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/31 17:15:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -104,6 +104,8 @@ void	check_redirection(t_info *exec, t_line *sub)
 			if (!check_ambiguous(buff->next->word, exec, FALSE,
 					buff->next->crash))
 				check_red_in(buff->next, exec);
+			else
+				return ;
 		}
 		else if (buff->token == RED_OUT_TRUNC || buff->token == RED_OUT_APPEND)
 		{
@@ -120,8 +122,7 @@ void	check_red_in(t_block *files, t_info *exec)
 {
 	int	f_open;
 
-	if (exec->open_fd != -1)
-		close(exec->open_fd);
+	if (exec->open_fd != -1) close(exec->open_fd);
 	exec->open_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
 		print_error(NULL, 1);

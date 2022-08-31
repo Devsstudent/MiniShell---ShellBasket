@@ -16,8 +16,7 @@
 
 //a Checker
 void	check_here_doc(t_line *sub, int turn, int *fd_arr);
-void	create_tmp(int *fd_arr, int turn);
-void	fill_here_doc(char *delim, int turn, int *fd_arr);
+void	create_tmp(int *fd_arr, int turn); void	fill_here_doc(char *delim, int turn, int *fd_arr);
 
 int	total_block(t_leaf *leaf)
 {
@@ -84,6 +83,44 @@ void	create_tmp(int *fd_arr, int turn)
 		return ;
 	}
 }
+
+char	*get_delim(char *delim)
+{
+	int	i;
+	int	size;
+	int	j;
+	char	*new_delim;
+
+	i = 0;
+	size = 0;
+	while (delim[i])
+	{
+		if (delim[i] == '\"' || delim[i] == '\'')
+			delim[i] = 21;
+		i++;
+	}
+	i = 0;
+	while (delim[i])
+	{
+		if (delim[i] != 21)
+			size++;
+		i++;
+	}
+	new_delim = malloc(sizeof(*new_delim) * size + 1);
+	j = 0;
+	i = 0;
+	while (delim[i])
+	{
+		if (delim[i] != 21)
+		{
+			new_delim[j] = delim[i];
+			j++;
+		}
+		i++;
+	}
+	new_delim[j] = 0;
+	return (new_delim);
+}
 //freeexit si open crash maybe
 
 //A revoir pck faut aussi geree les quotes au milieux du mot mdrr
@@ -95,7 +132,7 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 	char	*name;
 
 	errno = 140;
-	new_delim = ft_strjoin(ft_strdup(delim), "\n");
+	new_delim = get_delim(delim);
 	add_to_gc(SIMPLE, new_delim, get_gc());
 	write(1, "> ", 2);
 	line = get_next_line(0);
