@@ -45,5 +45,6 @@ void	print_error(char *ope, int type)
 t_bool	perror_false(char *str)
 {
 	perror(str);
+	g_exit_status = errno;
 	return (FALSE);
 }

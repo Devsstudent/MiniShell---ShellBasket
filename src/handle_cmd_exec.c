@@ -52,7 +52,7 @@ void	loop_get_arg(char *word, char **argv, int *i)
 		argv[((*i)++)] = ft_substr(word, last, (j - last));
 }
 
-t_bool	check_abs_path(char *cmd, char **res)
+static t_bool	check_abs_path(char *cmd, char **res)
 {
 	struct stat	statbuff;
 
@@ -77,7 +77,7 @@ t_bool	check_abs_path(char *cmd, char **res)
 	return (TRUE);
 }
 
-void	check_cmd_path(char **res, char ***path_li, char **argv, t_dict *env)
+static void	check_cmd_path(char **res, char ***path_li, char **argv, t_dict *env)
 {
 	int		i;
 	char	*buff;

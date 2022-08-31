@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	free_double_arr(t_gc *node)
+static void	free_double_arr(t_gc *node)
 {
 	size_t	i;
 
