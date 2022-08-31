@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-size_t		size_till_next_char(char *word, char c, size_t *i)
+size_t	size_till_next_char(char *word, char c, size_t *i)
 {
 	size_t	size;
 
@@ -21,7 +21,7 @@ size_t		size_till_next_char(char *word, char c, size_t *i)
 		(*i)++;
 		size++;
 	}
-	if ((size_t) ((*i) + 1) < ft_strlen(word))
+	if ((size_t)((*i) + 1) < ft_strlen(word))
 		(*i)++;
 	return (size);
 }
@@ -66,7 +66,7 @@ void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j)
 		(*j)++;
 		(*i)++;
 	}
-	if ((size_t) (*i) + 1 < ft_strlen(word))
+	if ((size_t)(*i) + 1 < ft_strlen(word))
 		(*i)++;
 }
 
@@ -102,14 +102,12 @@ void	str_quote_parse(char *word, char *new_word)
 void	remove_useless_quote(t_block *block)
 {
 	char	*new_word;
-	size_t		size;
+	size_t	size;
 
 	size = size_new_word_quote(block->word);
 	new_word = malloc(sizeof(*new_word) * size + 1);
 	if (!new_word)
 		free_exit();
 	str_quote_parse(block->word, new_word);
-//	add_to_gc(SIMPLE, block->word, get_gc());
 	block->word = new_word;
 }
-

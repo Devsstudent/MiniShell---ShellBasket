@@ -66,7 +66,7 @@ static long long	ft_atoll(char *arg)
 		i++;
 	}
 	if (arg[0] == '-')
-		return ((long long)((long long)(num) * -1));
+		return ((long long)(((long long)(num)) * -1));
 	else
 		return ((long long)(num));
 }

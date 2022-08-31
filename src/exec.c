@@ -22,7 +22,7 @@
 
 static t_bool	check_cmd_in_sub(t_line *sub)
 {
-	t_block *buff;
+	t_block	*buff;
 
 	if (!sub)
 		return (FALSE);
@@ -35,7 +35,6 @@ static t_bool	check_cmd_in_sub(t_line *sub)
 	}
 	return (FALSE);
 }
-
 
 static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 {
@@ -94,7 +93,8 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 //On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
 //Return un double tableau avec la commandes et arg
 
-t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path, t_line *sub)
+t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
+		t_line *sub)
 {
 	if (!cmd_path || exec_in->open_fd == -2)
 	{
@@ -111,7 +111,7 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
 	int			pipe_fd[2];
-	int		i;
+	int			i;
 
 	i = -1;
 	if (pipe(pipe_fd) == -1)
@@ -132,16 +132,3 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	free(cmd_path);
 	exec_in->turn++;
 }
-
-
-
-//Function qui open le file + gere les "" special + retour open + access
-
-//Same for out trunc
-//Checker toutes les values du path + la commande si aucune ne fonctionne alors on regarder avec access si c'est un abspath
-
-//On exec a chaque tour la boucle si pas de open open set a 0 et out set a 1 si pas de out
-
-//Funtion special execve pour les built-in aussi : )
-
-

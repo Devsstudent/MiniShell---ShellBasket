@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-t_bool check_pipe(t_token next, t_token previous)
+t_bool	check_pipe(t_token next, t_token previous)
 {
 	if (previous == UNDEF)
 		return (FALSE);
@@ -20,13 +20,13 @@ t_bool check_pipe(t_token next, t_token previous)
 	return (TRUE);
 }
 
-t_bool check_symbol(t_block *block)
+//if close parenthese not possible to have not a symbol after (a part EOF)
+t_bool	check_symbol(t_block *block)
 {
 	t_token	next_token;
 	t_token	previous_token;
 	t_token	token;
 
-	//if close parenthese not possible to have not a symbol after (a part EOF)
 	next_token = get_next_token(block->next);
 	previous_token = get_previous_token(block->prev);
 	token = block->token;
@@ -34,7 +34,7 @@ t_bool check_symbol(t_block *block)
 		return (check_pipe(next_token, previous_token));
 	else if (token == HERE_DOC)
 		return (next_token == DELIMITER);
-	else if (token == RED_IN || token == RED_OUT_APPEND 
+	else if (token == RED_IN || token == RED_OUT_APPEND
 		|| token == RED_OUT_TRUNC)
 		return (next_token == FILES);
 	return (TRUE);

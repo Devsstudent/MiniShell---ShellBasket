@@ -25,7 +25,6 @@ t_bool	tokenization(t_line *line)
 	while (buff != NULL)
 	{
 		attribute_token(buff);
-		//printf("%i\n", buff->token);
 		if (!check_symbol(buff))
 		{
 			if (buff->next)

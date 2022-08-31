@@ -13,7 +13,6 @@
 
 static void	check_quote(t_bool *d_quote, t_bool *quote, char word)
 {
-	
 	if (word == '\"' && !(*d_quote))
 		*d_quote = TRUE;
 	else if (word == '\"' && *d_quote)
@@ -57,23 +56,25 @@ void	ambiguous_case(t_bool type, t_info *exec_in)
 	if (type)
 		exec_in->out_fd = -2;
 	if (!type)
- 		exec_in->open_fd = -2;
+		exec_in->open_fd = -2;
 	write(2, "ambiguous redirect :)", 21);
 }
 
-static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type, t_bool crash)
+static t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type,
+			t_bool crash)
 {
-	int	i;
+	int		i;
 	t_bool	quote;
 	t_bool	d_quote;
 
 	quote = FALSE;
 	d_quote = FALSE;
-	if ((i = -1) && crash)
+	if (crash)
 	{
 		exec_in->open_fd = -2;
 		return (TRUE);
 	}
+	i = -1;
 	while (word[++i])
 	{
 		check_quote(&d_quote, &quote, word[i]);
@@ -100,7 +101,8 @@ void	check_redirection(t_info *exec, t_line *sub)
 	{
 		if (buff->token == RED_IN)
 		{
-			if (!check_ambiguous(buff->next->word, exec, FALSE, buff->next->crash))
+			if (!check_ambiguous(buff->next->word, exec, FALSE,
+					buff->next->crash))
 				check_red_in(buff->next, exec);
 		}
 		else if (buff->token == RED_OUT_TRUNC || buff->token == RED_OUT_APPEND)
@@ -114,28 +116,6 @@ void	check_redirection(t_info *exec, t_line *sub)
 	}
 }
 
-/*
-void	expand_here_doc_content(t_info *exec)
-{
-	char	buffer;
-
-	buffer = 1;
-	while (buffer)
-	{
-		//Comment on fait la ?
-		if (buffer == '$')
-		{
-			//Maybe we can open another tmp file copy all content, and copy the corntent into the first one with the expand done xD
-			//Join tous les char apres qui ne sont pas des separateurs
-			//ensuite on expand
-			//mais ensuite rajouter le content au fd c'est chaud
-			//
-		}
-		read(exec->fd_arr[exec->turn], buffer, 1);
-	}
-}
-*/
-
 void	check_red_in(t_block *files, t_info *exec)
 {
 	int	f_open;
@@ -143,16 +123,14 @@ void	check_red_in(t_block *files, t_info *exec)
 	if (exec->open_fd != -1)
 		close(exec->open_fd);
 	exec->open_fd = -1;
-	//Va falloir revoir a fond l'expand xd ca reste la meme idee mais bon pck dans l'ideal pour l'error on a besoin de la value avant l'expand (a voir apres)
 	if (ft_strncmp(files->word, "", 2) == 0)
 		print_error(NULL, 1);
-	else if (ft_strncmp(files->word, "\"\"", 3) == 0 || ft_strncmp(files->word, "\'\'", 3) == 0)
+	else if (ft_strncmp(files->word, "\"\"", 3) == 0
+		|| ft_strncmp(files->word, "\'\'", 3) == 0)
 	{
 		files->word[0] = ' ';
 		ft_bzero(files->word + 1, ft_strlen(files->word) - 1);
 	}
-	//soit on check avec access
-//->	//soit on check juste le retour de open
 	if (!files->crash)
 	{
 		f_open = open(files->word, O_RDONLY);
@@ -173,8 +151,9 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		close(exec->out_fd);
 	exec->out_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
-		return print_error(NULL, 1);
-	else if (ft_strncmp(files->word, "\"\"", 3) == 0 || ft_strncmp(files->word, "\'\'", 3) == 0)
+		return (print_error(NULL, 1));
+	else if (ft_strncmp(files->word, "\"\"", 3) == 0
+		|| ft_strncmp(files->word, "\'\'", 3) == 0)
 	{
 		write(2, " :", 2);
 		ft_bzero(files->word, ft_strlen(files->word));

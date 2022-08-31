@@ -51,6 +51,7 @@ void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn)
 		check_here_doc(leaf->content, turn, fd_arr);
 }
 
+//Ou on check les delimiter et on envoie pas le next au choix
 void	check_here_doc(t_line *sub, int turn, int *fd_arr)
 {
 	t_block	*buff;
@@ -58,7 +59,6 @@ void	check_here_doc(t_line *sub, int turn, int *fd_arr)
 	buff = sub->head;
 	while (buff)
 	{
-		//Ou on check les delimiter et on envoie pas le next au choix
 		if (buff->token == HERE_DOC)
 		{
 			create_tmp(fd_arr, turn);
@@ -68,7 +68,6 @@ void	check_here_doc(t_line *sub, int turn, int *fd_arr)
 	}
 }
 
-
 void	create_tmp(int *fd_arr, int turn)
 {
 	char	*num;
@@ -76,7 +75,6 @@ void	create_tmp(int *fd_arr, int turn)
 
 	num = ft_itoa(turn);
 	name = ft_strjoin(ft_strdup(".tmp_here_doc_"), num);
-	// checker que il soit pas deja present peut etre sinon modifier son nom jsp / 1 2 3 etc en function du block
 	fd_arr[turn] = open(name, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	free(num);
 	free(name);
@@ -84,17 +82,17 @@ void	create_tmp(int *fd_arr, int turn)
 	{
 		perror("open crash");
 		return ;
-		//ou free_exit();
 	}
 }
+//freeexit si open crash maybe
 
+//A revoir pck faut aussi geree les quotes au milieux du mot mdrr
 void	fill_here_doc(char *delim, int turn, int *fd_arr)
 {
 	char	*new_delim;
 	char	*line;
 	char	*num;
 	char	*name;
-	//A revoir pck faut aussi geree les quotes au milieux du mot mdrr
 
 	g_exit_status = -800;
 	new_delim = ft_strjoin(ft_strdup(delim), "\n");
@@ -109,6 +107,9 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 		free(line);
 		line = get_next_line(0);
 	}
+	if (!line)
+		write(2, "warning: here-document at some line delimited by end-of-file\n", 61);
+	g_exit_status = 0;
 	free(line);
 	close(fd_arr[turn]);
 	num = ft_itoa(turn);

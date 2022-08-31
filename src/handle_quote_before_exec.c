@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int		size_till_next_char(char *word, char c, int *i)
+static int	size_till_next_char(char *word, char c, int *i)
 {
 	int	size;
 
@@ -10,7 +10,7 @@ static int		size_till_next_char(char *word, char c, int *i)
 		(*i)++;
 		size++;
 	}
-	if ((size_t) ((*i) + 1) < ft_strlen(word))
+	if ((size_t)((*i) + 1) < ft_strlen(word))
 		(*i)++;
 	return (size);
 }
@@ -39,7 +39,7 @@ static int	size_new_word_quote(char *word)
 			size++;
 			i++;
 		}
-	} //ft_printf("size : %i\n", size);
+	}
 	return (size);
 }
 
@@ -49,13 +49,13 @@ static void	str_cp_till_quote(char *word, char *new_word, int *i, int *j)
 
 	if (*i > 0)
 		c = word[*i - 1];
-	while ((size_t) *i < ft_strlen(word) && word[*i] != c)
+	while ((size_t)(*i) < ft_strlen(word) && word[*i] != c)
 	{
 		new_word[*j] = word[*i];
 		(*j)++;
 		(*i)++;
 	}
-	if ((size_t) (*i) + 1 < ft_strlen(word))
+	if ((size_t)(*i) + 1 < ft_strlen(word))
 		(*i)++;
 }
 
@@ -89,9 +89,11 @@ char	*handle_quote(char *word)
 	char	*new_word;
 	int		size;
 
-	if (word && ft_strlen(word) >= 2 && word[0] == '\"' && word[1] == '\"'&& !word[2])
+	if (word && ft_strlen(word) >= 2 && word[0] == '\"'
+		&& word[1] == '\"' && !word[2])
 		return (word);
-	if (word && ft_strlen(word) >= 2 && word[0] == '\'' && word[1] == '\''&& !word[2])
+	if (word && ft_strlen(word) >= 2 && word[0] == '\''
+		&& word[1] == '\'' && !word[2])
 		return (word);
 	size = size_new_word_quote(word);
 	new_word = malloc(sizeof(*new_word) * size + 1);

@@ -14,6 +14,7 @@
 
 t_gc	**get_gc(void)
 {
-	static t_gc *gc;
+	static t_gc	*gc;
+
 	return (&gc);
 }

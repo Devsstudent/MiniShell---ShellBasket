@@ -119,6 +119,7 @@ void	handle_red_i(char *line, int *i, int *size, t_line *lst)
 //Not possible to have single &
 //Taking care ()
 //Check || && ();
+
 void	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 {
 	if (line[*i] == '|')
@@ -133,7 +134,7 @@ void	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 
 static void	handle_space(char *line, int *i, int *size, t_line *lst)
 {
-	 if (*i > 0 && (line[*i - 1]))
+	if (*i > 0 && (line[*i - 1]))
 		fill_word(size, lst, line, *i - 1);
 	*size = 0;
 }
@@ -142,7 +143,7 @@ void	analyse_word(char *line, int *i, int *size_word, t_line *lst)
 {
 	if (line[*i] == ' ')
 		handle_space(line, i, size_word, lst);
-	else 
+	else
 		analyse_symbol(line, i, size_word, lst);
 }
 

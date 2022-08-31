@@ -13,7 +13,6 @@
 
 t_bool	check_builtins(char **argv)
 {
-	//besoin d'une protection contre NULL
 	if (argv[0] == NULL)
 		return (FALSE);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
@@ -85,7 +84,7 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 		exec_export(ac, argv, env);
 	else if (ft_strncmp(argv[0], "cd", 5) == 0)
 		exec_cd(ac, argv, env);
-	else 
+	else
 		return (FALSE);
 	if (fork)
 		exit(1);
@@ -96,11 +95,11 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork)
 {
 	char	**env_bis;
+	int		i;
 
 	env_bis = dict_to_double_char_env(env);
 	if (!exec_builtin(argv, env, fork))
 	{
-		int	i;
 		i = 0;
 		while (argv[i])
 			i++;

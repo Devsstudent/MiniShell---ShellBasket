@@ -68,7 +68,7 @@ void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst)
 {
 	t_block	*new;
 	char	*cpy;
-	int	i;
+	int		i;
 
 	i = 0;
 	while (*buff && (*buff)->token != PIPE)

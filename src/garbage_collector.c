@@ -23,7 +23,7 @@ t_gc	*gc_new_node(t_type type, void *ptr)
 	new->type = type;
 	new->content = ptr;
 	return (new);
-} 
+}
 
 void	free_double_arr(t_gc *node)
 {
@@ -36,12 +36,10 @@ void	free_double_arr(t_gc *node)
 		i++;
 	}
 	free(node->content);
-	
-	
 }
+
 void	gc_free_node(t_gc *node)
 {
-
 	if (!node)
 		return ;
 	if (node->type == DOUBLE)
@@ -130,7 +128,7 @@ t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)
 
 void	remove_tmp_file(int file_nb, int *fd_arr)
 {
-	int i;
+	int		i;
 	char	*num;
 	char	*name;
 
@@ -152,9 +150,8 @@ t_bool	free_each_turn(t_gc **gc, t_info *exec_in)
 	t_gc	*tmp;
 	t_gc	*head;
 
-//Clean tous sauf l'environnemnt
 	if (!gc)
-		return 1;
+		return (1);
 	head = *gc;
 	while (*gc)
 	{
@@ -172,5 +169,5 @@ t_bool	free_each_turn(t_gc **gc, t_info *exec_in)
 		*gc = head;
 	remove_tmp_file(exec_in->fd_arr_size, exec_in->fd_arr);
 	free(exec_in);
-	return 1;
+	return (1);
 }

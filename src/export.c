@@ -35,7 +35,7 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 		if (append && old_value)
 		{
 			new_value = ft_strjoin(ft_strdup(old_value), value);
-			free(value); //see if alright or not, free or not ?
+			free(value);
 			dict_modify(env, key, new_value);
 		}
 		else

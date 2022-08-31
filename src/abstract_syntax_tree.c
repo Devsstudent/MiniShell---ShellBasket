@@ -13,8 +13,6 @@
 
 //loop on the line without repassing on it (each elem of line_lst);
 
-//read till the next pipe and fill a new "line" or new_struct -> this function could be use for the left and right part of the pipe
-
 //this function should return "line" or new_struct
 
 //Function to create a pipe node

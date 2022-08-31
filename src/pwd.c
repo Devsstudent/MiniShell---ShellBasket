@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
+//Erange 34
 void	exec_pwd(int ac, char **argv, t_dict *env)
 {
 	char	buff[4097];
@@ -23,7 +24,6 @@ void	exec_pwd(int ac, char **argv, t_dict *env)
 	if (pwd_value == NULL)
 	{
 		perror("pwd");
-		//Erange 34
 		g_exit_status = 34;
 		return ;
 	}

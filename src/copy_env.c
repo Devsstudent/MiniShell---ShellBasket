@@ -84,11 +84,10 @@ t_dict	*double_char_to_lst(char **d_char)
 	while (*d_char != 0)
 	{
 		new = new_elem(*d_char);
-		//Free tous les elememt malloc avant ! Si ca crash
 		if (!new)
 			free_exit();
 		dict_addback(env, new);
 		d_char++;
 	}
-	return env;
+	return (env);
 }

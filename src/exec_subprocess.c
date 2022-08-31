@@ -19,7 +19,6 @@ t_bool	perror_false(char *str)
 
 t_bool	dup_cmd_alone(t_info *exec_in, int pipe_fd[2])
 {
-	//Need to return FALSE
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 	{
 		write(2, ft_itoa(exec_in->open_fd), 1);
@@ -49,7 +48,7 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 	exec_in->pid[exec_in->turn] = fork();
 	if (exec_in->pid[exec_in->turn] < 0)
 		return (perror("shellbasket"));
-	else  if (exec_in->pid[exec_in->turn] == 0)
+	else if (exec_in->pid[exec_in->turn] == 0)
 	{
 		if (exec_in->open_fd != -1)
 			close(exec_in->open_fd);
@@ -91,10 +90,9 @@ static t_bool	dup_stdout(t_info *exec_in, int pipe_fd[2])
 	return (TRUE);
 }
 
-
+//Gerer les erreurs et afficher perror return un booleen
 t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2])
 {
-	//Gerer les erreurs et afficher perror return un booleen
 	if (!dup_stdout(exec_in, pipe_fd))
 		return (FALSE);
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)

@@ -12,7 +12,8 @@
 #include "minishell.h"
 
 //without -e, the escape sequences are not interpreted
-//to do that, use write, char by char, not ft_printf, it does it alone, it erases \ alone
+//to do that, use write, char by char, not ft_printf,
+//it does it alone, it erases \ alone
 
 void	display_single_arg(char *arg)
 {
@@ -57,10 +58,3 @@ void	exec_echo(int ac, char **argv, t_dict *env)
 	}
 	g_exit_status = 0;
 }
-
-/* int	main(int ac, char **argv) {
-	exec_echo(ac, argv);
-	return (0);
-}
-*/
-

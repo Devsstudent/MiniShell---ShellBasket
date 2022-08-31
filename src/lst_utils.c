@@ -98,7 +98,7 @@ void	dict_addback(t_dict *dict, t_elem *new)
 void	dict_delone(t_dict *dict, char *key)
 {
 	t_elem	*buff;
-	
+
 	buff = dict->head;
 	while (buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
 		buff = buff->next;

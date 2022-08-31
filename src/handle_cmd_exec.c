@@ -29,7 +29,7 @@ size_t	get_nb_cmd_arg(t_line *sub)
 
 void	get_size_word_in_word(char *word, size_t *size)
 {
-	int	i;
+	int		i;
 	t_bool	quote;
 	t_bool	d_quote;
 
@@ -47,7 +47,7 @@ void	get_size_word_in_word(char *word, size_t *size)
 		else if (word[i] == '\'' && quote)
 			quote = FALSE;
 		if (i > 0 && word[i - 1] != ' ' && word[i] == ' '
-				&& word[i + 1] && word[i + 1] != ' ' && !quote && !d_quote)
+			&& word[i + 1] && word[i + 1] != ' ' && !quote && !d_quote)
 			(*size)++;
 		i++;
 	}
@@ -95,11 +95,10 @@ void	init_loop_get_arg(int *j, int *last, t_bool *quote, t_bool *d_quote)
 	*d_quote = FALSE;
 }
 
-
 void	loop_get_arg(char *word, char **argv, int *i)
 {
-	int	j;
-	int	last;
+	int		j;
+	int		last;
 	t_bool	quote;
 	t_bool	d_quote;
 
@@ -163,7 +162,7 @@ void	check_cmd_path(char **res, char ***path_li, char **argv, t_dict *env)
 		if (access(buff, X_OK) == 0)
 		{
 			*res = buff;
-			break;
+			break ;
 		}
 		free(buff);
 		i++;
