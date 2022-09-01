@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:47:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 15:06:35 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 18:05:27 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -33,6 +33,8 @@ void	remove_tmp_file(int file_nb, int *fd_arr)
 static void	replace_quote(char *delim)
 {
 	int	i;
+
+	i = 0;
 	while (delim[i])
 	{
 		if (delim[i] == '\"' || delim[i] == '\'')
@@ -59,9 +61,9 @@ static int	get_size_delim(char *delim)
 
 char	*get_delim(char *delim)
 {
-	int	i;
-	int	size;
-	int	j;
+	int		i;
+	int		size;
+	int		j;
 	char	*new_delim;
 
 	replace_quote(delim);
@@ -80,4 +82,18 @@ char	*get_delim(char *delim)
 	}
 	new_delim[j] = 0;
 	return (new_delim);
+}
+
+void	close_reopen_here_doc(int turn, int *fd_arr, char *line)
+{
+	char	*num;
+	char	*name;
+
+	free(line);
+	close(fd_arr[turn]);
+	num = ft_itoa(turn);
+	name = ft_strjoin(ft_strdup(".tmp_here_doc_"), num);
+	fd_arr[turn] = open(name, O_RDONLY, 0600);
+	free(num);
+	free(name);
 }

@@ -6,10 +6,11 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:56:57 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 19:57:49 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 18:01:30 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
+
 void	handle_pipe(char *line, int *i, int *size, t_line *lst)
 {
 	if (*i >= 1 && line[*i - 1])

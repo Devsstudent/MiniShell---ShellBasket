@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:08:59 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 20:10:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 18:09:43 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -81,4 +81,3 @@ void	init_loop_get_arg(int *j, int *last, t_bool *quote, t_bool *d_quote)
 	*quote = FALSE;
 	*d_quote = FALSE;
 }
-

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:04:23 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 15:06:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 18:37:00 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -88,8 +88,6 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 {
 	char	*new_delim;
 	char	*line;
-	char	*num;
-	char	*name;
 
 	errno = 140;
 	new_delim = get_delim(delim);
@@ -104,13 +102,7 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 		free(line);
 		line = get_next_line(0);
 	}
-	if (!line)
-		write(2, "warning: here-document at some line delimited by end-of-file\n", 61);
-	free(line);
-	close(fd_arr[turn]);
-	num = ft_itoa(turn);
-	name = ft_strjoin(ft_strdup(".tmp_here_doc_"), num);
-	fd_arr[turn] = open(name, O_RDONLY, 0600);
-	free(num);
-	free(name);
+	if (!line && g_exit_status != 140)
+		write(2, "warning: here-document delimited by end-of-file\n", 48);
+	close_reopen_here_doc(turn, fd_arr, line);
 }

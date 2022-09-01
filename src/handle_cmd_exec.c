@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 17:05:04 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 17:26:49 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -77,7 +77,8 @@ static t_bool	check_abs_path(char *cmd, char **res)
 	return (TRUE);
 }
 
-static void	check_cmd_path(char **res, char ***path_li, char **argv, t_dict *env)
+static void	check_cmd_path(char **res, char ***path_li, char **argv,
+			t_dict *env)
 {
 	int		i;
 	char	*buff;

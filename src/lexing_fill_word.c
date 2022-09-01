@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:06:59 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 20:07:11 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 18:06:29 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -30,4 +30,3 @@ void	fill_word(int *size, t_line *lst, char *line, int i)
 	line_lst_addback(lst, buff);
 	*size = 0;
 }
-

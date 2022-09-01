@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 14:49:21 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/08/24 19:22:33 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/01 17:56:27 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -41,6 +41,20 @@ void	display_args(char **argv)
 	}
 }
 
+t_bool	check_options(char *options)
+{
+	int	i;
+
+	i = 2;
+	while (options[i])
+	{
+		if (options[i] != 'n')
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
 void	exec_echo(int ac, char **argv, t_dict *env)
 {
 	(void)env;
@@ -49,9 +63,9 @@ void	exec_echo(int ac, char **argv, t_dict *env)
 		write(1, "\n", 1);
 		return ;
 	}
-	if (ac > 1 && ft_strncmp(argv[1], "-n", 3) == 0)
+	if (ac > 1 && ft_strncmp(argv[1], "-n", 2) == 0 && check_options(argv[1]))
 		display_args(&argv[2]);
-	else if (ac > 1 && ft_strncmp(argv[1], "-n", 3) != 0)
+	else if (ac > 1)
 	{
 		display_args(&argv[1]);
 		write(1, "\n", 1);

@@ -1,12 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_ambiguous.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/01 18:10:06 by odessein          #+#    #+#             */
+/*   Updated: 2022/09/01 18:10:13 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 
 void	ambiguous_case(t_bool type, t_info *exec_in)
 {
+	char	*msg;
+
+	msg = "shellbasket: ambiguous redirect\n";
 	if (type)
 		exec_in->out_fd = -2;
 	if (!type)
 		exec_in->open_fd = -2;
-	write(2, "ambiguous redirect :)", 21);
+	write(2, msg, ft_strlen(msg));
 }
 
 t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)

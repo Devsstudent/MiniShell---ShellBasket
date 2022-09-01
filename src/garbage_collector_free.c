@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:45:07 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 19:47:26 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 19:27:21 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -108,6 +108,8 @@ t_bool	free_each_turn(t_gc **gc, t_info *exec_in)
 	}
 	if (head)
 		*gc = head;
+	close(exec_in->stdi);
+	close(exec_in->stdou);
 	remove_tmp_file(exec_in->fd_arr_size, exec_in->fd_arr);
 	free(exec_in);
 	return (1);

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_redir.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
+/*   Updated: 2022/09/01 17:26:04 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 
 void	check_red_in(t_block *files, t_info *exec)
@@ -23,8 +34,6 @@ void	check_red_in(t_block *files, t_info *exec)
 	}
 	else
 		exec->open_fd = f_open;
-	if (errno == 13)
-		exec->open_fd = -2;
 }
 
 void	check_red_out(t_block *files, t_info *exec, t_block *red)
@@ -53,8 +62,6 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 	}
 	else
 		exec->out_fd = f_open_out;
-	if (errno == 13)
-		exec->out_fd = -2;
 }
 
 void	check_redirection(t_info *exec, t_line *sub)

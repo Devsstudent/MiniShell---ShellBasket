@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 16:30:53 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/01 18:40:44 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -87,7 +87,7 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 	else
 		return (FALSE);
 	if (fork)
-		exit(1);
+		free_exit();
 	return (TRUE);
 }
 
@@ -98,17 +98,13 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork)
 	int		i;
 
 	env_bis = dict_to_double_char_env(env);
-
 	if (!exec_builtin(argv, env, fork))
 	{
 		i = 0;
 		while (argv[i])
 			i++;
 		if (execve(pathname, argv, env_bis) == -1)
-		{
-			perror(argv[0]);
 			return (FALSE);
-		}
 	}
 	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 20:07:11 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 17:36:01 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -54,7 +54,6 @@ t_bool	not_in_quote(char *line, int i)
 		return (TRUE);
 	return (FALSE);
 }
-
 
 //Not possible to have single &
 //Taking care ()

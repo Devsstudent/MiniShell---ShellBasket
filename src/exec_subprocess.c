@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:15:10 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 19:33:11 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -76,6 +76,8 @@ void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2])
 {
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
+	close(exec_in->stdi);
+	close(exec_in->stdou);
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
