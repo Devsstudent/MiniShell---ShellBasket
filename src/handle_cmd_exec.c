@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 20:10:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 17:05:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -43,7 +43,7 @@ void	loop_get_arg(char *word, char **argv, int *i)
 		}
 		while (word[j] && word[j] == ' ')
 			j++;
-		if (!word[j] && check_quote(&d_quote, &quote, word[j]))
+		if (check_quote(&d_quote, &quote, word[j]) && !word[j])
 			break ;
 		else
 			j++;
