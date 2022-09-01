@@ -52,6 +52,7 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 	t_leaf	*leaf;
 	int		size;
 
+	leaf = NULL;
 	size = 0;
 	if (tree->head)
 		leaf = tree->head;

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
+t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path);
 t_bool	check_builtins(char **argv)
 {
 	if (argv[0] == NULL)
@@ -45,7 +46,12 @@ size_t	get_ac(char **argv)
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 {
 	int	ac;
+	int	pipe_fd[2];
 
+	if (pipe(pipe_fd) == -1)
+		return (perror("pipe in forking cmd alone"));
+	if (!dup_cmd_alone(exec_in, pipe_fd) || !exec_cmd_alone_not_builtin(exec_in, env, cmd_path))
+		return ;
 	ac = get_ac(exec_in->argv);
 	if (ft_strncmp(cmd_path, "exit", 5) == 0)
 		exec_exit(ac, exec_in->argv, 1);
@@ -61,8 +67,34 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 		exec_env(ac, exec_in->argv, env);
 	else if (ft_strncmp(cmd_path, "echo", 5) == 0)
 		exec_echo(ac, exec_in->argv, env);
-	else
-		forking_cmd_alone(cmd_path, exec_in, env);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+}
+
+t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path)
+{
+	if (!check_builtins(exec_in->argv))
+	{
+		exec_in->pid[exec_in->turn] = fork();
+		if (exec_in->pid[exec_in->turn] < 0)
+		{
+			perror("shellbasket");
+			return (FALSE);
+		}
+		else if (exec_in->pid[exec_in->turn] == 0)
+		{
+			if (exec_in->open_fd != -1)
+				close(exec_in->open_fd);
+			if (exec_in->out_fd != -1)
+				close(exec_in->out_fd);
+			if (!execve_test(cmd_path, exec_in->argv, env, 1))
+			{
+				perror(exec_in->argv[0]);
+				free_exit();
+			}
+		}
+	}
+	return  (TRUE);
 }
 
 t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
