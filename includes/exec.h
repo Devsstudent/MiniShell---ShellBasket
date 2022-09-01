@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 20:17:12 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 16:20:27 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -46,8 +46,7 @@ void	check_file_permission(t_block *buff);
 //redir_ambiguous.c
 t_bool	check_ambiguous_bis(t_block *buff);
 void	ambiguous_case(t_bool type, t_info *exec_in);
-t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type,
-			t_bool crash);
+t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type);
 
 //check_redir.c
 void	check_red_out(t_block *files, t_info *exec, t_block *red);

@@ -1,27 +1,5 @@
 #include "minishell.h"
 
-void	check_red_in_sub(t_line *sub_line, t_dict *env)
-{
-	t_block	*buff;
-
-	buff = sub_line->head;
-	while (buff)
-	{
-		if (buff->token == RED_IN)
-		{
-			expand(sub_line, env);
-			if (check_ambiguous_bis(buff->next))
-			{
-				buff->next->crash = TRUE;
-				buff = buff->next;
-				continue ;
-			}
-			check_file_permission(buff);
-		}
-		buff = buff->next;
-	}
-}
-
 void	check_red_in(t_block *files, t_info *exec)
 {
 	int	f_open;
@@ -37,16 +15,16 @@ void	check_red_in(t_block *files, t_info *exec)
 		files->word[0] = ' ';
 		ft_bzero(files->word + 1, ft_strlen(files->word) - 1);
 	}
-	if (!files->crash)
+	f_open = open(files->word, O_RDONLY);
+	if (f_open == -1)
 	{
-		f_open = open(files->word, O_RDONLY);
-		if (f_open == -1)
-			perror(files->word);
-		else
-			exec->open_fd = f_open;
+		exec->open_fd = -2;
+		perror(files->word);
 	}
-	else if (errno == 13)
-		free_exit();
+	else
+		exec->open_fd = f_open;
+	if (errno == 13)
+		exec->open_fd = -2;
 }
 
 void	check_red_out(t_block *files, t_info *exec, t_block *red)
@@ -69,11 +47,14 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 	else
 		f_open_out = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
 	if (f_open_out == -1)
+	{
+		exec->out_fd = -2;
 		perror(files->word);
+	}
 	else
 		exec->out_fd = f_open_out;
 	if (errno == 13)
-		free_exit();
+		exec->out_fd = -2;
 }
 
 void	check_redirection(t_info *exec, t_line *sub)
@@ -90,14 +71,13 @@ void	check_redirection(t_info *exec, t_line *sub)
 	{
 		if (buff->token == RED_IN)
 		{
-			if (!check_ambiguous(buff->next->word, exec, FALSE,
-					buff->next->crash))
+			if (!check_ambiguous(buff->next->word, exec, FALSE))
 				check_red_in(buff->next, exec);
 			else
 				return ;
 		}
 		if (buff->token == RED_OUT_TRUNC || buff->token == RED_OUT_APPEND)
-			if (!check_ambiguous(buff->next->word, exec, TRUE, FALSE))
+			if (!check_ambiguous(buff->next->word, exec, TRUE))
 				check_red_out(buff->next, exec, buff);
 		if (buff->token == HERE_DOC)
 			exec->open_fd = exec->fd_arr[exec->turn];

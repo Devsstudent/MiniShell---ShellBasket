@@ -6,24 +6,10 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 17:15:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 16:11:48 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-void	browse_line_check_red_in(t_leaf *leaf, t_dict *env)
-{
-	if (!leaf)
-		return ;
-	if (leaf->type == PIPE_L)
-	{
-		check_red_in_sub(leaf->left->content, env);
-		if (leaf->right)
-			browse_line_check_red_in(leaf->right, env);
-	}
-	else if (leaf->type == CMD)
-		check_red_in_sub(leaf->content, env);
-}
 
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word)
 {

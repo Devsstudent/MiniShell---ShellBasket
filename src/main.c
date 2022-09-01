@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 21:25:51 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 16:17:08 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	//ft_printf(0, "(TRUE)type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
@@ -85,24 +84,15 @@ void	browse_sub_tree(t_leaf *leaf)
 		{
 			buff = line->head;
 			while (buff)
-			{
-				//ft_printf(0, "content = %s\n", buff->word);
 				buff = buff->next;
-			}
 		}
 	}
 	if (leaf->left != NULL)
-	{
-		//ft_printf(0, "left\n");
 		browse_sub_tree(leaf->left);
-	}
 	else
 		return ;
 	if (leaf->right != NULL)
-	{
-		//ft_printf(0, "right\n");
 		browse_sub_tree(leaf->right);
-	}
 	else
 		return ;
 }
@@ -168,7 +158,6 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		}
 		malloc_pid_arr(exec_info, tree);
-		browse_line_check_red_in(tree->head, env);
 		exec_tree(tree->head, exec_info, env, tree);
 		wait_sub_process(exec_info);
 		free_each_turn(get_gc(), exec_info);

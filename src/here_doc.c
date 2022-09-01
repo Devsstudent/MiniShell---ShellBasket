@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:04:23 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 21:23:45 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 15:06:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -81,43 +81,6 @@ void	create_tmp(int *fd_arr, int turn)
 	}
 }
 
-char	*get_delim(char *delim)
-{
-	int	i;
-	int	size;
-	int	j;
-	char	*new_delim;
-
-	i = 0;
-	size = 0;
-	while (delim[i])
-	{
-		if (delim[i] == '\"' || delim[i] == '\'')
-			delim[i] = 21;
-		i++;
-	}
-	i = 0;
-	while (delim[i])
-	{
-		if (delim[i] != 21)
-			size++;
-		i++;
-	}
-	new_delim = malloc(sizeof(*new_delim) * size + 1);
-	j = 0;
-	i = 0;
-	while (delim[i])
-	{
-		if (delim[i] != 21)
-		{
-			new_delim[j] = delim[i];
-			j++;
-		}
-		i++;
-	}
-	new_delim[j] = 0;
-	return (new_delim);
-}
 //freeexit si open crash maybe
 
 //A revoir pck faut aussi geree les quotes au milieux du mot mdrr

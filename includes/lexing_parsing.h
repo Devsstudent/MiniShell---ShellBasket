@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:41:30 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 20:05:08 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/01 15:06:07 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LEXING_PARSING_H
@@ -54,6 +54,7 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr);
 int	total_block(t_leaf *leaf);
 //here_doc_utils.c
 void	remove_tmp_file(int file_nb, int *fd_arr);
+char	*get_delim(char *delim);
 
 /********************************************/
 /*              tokenization                */
