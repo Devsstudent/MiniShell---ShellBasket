@@ -39,10 +39,21 @@ char	*check_cmd(char **argv, t_dict *env);
 
 
 //redirection.c
-void	check_redirection(t_info *exec, t_line *sub);
+void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word);
+void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);
+void	check_file_permission(t_block *buff);
+
+//redir_ambiguous.c
+t_bool	check_ambiguous_bis(t_block *buff);
+void	ambiguous_case(t_bool type, t_info *exec_in);
+t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type,
+			t_bool crash);
+
+//check_redir.c
 void	check_red_out(t_block *files, t_info *exec, t_block *red);
 void	check_red_in(t_block *files, t_info *exec);
-void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);
+void	check_redirection(t_info *exec, t_line *sub);
+void	check_red_in_sub(t_line *sub_line, t_dict *env);
 
 //handle_quote_before_exec.c
 char	*handle_quote(char *word);

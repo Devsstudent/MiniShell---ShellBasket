@@ -28,13 +28,13 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 		close_subprocess_fd(exec_in, pipe_fd);
 		if (!execve_test(cmd_path, exec_in->argv, env, 1))
 		{
-			write(2, "YOOBIS", 6);
-			//perror(exec_in->argv[0]);
-			g_exit_status = errno;
+			perror(exec_in->argv[0]);
 			exit(1);
 		}
 	}
-	if (exec_in->tmp_fd != -1) close(exec_in->tmp_fd);
+	g_exit_status = errno;
+	if (exec_in->tmp_fd != -1)
+		close(exec_in->tmp_fd);
 	exec_in->tmp_fd = pipe_fd[0];
 }
 
@@ -63,6 +63,7 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 			exit(1);
 		}
 	}
+	g_exit_status = errno;
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 }

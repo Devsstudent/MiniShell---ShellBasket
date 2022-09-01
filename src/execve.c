@@ -106,9 +106,7 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork)
 			i++;
 		if (execve(pathname, argv, env_bis) == -1)
 		{
-			write(2, "YOOO", 4);
-			//perror(argv[0]);
-			g_exit_status = errno;
+			perror(argv[0]);
 			return (FALSE);
 		}
 	}

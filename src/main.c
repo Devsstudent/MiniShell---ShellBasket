@@ -196,8 +196,9 @@ void	wait_sub_process(t_info *exec_info)
 	while (i < exec_info->turn)
 	{
 		waitpid(exec_info->pid[i], &w_status, 0);
-		g_exit_status = errno;
-		if (WIFSIGNALED(w_status))
+		if (WIFEXITED(w_status))
+			g_exit_status = WEXITSTATUS(w_status);
+		else if (WIFSIGNALED(w_status))
 			g_exit_status = 130;
 		i++;
 	}

@@ -46,6 +46,8 @@ OBJ = $(addprefix obj/, main.o \
 			lexing_fill_word.o \
 			handle_cmd_utils.o \
 			export_utils.o \
+			check_redir.o \
+			redir_ambiguous.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
 			ast_utils.d \
@@ -88,6 +90,8 @@ D_LST = $(addprefix obj/, main.d \
 			lexing_fill_word.d \
 			lexing_handle.d \
 			export_utils.d \
+			check_redir.d \
+			redir_ambiguous.d \
 			handle_cmd_utils.d \
 			null.d)
 NAME = minishell
