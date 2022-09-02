@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 14:49:21 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/01 17:56:27 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/02 16:41:28 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,6 +20,8 @@ void	display_single_arg(char *arg)
 	int	i;
 
 	i = 0;
+	if (ft_strncmp(arg, "''", 3) == 0 || ft_strncmp(arg, "\"\"", 3) == 0)
+		return ;
 	while (arg[i])
 	{
 		write(1, &arg[i], 1);
@@ -55,8 +57,21 @@ t_bool	check_options(char *options)
 	return (TRUE);
 }
 
+void	find_first_arg(char **argv, int *i)
+{
+	*i = 2;
+	while (argv[*i])
+	{
+		if (!(ft_strncmp(argv[*i], "-n", 2) == 0 && check_options(argv[*i])))
+			return ;
+		(*i)++;
+	}
+}
+
 void	exec_echo(int ac, char **argv, t_dict *env)
 {
+	int	i;
+
 	(void)env;
 	if (ac == 1)
 	{
@@ -64,7 +79,10 @@ void	exec_echo(int ac, char **argv, t_dict *env)
 		return ;
 	}
 	if (ac > 1 && ft_strncmp(argv[1], "-n", 2) == 0 && check_options(argv[1]))
-		display_args(&argv[2]);
+	{
+		find_first_arg(argv, &i);
+		display_args(&argv[i]);
+	}
 	else if (ac > 1)
 	{
 		display_args(&argv[1]);
