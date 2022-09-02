@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:41:14 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:23:43 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -43,8 +43,9 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (!cmd_path || exec_in->open_fd == -2)
 	{
+		//the last one should be gone for it to work on commands alone that don't exist
 		if (errno != 13 && exec_in->open_fd != -2 && !cmd_path
-			&& check_cmd_in_sub(sub) && (exec_in->turn++))
+			&& check_cmd_in_sub(sub) /*&& (exec_in->turn++)*/)
 			print_error(exec_in->argv[0], 2);
 		return ;
 	}
