@@ -23,7 +23,7 @@ void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word)
 		*quote = FALSE;
 }
 
-void	check_file_permission(t_block *buff)
+t_bool	check_file_permission(t_block *buff, t_info *exec, int type)
 {
 	struct stat	statbuff;
 
@@ -35,13 +35,22 @@ void	check_file_permission(t_block *buff)
 		{
 			ft_putstr_fd(buff->next->word, 2);
 			ft_putstr_fd(": Not a file\n", 2);
-			buff->next->crash = TRUE;
+			if (type)
+				exec->open_fd = -2;
+			else
+				exec->out_fd = -2;
+			return (FALSE);
 		}
 	}
-	else
+/*	else
 	{
 		ft_putstr_fd(buff->next->word, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		buff->next->crash = TRUE;
-	}
+		if (type)
+			exec->open_fd = -2;
+		else
+			exec->out_fd = -2;
+		return (FALSE);
+	}*/
+	return (TRUE);
 }

@@ -43,7 +43,8 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (!cmd_path || exec_in->open_fd == -2)
 	{
-		if (exec_in->open_fd != -2 && !cmd_path && check_cmd_in_sub(sub))
+		if (errno != 13 && exec_in->open_fd != -2 && !cmd_path
+			&& check_cmd_in_sub(sub) && (exec_in->turn++))
 			print_error(exec_in->argv[0], 2);
 		return ;
 	}
@@ -92,8 +93,11 @@ t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
 	{
 		close(pipe_fd[1]);
 		exec_in->tmp_fd = pipe_fd[0];
-		if (exec_in->open_fd != -2 && !cmd_path && check_cmd_in_sub(sub))
+		ft_putnbr_fd(errno, 2);
+		if (errno != 13 && exec_in->open_fd != -2 && !cmd_path
+			&& check_cmd_in_sub(sub))
 			print_error(exec_in->argv[0], 2);
+		exec_in->turn++;
 		return (TRUE);
 	}
 	return (FALSE);

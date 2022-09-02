@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path);
 t_bool	check_builtins(char **argv)
 {
 	if (argv[0] == NULL)
@@ -50,7 +49,8 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 
 	if (pipe(pipe_fd) == -1)
 		return (perror("pipe in forking cmd alone"));
-	if (!dup_cmd_alone(exec_in, pipe_fd) || !exec_cmd_alone_not_builtin(exec_in, env, cmd_path))
+	if (!dup_cmd_alone(exec_in, pipe_fd)
+		|| !exec_cmd_alone_not_builtin(exec_in, env, cmd_path))
 		return ;
 	ac = get_ac(exec_in->argv);
 	if (ft_strncmp(cmd_path, "exit", 5) == 0)
@@ -94,7 +94,7 @@ t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path)
 			}
 		}
 	}
-	return  (TRUE);
+	return (TRUE);
 }
 
 t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)

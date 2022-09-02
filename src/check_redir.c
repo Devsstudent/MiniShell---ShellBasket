@@ -11,40 +11,42 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	check_red_in(t_block *files, t_info *exec)
+t_bool	check_red_in(t_block *files, t_info *exec)
 {
-	int	f_open;
-
-	if (exec->open_fd != -1)
+	if (exec->open_fd != -1 && exec->open_fd != -2)
 		close(exec->open_fd);
 	exec->open_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
+	{
 		print_error(NULL, 1);
+		return (FALSE);
+	}
 	else if (ft_strncmp(files->word, "\"\"", 3) == 0
 		|| ft_strncmp(files->word, "\'\'", 3) == 0)
 	{
 		files->word[0] = ' ';
 		ft_bzero(files->word + 1, ft_strlen(files->word) - 1);
 	}
-	f_open = open(files->word, O_RDONLY);
-	if (f_open == -1)
+	exec->open_fd = open(files->word, O_RDONLY);
+	if (exec->open_fd == -1)
 	{
-		exec->open_fd = -2;
 		perror(files->word);
+		exec->open_fd = -2;
+		return (FALSE);
 	}
-	else
-		exec->open_fd = f_open;
+	return (TRUE);
 }
 
-void	check_red_out(t_block *files, t_info *exec, t_block *red)
+t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 {
-	int	f_open_out;
-
-	if (exec->out_fd != -1)
+	if (exec->out_fd != -1 || exec->out_fd != -2)
 		close(exec->out_fd);
 	exec->out_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
-		return (print_error(NULL, 1));
+	{
+		print_error(NULL, 1);
+		return (FALSE);
+	}
 	else if (ft_strncmp(files->word, "\"\"", 3) == 0
 		|| ft_strncmp(files->word, "\'\'", 3) == 0)
 	{
@@ -52,16 +54,36 @@ void	check_red_out(t_block *files, t_info *exec, t_block *red)
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (red->token == RED_OUT_TRUNC)
-		f_open_out = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
 	else
-		f_open_out = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
-	if (f_open_out == -1)
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
+	if (exec->out_fd == -1)
 	{
-		exec->out_fd = -2;
 		perror(files->word);
+		exec->out_fd = -2;
+		return (FALSE);
 	}
-	else
-		exec->out_fd = f_open_out;
+	return (TRUE);
+}
+
+static t_bool	check_token_red_in(t_block *buff, t_info *exec)
+{
+	if (!check_file_permission(buff, exec, 1))
+		return (FALSE);
+	else if (!check_ambiguous(buff->next->word, exec, FALSE)
+		&& !check_red_in(buff->next, exec))
+		return (FALSE);
+	return (TRUE);
+}
+
+static t_bool	check_token_red_out(t_block *buff, t_info *exec)
+{
+	if (!check_file_permission(buff, exec, 0))
+		return (FALSE);
+	else if (!check_ambiguous(buff->next->word, exec, TRUE)
+		&& !check_red_out(buff->next, exec, buff))
+		return (FALSE);
+	return (TRUE);
 }
 
 void	check_redirection(t_info *exec, t_line *sub)
@@ -77,15 +99,11 @@ void	check_redirection(t_info *exec, t_line *sub)
 	while (buff)
 	{
 		if (buff->token == RED_IN)
-		{
-			if (!check_ambiguous(buff->next->word, exec, FALSE))
-				check_red_in(buff->next, exec);
-			else
+			if (!check_token_red_in(buff, exec))
 				return ;
-		}
 		if (buff->token == RED_OUT_TRUNC || buff->token == RED_OUT_APPEND)
-			if (!check_ambiguous(buff->next->word, exec, TRUE))
-				check_red_out(buff->next, exec, buff);
+			if (!check_token_red_out(buff, exec))
+				return ;
 		if (buff->token == HERE_DOC)
 			exec->open_fd = exec->fd_arr[exec->turn];
 		buff = buff->next;

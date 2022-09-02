@@ -41,7 +41,7 @@ char	*check_cmd(char **argv, t_dict *env);
 //redirection.c
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word);
 void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);
-void	check_file_permission(t_block *buff);
+t_bool	check_file_permission(t_block *buff, t_info *exec, int type);
 
 //redir_ambiguous.c
 t_bool	check_ambiguous_bis(t_block *buff);
@@ -49,8 +49,8 @@ void	ambiguous_case(t_bool type, t_info *exec_in);
 t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type);
 
 //check_redir.c
-void	check_red_out(t_block *files, t_info *exec, t_block *red);
-void	check_red_in(t_block *files, t_info *exec);
+t_bool	check_red_in(t_block *files, t_info *exec);
+t_bool	check_red_out(t_block *files, t_info *exec, t_block *red);
 void	check_redirection(t_info *exec, t_line *sub);
 void	check_red_in_sub(t_line *sub_line, t_dict *env);
 
@@ -71,6 +71,7 @@ size_t	get_ac(char **argv);
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
 t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork);
 t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_bool fork);
+t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path);
 
 //cd.c
 void	exec_cd(int ac, char **argv, t_dict *env);

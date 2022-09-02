@@ -71,8 +71,12 @@ static t_bool	check_abs_path(char *cmd, char **res)
 			if (!(*res))
 				free_exit();
 		}
-		else
+		else if (errno == 13)
+		{
+			perror(cmd);
+			g_exit_status = 126;
 			return (FALSE);
+		}
 	}
 	return (TRUE);
 }
