@@ -34,6 +34,20 @@ OBJ = $(addprefix obj/, main.o \
 			pwd.o \
 			handle_quote_before_exec.o \
 			here_doc.o \
+			forking.o \
+			expand_check_key.o \
+			expand_utils.o \
+			expand_fill_word_val.o \
+			dict_utils.o \
+			dict_to_double.o \
+			here_doc_utils.o \
+			garbage_collector_free.o \
+			lexing_handle.o \
+			lexing_fill_word.o \
+			handle_cmd_utils.o \
+			export_utils.o \
+			check_redir.o \
+			redir_ambiguous.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
 			ast_utils.d \
@@ -64,7 +78,21 @@ D_LST = $(addprefix obj/, main.d \
 			ft_strdup.d \
 			pwd.d \
 			here_doc.d \
+			forking.d \
 			handle_quote_before_exec.d \
+			expand_check_key.d \
+			expand_utils.d \
+			expand_fill_word_val.d \
+			dict_utils.d \
+			dict_to_double.d \
+			here_doc_utils.d \
+			garbage_collector_free.d \
+			lexing_fill_word.d \
+			lexing_handle.d \
+			export_utils.d \
+			check_redir.d \
+			redir_ambiguous.d \
+			handle_cmd_utils.d \
 			null.d)
 NAME = minishell
 

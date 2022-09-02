@@ -1,12 +1,15 @@
-/* ************************************************************************** */ /*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/20 12:49:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/22 16:49:02 by odessein         ###   ########.fr       */
-/*                                                                            */ /* ************************************************************************** */
+/*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
+/*   Updated: 2022/09/01 18:33:46 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_bool	ms_line(char **line)
@@ -14,14 +17,16 @@ t_bool	ms_line(char **line)
 	listen_to_sigs();
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
+	{
+		write(2, "exit\n", 5);
 		free_exit();
-	if (*line &&  !(*line[0]))
+	}
+	if (*line && !(*line[0]))
 		return (TRUE);
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
 	return (FALSE);
 }
-
 
 t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 {
@@ -45,8 +50,9 @@ t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 {
 	t_leaf	*leaf;
-	int	size;
+	int		size;
 
+	leaf = NULL;
 	size = 0;
 	if (tree->head)
 		leaf = tree->head;
@@ -65,46 +71,36 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 		exec_info->pid = (int *)malloc(sizeof(int) * size);
 	}
 	add_to_gc(SIMPLE, exec_info->pid, get_gc());
-	//ft_printf(0, "HEREE %i\n", size);
 }
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	//ft_printf(0, "(TRUE)type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	t_line	*line;
+	t_block	*buff;
+
 	if (leaf->type == CMD)
 	{
-		t_line *line;
 		line = leaf->content;
-		t_block	*buff;
 		if (line)
 		{
 			buff = line->head;
 			while (buff)
-			{
-				//ft_printf(0, "content = %s\n", buff->word);
 				buff = buff->next;
-			}
 		}
 	}
 	if (leaf->left != NULL)
-	{
-		//ft_printf(0, "left\n");
 		browse_sub_tree(leaf->left);
-	}
 	else
 		return ;
 	if (leaf->right != NULL)
-	{
-		//ft_printf(0, "right\n");
 		browse_sub_tree(leaf->right);
-	}
 	else
 		return ;
 }
 
 void	browse_tree(t_tree *tree)
 {
-	t_leaf  *buff;
+	t_leaf	*buff;
 
 	buff = tree->head;
 	browse_sub_tree(buff);
@@ -115,8 +111,6 @@ t_info	*init_exec_info(void)
 	t_info	*exec_info;
 
 	exec_info = (t_info *) malloc(sizeof(t_info));
-	//sometimes exec_info isn't freed
-	//Free exec_info
 	exec_info->argv = NULL;
 	exec_info->fd_arr = NULL;
 	exec_info->fd_arr_size = 0;
@@ -127,12 +121,19 @@ t_info	*init_exec_info(void)
 	exec_info->stdi = dup(STDIN_FILENO);
 	exec_info->stdou = dup(STDOUT_FILENO);
 	return (exec_info);
-	//penser a closes et a reset a chaque tour
 }
 
 void	wait_sub_process(t_info *exec_info);
 
 int	g_exit_status = 0;
+
+static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
+{
+	malloc_pid_arr(exec_info, tree);
+	exec_tree(tree->head, exec_info, env, tree);
+	wait_sub_process(exec_info);
+	free_each_turn(get_gc(), exec_info);
+}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -141,26 +142,22 @@ int	main(int ac, char **av, char **envp)
 	t_dict	*env;
 	t_info	*exec_info;
 
-	if (av[1])
-		return (1);
 	env = double_char_to_lst(envp);
-	while (ac)
+	while (ac && av[0])
 	{
 		exec_info = init_exec_info();
 		if (ms_line(&line))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		if (tree->head == NULL)
+		if (tree->head == NULL && free_each_turn(get_gc(), exec_info))
+			continue ;
+		parse_here_doc(tree->head, exec_info->fd_arr, 0);
+		if (g_exit_status == 140 && free_each_turn(get_gc(), exec_info))
 		{
-			free_each_turn(get_gc(), exec_info);
+			g_exit_status = 130;
 			continue ;
 		}
-		parse_here_doc(tree->head, exec_info->fd_arr, 0);
-		malloc_pid_arr(exec_info, tree);
-		browse_line_check_red_in(tree->head, env);
-		exec_tree(tree->head, exec_info, env, tree);
-		wait_sub_process(exec_info);
-		free_each_turn(get_gc(), exec_info);
+		main_extension(exec_info, tree, env);
 	}
 	return (1);
 }
@@ -180,42 +177,15 @@ void	wait_sub_process(t_info *exec_info)
 		perror("basket");
 	if (exec_info->stdou != -1)
 		close(exec_info->stdou);
-	while (i < exec_info->turn - 1)
+	if (check_builtins(exec_info->argv) && exec_info->turn == 1)
+		return ;
+	while (i < exec_info->turn)
 	{
 		waitpid(exec_info->pid[i], &w_status, 0);
-		if (WIFSIGNALED(w_status))
+		if (WIFEXITED(w_status))
+			g_exit_status = WEXITSTATUS(w_status);
+		else if (WIFSIGNALED(w_status))
 			g_exit_status = 130;
 		i++;
 	}
 }
-
-
-/*
-int	main(int ac, char **av, char **envp)
-{
-	t_dict	env;
-	t_elem	*buff;
-	t_elem	*new;
-	char	**arg;
-
-	arg = ft_split("COCO=COCO", '=');
-	if (!double_char_to_lst(envp, &env))
-		return (1);
-	printf("here\n");
-	new = new_elem("COCO=PASCOCO");
-	if (!new)
-		return (3);
-	dict_addback(&env, new);
-	dict_modify(&env, arg[0], arg[1]);
-	buff = env.head;
-	while (buff)
-	{
-		printf("%s=%s\n", buff->key, buff->value);
-		buff = buff->next;
-	}
-	free(arg);
-	dict_clear(&env);
-	printf("done\n");
-	return (0);
-}
-*/

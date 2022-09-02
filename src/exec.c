@@ -1,24 +1,15 @@
-/* ************************************************************************* */
-/*                                                                            */ /*                                                        :::      ::::::::   */ /*   exec.c                                             :+:      :+:    :+:   */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/20 14:37:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/24 12:53:18 by odessein         ###   ########.fr       */
+/*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
+/*   Updated: 2022/08/31 18:41:14 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-//Brows le tree
-
-//Geree les lines cmd et arguments + les redirections
-
-//Loop d'exec :
-	//while we have redirection : in -> check les permission / l'existance des fichiers etc pour les erreurs and care if its a "" char
-	//out trunc or append -> check permission + creation if not created  car if it's a "" char
-	//Here_doc Special :)
-	//Exec les commandes / built-in
-	//With forking and piping if necessary
 
 static t_bool	check_cmd_in_sub(t_line *sub)
 {
@@ -52,7 +43,8 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (!cmd_path || exec_in->open_fd == -2)
 	{
-		if (exec_in->open_fd != -2 && !cmd_path && check_cmd_in_sub(sub))
+		if (errno != 13 && exec_in->open_fd != -2 && !cmd_path
+			&& check_cmd_in_sub(sub) && (exec_in->turn++))
 			print_error(exec_in->argv[0], 2);
 		return ;
 	}
@@ -90,7 +82,8 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 	}
 }
 
-//On pourrait aussi define une value dans la struct line des quon ajoute un token CMD on ++ (pour moins reparcourir la liste)
+//On pourrait aussi define une value dans la struct line des quon ajoute un 
+//token CMD on ++ (pour moins reparcourir la liste)
 //Return un double tableau avec la commandes et arg
 
 t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
@@ -100,8 +93,11 @@ t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
 	{
 		close(pipe_fd[1]);
 		exec_in->tmp_fd = pipe_fd[0];
-		if (exec_in->open_fd != -2 && !cmd_path && check_cmd_in_sub(sub))
+		ft_putnbr_fd(errno, 2);
+		if (errno != 13 && exec_in->open_fd != -2 && !cmd_path
+			&& check_cmd_in_sub(sub))
 			print_error(exec_in->argv[0], 2);
+		exec_in->turn++;
 		return (TRUE);
 	}
 	return (FALSE);

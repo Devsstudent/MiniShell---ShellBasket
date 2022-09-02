@@ -1,23 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/31 20:04:23 by odessein          #+#    #+#             */
+/*   Updated: 2022/09/01 18:37:00 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
-
-//Cree un tmp file pour chaque block qui contient des here_doc
-
-//Malloc un tableau de fd pour chaque line avec le nombre de sub_line
-
-//Si plusieurs heredoc on ecrit dans le premier puis le deuxieme etc
-
-//TRUNC pas APPEND dcp
-
-//ReChecker le content du fd pour expand les value si on doit expand 
-
-//Le fd du file sera le fd du infile dans les redirections
-
-//Ensuite on close tous les tmp file dans la free_each_turn
-
-//a Checker
-void	check_here_doc(t_line *sub, int turn, int *fd_arr);
-void	create_tmp(int *fd_arr, int turn);
-void	fill_here_doc(char *delim, int turn, int *fd_arr);
 
 int	total_block(t_leaf *leaf)
 {
@@ -41,6 +33,8 @@ void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn)
 {
 	if (!leaf)
 		return ;
+	if (g_exit_status == 140)
+		return ;
 	if (leaf->type == PIPE_L)
 	{
 		check_here_doc(leaf->left->content, turn, fd_arr);
@@ -59,6 +53,8 @@ void	check_here_doc(t_line *sub, int turn, int *fd_arr)
 	buff = sub->head;
 	while (buff)
 	{
+		if (g_exit_status == 140)
+			return ;
 		if (buff->token == HERE_DOC)
 		{
 			create_tmp(fd_arr, turn);
@@ -84,6 +80,7 @@ void	create_tmp(int *fd_arr, int turn)
 		return ;
 	}
 }
+
 //freeexit si open crash maybe
 
 //A revoir pck faut aussi geree les quotes au milieux du mot mdrr
@@ -91,11 +88,9 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 {
 	char	*new_delim;
 	char	*line;
-	char	*num;
-	char	*name;
 
 	errno = 140;
-	new_delim = ft_strjoin(ft_strdup(delim), "\n");
+	new_delim = get_delim(delim);
 	add_to_gc(SIMPLE, new_delim, get_gc());
 	write(1, "> ", 2);
 	line = get_next_line(0);
@@ -107,14 +102,7 @@ void	fill_here_doc(char *delim, int turn, int *fd_arr)
 		free(line);
 		line = get_next_line(0);
 	}
-	if (!line)
-		write(2, "warning: here-document at some line delimited by end-of-file\n", 61);
-	g_exit_status = 0;
-	free(line);
-	close(fd_arr[turn]);
-	num = ft_itoa(turn);
-	name = ft_strjoin(ft_strdup(".tmp_here_doc_"), num);
-	fd_arr[turn] = open(name, O_RDONLY, 0600);
-	free(num);
-	free(name);
+	if (!line && g_exit_status != 140)
+		write(2, "warning: here-document delimited by end-of-file\n", 48);
+	close_reopen_here_doc(turn, fd_arr, line);
 }
