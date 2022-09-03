@@ -108,8 +108,6 @@ t_bool	free_each_turn(t_gc **gc, t_info *exec_in)
 	}
 	if (head)
 		*gc = head;
-	close(exec_in->stdi);
-	close(exec_in->stdou);
 	remove_tmp_file(exec_in->fd_arr_size, exec_in->fd_arr);
 	free(exec_in);
 	return (1);

@@ -12,13 +12,16 @@
 
 #include "minishell.h"
 
-t_bool	ms_line(char **line)
+t_bool	ms_line(char **line, t_info *exec_in)
 {
 	listen_to_sigs();
 	*line = readline("@ShellBasket^$ ");
 	if (!(*line))
 	{
 		write(2, "exit\n", 5);
+		close(exec_in->stdi);
+		if (exec_in->stdou != -1)
+			close(exec_in->stdou);
 		free_exit();
 	}
 	if (*line && !(*line[0]))
@@ -146,7 +149,7 @@ int	main(int ac, char **av, char **envp)
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();
-		if (ms_line(&line))
+		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
 		if (tree->head == NULL && free_each_turn(get_gc(), exec_info))
@@ -177,8 +180,6 @@ void	wait_sub_process(t_info *exec_info)
 		perror("basket");
 	if (exec_info->stdou != -1)
 		close(exec_info->stdou);
-	if (check_builtins(exec_info->argv) && exec_info->turn == 1)
-		return ;
 	while (i < exec_info->turn)
 	{
 		waitpid(exec_info->pid[i], &w_status, 0);

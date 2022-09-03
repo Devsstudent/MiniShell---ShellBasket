@@ -15,7 +15,6 @@ t_bool	dup_cmd_alone(t_info *exec_in, int pipe_fd[2])
 {
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 	{
-		write(2, ft_itoa(exec_in->open_fd), 1);
 		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 			return (perror_false("shellbasket"));
 	}
@@ -67,8 +66,10 @@ t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2])
 			return (perror_false("set"));
 	}
 	else if (exec_in->tmp_fd != -1 && !exec_in->start)
+	{
 		if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
 			return (perror_false("lasy"));
+	}
 	return (TRUE);
 }
 
@@ -77,6 +78,7 @@ void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2])
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	close(exec_in->stdi);
+	if (exec_in->stdou != -1)
 	close(exec_in->stdou);
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 		close(exec_in->open_fd);
