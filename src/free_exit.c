@@ -9,9 +9,9 @@
 /*   Updated: 2022/09/01 19:26:27 by odessein         ###   ########.fr       */
 #include "minishell.h"
 
-void	free_exit(void)
+void	free_exit()
 {
 	rl_clear_history();
 	free_gc(get_gc());
-	exit(1);
+	exit(g_exit_status);
 }
