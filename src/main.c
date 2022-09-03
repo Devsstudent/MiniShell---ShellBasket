@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/03 15:24:34 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/03 16:47:14 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ t_bool	ms_line(char **line, t_info *exec_in)
 			close(exec_in->stdi);
 		if (exec_in->stdou != -1)
 			close(exec_in->stdou);
+		free_each_turn(get_gc(), exec_in);
 		free_exit();
 	}
-	if (*line && !(*line[0]))
-		return (free(exec_in), TRUE);
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
+	if (*line && !(*line[0]))
+		return (free(exec_in), TRUE);
 	return (FALSE);
 }
 
