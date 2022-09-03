@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 17:26:04 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/03 15:45:58 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -39,7 +39,7 @@ t_bool	check_red_in(t_block *files, t_info *exec)
 
 t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 {
-	if (exec->out_fd != -1 || exec->out_fd != -2)
+	if (exec->out_fd != -1 && exec->out_fd != -2)
 		close(exec->out_fd);
 	exec->out_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)

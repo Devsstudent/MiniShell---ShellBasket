@@ -1,7 +1,7 @@
 #don't forget the definition of CC, because default is cc, not gcc
 
 CC = gcc
-FLAG = -Wall -g -Wextra -MMD -Werror
+FLAG = -Wall -g3 -Wextra -MMD -Werror
 LIB = ./libft
 HEAD = ./includes
 OBJ = $(addprefix obj/, main.o \

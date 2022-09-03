@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 18:33:46 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/03 15:24:34 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,14 @@ t_bool	ms_line(char **line, t_info *exec_in)
 	if (!(*line))
 	{
 		write(2, "exit\n", 5);
-		close(exec_in->stdi);
+		if (exec_in->stdi != -1)
+			close(exec_in->stdi);
 		if (exec_in->stdou != -1)
 			close(exec_in->stdou);
 		free_exit();
 	}
 	if (*line && !(*line[0]))
-		return (TRUE);
+		return (free(exec_in), TRUE);
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
 	return (FALSE);
@@ -60,7 +61,10 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 	if (tree->head)
 		leaf = tree->head;
 	if (leaf && leaf->type == CMD)
+	{
 		exec_info->pid = (int *)malloc(sizeof(int));
+		(exec_info->pid)[0] = -1;
+	}
 	else
 	{
 		while (leaf->type == PIPE_L)
@@ -114,6 +118,8 @@ t_info	*init_exec_info(void)
 	t_info	*exec_info;
 
 	exec_info = (t_info *) malloc(sizeof(t_info));
+	if (!exec_info)
+		free_exit();
 	exec_info->argv = NULL;
 	exec_info->fd_arr = NULL;
 	exec_info->fd_arr_size = 0;
@@ -175,7 +181,8 @@ void	wait_sub_process(t_info *exec_info)
 		close(exec_info->tmp_fd);
 	if (dup2(exec_info->stdi, STDIN_FILENO) == -1)
 		perror("sell");
-	close(exec_info->stdi);
+	if (exec_info->stdi > 0)
+		close(exec_info->stdi);
 	if (exec_info->stdou != -1 && dup2(exec_info->stdou, STDOUT_FILENO) == -1)
 		perror("basket");
 	if (exec_info->stdou != -1)
@@ -183,6 +190,8 @@ void	wait_sub_process(t_info *exec_info)
 	while (i < exec_info->turn)
 	{
 		waitpid(exec_info->pid[i], &w_status, 0);
+		if (exec_info->pid[i] == -1)
+			return ;
 		if (WIFEXITED(w_status))
 			g_exit_status = WEXITSTATUS(w_status);
 		else if (WIFSIGNALED(w_status))
