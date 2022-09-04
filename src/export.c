@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/01 16:48:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/04 19:28:05 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -19,7 +19,7 @@
 //when between quotes "", works like when not betwwen quotes
 //remove quote before, and interpret it the right way
 
-void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
+void	fill_export_env(char *key, char *value, t_bool append, t_dict *env)
 {
 	t_elem	*elem;
 	char	*new_value;
@@ -44,7 +44,7 @@ void	do_the_last_thing(char *key, char *value, t_bool append, t_dict *env)
 	}
 }
 
-void	do_your_thing(char *arg, t_bool append, t_dict *env)
+void	get_key_value(char *arg, t_bool append, t_dict *env)
 {
 	char	*ptr;
 	char	*key;
@@ -65,7 +65,7 @@ void	do_your_thing(char *arg, t_bool append, t_dict *env)
 		value = ft_substr(ptr, 1, ft_strlen(ptr));
 	if (value == NULL)
 		return ;
-	do_the_last_thing(key, value, append, env);
+	fill_export_env(key, value, append, env);
 }
 
 void	export_arg(char *arg, t_dict *env)
@@ -86,7 +86,7 @@ void	export_arg(char *arg, t_dict *env)
 	if (arg[i] == '\0')
 		handle_key(ft_strdup(arg), env);
 	else
-		do_your_thing(arg, append, env);
+		get_key_value(arg, append, env);
 	g_exit_status = 0;
 }
 

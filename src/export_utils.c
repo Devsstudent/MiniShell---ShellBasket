@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:12:21 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 20:13:55 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/04 20:09:45 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -52,4 +52,6 @@ void	handle_key(char *key, t_dict *env)
 		elem = create_elem(key, NULL);
 		dict_addback(env, elem);
 	}
+	else
+		free(key);
 }
