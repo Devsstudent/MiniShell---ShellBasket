@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 15:22:31 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/04 16:56:30 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,6 @@ int	main(int ac, char **av, char **envp)
 		parse_here_doc(tree->head, exec_info->fd_arr, 0);
 		if (g_exit_status == 140 && free_each_turn(get_gc(), exec_info))
 		{
-			printf("ICI\n");
 			g_exit_status = 130;
 			continue ;
 		}
@@ -196,18 +195,14 @@ void	wait_sub_process(t_info *exec_info)
 		if (exec_info->pid[i] == -1 || w_status == -81)
 		{
 			if (exec_info->pid[i] != -1 && w_status == -81)
-			{
 				g_exit_status = 130;
-			}
 			i++;
 			continue ;
 		}
 		if (WIFEXITED(w_status))
 			g_exit_status = WEXITSTATUS(w_status);
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 2)
-		{
 			g_exit_status = 130;
-		}
 		i++;
 	}
 }
