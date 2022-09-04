@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 14:51:54 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/04 18:15:21 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -136,7 +136,9 @@ t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_info *exec_in)
 		while (argv[i])
 			i++;
 		if (execve(pathname, argv, env_bis) == -1)
+		{
 			return (FALSE);
+		}
 	}
 	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:44:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:02:15 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/04 18:42:54 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef STRUCT_H
@@ -77,6 +77,7 @@ typedef struct	s_info{
 	int		tmp_fd;
 	int		stdou;
 	int		stdi;
+	t_bool	cmd_not_found;
 	t_bool	start;
 	t_bool	end;
 }			t_info;

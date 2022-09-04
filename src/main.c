@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 16:56:30 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/04 18:48:16 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ t_info	*init_exec_info(void)
 	exec_info->tmp_fd = -1;
 	exec_info->end = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);
+	exec_info->cmd_not_found = FALSE;
 	exec_info->stdou = dup(STDOUT_FILENO);
 	return (exec_info);
 }
@@ -199,7 +200,7 @@ void	wait_sub_process(t_info *exec_info)
 			i++;
 			continue ;
 		}
-		if (WIFEXITED(w_status))
+		if (WIFEXITED(w_status) && !exec_info->cmd_not_found)
 			g_exit_status = WEXITSTATUS(w_status);
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 2)
 			g_exit_status = 130;
