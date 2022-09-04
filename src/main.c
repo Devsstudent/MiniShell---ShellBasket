@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/03 16:47:14 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/04 14:30:56 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,9 +190,15 @@ void	wait_sub_process(t_info *exec_info)
 		close(exec_info->stdou);
 	while (i < exec_info->turn)
 	{
+		w_status = -81;
 		waitpid(exec_info->pid[i], &w_status, 0);
-		if (exec_info->pid[i] == -1)
-			return ;
+		if (exec_info->pid[i] == -1 || w_status == -81)
+		{
+			if (exec_info->pid[i] != -1 && w_status == -81)
+				g_exit_status = 130;
+			i++;
+			continue ;
+		}
 		if (WIFEXITED(w_status))
 			g_exit_status = WEXITSTATUS(w_status);
 		else if (WIFSIGNALED(w_status))
