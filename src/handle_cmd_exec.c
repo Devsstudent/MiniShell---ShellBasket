@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 17:26:49 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/05 18:03:31 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -34,7 +34,8 @@ void	loop_get_arg(char *word, char **argv, int *i)
 	init_loop_get_arg(&j, &last, &quote, &d_quote);
 	while (word[j])
 	{
-		if (word[j] == ' ' && j > 0 && word[j - 1] != ' ' && !d_quote && !quote)
+		if (word[j] == ' ' && j > 0 && word[j - 1] != ' ' 
+				&& word[j + 1] != ' ' && !d_quote && !quote)
 		{
 			argv[*i] = ft_substr(word, last, (j - last));
 			(*i)++;

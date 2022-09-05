@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:08:59 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 18:09:43 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/05 18:05:50 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -62,6 +62,8 @@ char	**get_cmd_arg(t_line *sub)
 
 	i = 0;
 	argv = (char **) malloc(sizeof(*argv) * (get_nb_cmd_arg(sub) + 1));
+	if (!argv)
+		free_exit();
 	add_to_gc(DOUBLE, argv, get_gc());
 	buff = sub->head;
 	while (buff)
