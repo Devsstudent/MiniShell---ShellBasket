@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:08:59 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/05 18:05:50 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/05 21:57:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,12 +32,16 @@ void	get_size_word_in_word(char *word, size_t *size)
 	int		i;
 	t_bool	quote;
 	t_bool	d_quote;
+	size_t		buff;
 
 	i = 0;
+	buff = *size;
 	quote = FALSE;
 	d_quote = FALSE;
 	while (word[i])
 	{
+		if (i > 0 && word[i - 1] == ' ' && word[i] != ' ' && !quote && !d_quote && word[i] != '\'' && word[i] != '\"')
+				(*size)++;
 		if (word[i] == '\"' && !d_quote)
 			d_quote = TRUE;
 		else if (word[i] == '\"' && d_quote)
@@ -46,12 +50,10 @@ void	get_size_word_in_word(char *word, size_t *size)
 			quote = TRUE;
 		else if (word[i] == '\'' && quote)
 			quote = FALSE;
-		if (i > 0 && word[i - 1] != ' ' && word[i] == ' '
-			&& word[i + 1] && word[i + 1] != ' ' && !quote && !d_quote)
-			(*size)++;
 		i++;
 	}
-	(*size)++;
+	if (*size == buff)
+		(*size)++;
 }
 
 char	**get_cmd_arg(t_line *sub)
