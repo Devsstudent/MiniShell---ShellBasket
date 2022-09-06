@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 18:48:16 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 13:46:43 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_bool	ms_line(char **line, t_info *exec_in)
 			close(exec_in->stdi);
 		if (exec_in->stdou != -1)
 			close(exec_in->stdou);
-		free_each_turn(get_gc(), exec_in);
 		free_exit();
 	}
 	add_history(*line);
@@ -39,6 +38,8 @@ t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 	t_tree	*tree;
 
 	tree = (t_tree *) malloc(sizeof(t_tree));
+	if (!tree)
+		free_exit();
 	add_to_gc(TREE, tree, get_gc());
 	line_lst = fill_line_lst(*line);
 	if (line_lst == NULL)
@@ -49,6 +50,8 @@ t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 	fill_ast(line_lst, tree);
 	exec_in->fd_arr_size = total_block(tree->head);
 	exec_in->fd_arr = malloc(sizeof(int) * exec_in->fd_arr_size);
+	if (!exec_in->fd_arr)
+		free_exit();
 	return (tree);
 }
 
@@ -64,6 +67,8 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 	if (leaf && leaf->type == CMD)
 	{
 		exec_info->pid = (int *)malloc(sizeof(int));
+		if (!exec_info->pid)
+			free_exit();
 		(exec_info->pid)[0] = -1;
 	}
 	else
@@ -77,6 +82,8 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 				break ;
 		}
 		exec_info->pid = (int *)malloc(sizeof(int) * size);
+		if (!exec_info->pid)
+			free_exit();
 	}
 	add_to_gc(SIMPLE, exec_info->pid, get_gc());
 }
@@ -155,6 +162,7 @@ int	main(int ac, char **av, char **envp)
 	t_info	*exec_info;
 
 	env = double_char_to_lst(envp);
+	dict_modify(env, ft_strdup("SHLVL"), ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();
@@ -193,7 +201,7 @@ void	wait_sub_process(t_info *exec_info)
 	while (i < exec_info->turn)
 	{
 		w_status = -81;
-		waitpid(exec_info->pid[i], &w_status, 0);
+		waitpid(exec_info->pid[i], &w_status, WCONTINUED);
 		if (exec_info->pid[i] == -1 || w_status == -81)
 		{
 			if (exec_info->pid[i] != -1 && w_status == -81)

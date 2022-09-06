@@ -6,11 +6,22 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 14:11:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/06/02 15:55:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/06 13:15:35 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <signal.h>
+#include <errno.h>
 #include "libft.h"
+
+void	listen_sigs(void)
+{
+	struct sigaction	action_quit;
+
+	sigemptyset(&action_quit.sa_mask);
+	action_quit.sa_handler = SIG_IGN;
+	action_quit.sa_flags = 0;
+	sigaction(SIGQUIT, &action_quit, NULL);
+}
 
 char	*get_next_line(int fd)
 {
@@ -27,6 +38,7 @@ char	*get_next_line(int fd)
 		line = gnl_strjoin(line, buff[fd]);
 	if (ft_check_line(line))
 		ft_reset_buff(buff[fd]);
+	listen_sigs();
 	line = gnl_loop(line, buff[fd], fd);
 	return (line);
 }
@@ -57,10 +69,14 @@ t_bool	ft_fill_buff(char *buff, int fd)
 	int	read_val;
 
 	read_val = read(fd, buff, BUFFER_SIZE);
-	if (read_val > 0)
+	if (read_val > 0 && errno != EINTR)
 	{
 		buff[read_val] = 0;
 		return (TRUE);
+	}
+	else if (errno == EINTR)
+	{
+		write(2, "YO", 2);
 	}
 	return (FALSE);
 }
