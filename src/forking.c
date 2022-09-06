@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 13:58:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/06 15:55:22 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -26,6 +26,7 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 		return ;
 	if (exec_in->pid[exec_in->turn] == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
 		close_subprocess_fd(exec_in, pipe_fd);
 		if (!execve_test(cmd_path, exec_in->argv, env, exec_in))
 		{
@@ -52,6 +53,7 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env)
 		return (perror("shellbasket"));
 	else if (exec_in->pid[exec_in->turn] == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
 		if (exec_in->open_fd != -1)
 			close(exec_in->open_fd);
 		if (exec_in->out_fd != -1)

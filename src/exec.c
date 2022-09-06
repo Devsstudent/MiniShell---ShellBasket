@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 15:46:16 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 15:58:56 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -48,7 +48,6 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 			print_error(exec_in->argv[0], 2);
 		return ;
 	}
-	signal(SIGQUIT, SIG_DFL);
 	execve_cmd_alone(cmd_path, env, exec_in);
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 		close(exec_in->open_fd);
@@ -131,7 +130,6 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 			close(exec_in->out_fd);
 		return ;
 	}
-	signal(SIGQUIT, SIG_DFL);
 	forking(cmd_path, exec_in, env, pipe_fd);
 	close(pipe_fd[1]);
 	if (!exec_in->end)
