@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 13:46:43 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/06 16:21:48 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,11 @@ void	wait_sub_process(t_info *exec_info)
 			g_exit_status = WEXITSTATUS(w_status);
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 2)
 			g_exit_status = 130;
+		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 3)
+		{
+			write(2, "Quit (core dumped)\n", 19);
+			g_exit_status = 131;
+		}
 		i++;
 	}
 }
