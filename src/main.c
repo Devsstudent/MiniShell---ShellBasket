@@ -119,6 +119,7 @@ t_info	*init_exec_info(void)
 	t_info	*exec_info;
 
 	exec_info = (t_info *) malloc(sizeof(t_info));
+	add_to_gc(INFO, exec_info, get_gc());
 	if (!exec_info)
 		free_exit();
 	exec_info->argv = NULL;

@@ -73,16 +73,25 @@ void	gc_free_node_addr(void *ptr, t_gc **gc)
 
 void	free_gc(t_gc **gc)
 {
+	t_gc	*head;
 	t_gc	*tmp;
 
 	if (!gc)
 		return ;
+	head = *gc;
 	while (*gc)
 	{
 		tmp = (*gc)->next;
-		gc_free_node(*gc);
+		if ((*gc)->type != INFO)
+			gc_free_node(*gc);
+		else
+		{
+			head = *gc;
+			head->next = NULL;
+		}
 		*gc = tmp;
 	}
+	gc_free_node(head);
 	rl_clear_history();
 }
 
