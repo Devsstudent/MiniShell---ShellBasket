@@ -41,7 +41,8 @@ typedef enum	e_type{
 	LINE,
 	DOUBLE,
 	SIMPLE,
-	TREE
+	TREE,
+	INFO
 }	t_type;
 
 #endif

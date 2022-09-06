@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:02:58 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/01 17:12:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/06 13:58:27 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -33,6 +33,14 @@ void	sigint_handler(int signum)
 		rl_replace_line("", 1);
 		rl_redisplay();
 		g_exit_status = 130;
+	}
+}
+
+void	sigquit_handler(int signum)
+{
+	if (signum == SIGQUIT)
+	{
+		
 	}
 }
 

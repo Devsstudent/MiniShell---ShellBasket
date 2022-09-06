@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:47:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/03 15:56:34 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 12:55:09 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -69,6 +69,8 @@ char	*get_delim(char *delim)
 	replace_quote(delim);
 	size = get_size_delim(delim);
 	new_delim = malloc(sizeof(*new_delim) * size + 1);
+	if (!new_delim)
+		free_exit();
 	j = 0;
 	i = 0;
 	while (delim[i])
