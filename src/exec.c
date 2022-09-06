@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 18:47:19 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/05 18:17:35 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -49,9 +49,9 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 		return ;
 	}
 	execve_cmd_alone(cmd_path, env, exec_in);
-	if (exec_in->open_fd != -1)
+	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 		close(exec_in->open_fd);
-	if (exec_in->out_fd != -1)
+	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 		close(exec_in->out_fd);
 	exec_in->turn++;
 }

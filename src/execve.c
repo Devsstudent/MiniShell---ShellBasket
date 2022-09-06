@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 18:15:21 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/05 18:18:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -83,9 +83,9 @@ t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path)
 		}
 		else if (exec_in->pid[exec_in->turn] == 0)
 		{
-			if (exec_in->open_fd != -1)
+			if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 				close(exec_in->open_fd);
-			if (exec_in->out_fd != -1)
+			if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 				close(exec_in->out_fd);
 			if (!execve_test(cmd_path, exec_in->argv, env, exec_in))
 			{
