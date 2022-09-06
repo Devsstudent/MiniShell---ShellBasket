@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 16:21:48 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 18:59:38 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_bool	ms_line(char **line, t_info *exec_in)
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
 	if (*line && !(*line[0]))
-		return (free(exec_in), TRUE);
+		return (TRUE);
 	return (FALSE);
 }
 
@@ -126,9 +126,9 @@ t_info	*init_exec_info(void)
 	t_info	*exec_info;
 
 	exec_info = (t_info *) malloc(sizeof(t_info));
-	add_to_gc(INFO, exec_info, get_gc());
 	if (!exec_info)
 		free_exit();
+	add_to_gc(EXEC_INFO, exec_info, get_gc());
 	exec_info->argv = NULL;
 	exec_info->fd_arr = NULL;
 	exec_info->fd_arr_size = 0;
@@ -151,7 +151,7 @@ static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 	malloc_pid_arr(exec_info, tree);
 	exec_tree(tree->head, exec_info, env, tree);
 	wait_sub_process(exec_info);
-	free_each_turn(get_gc(), exec_info);
+	free_each_turn(get_gc());
 }
 
 int	main(int ac, char **av, char **envp)
@@ -169,10 +169,10 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		if (tree->head == NULL && free_each_turn(get_gc(), exec_info))
+		if (tree->head == NULL && free_each_turn(get_gc()))
 			continue ;
 		parse_here_doc(tree->head, exec_info->fd_arr, 0);
-		if (g_exit_status == 140 && free_each_turn(get_gc(), exec_info))
+		if (g_exit_status == 140 && free_each_turn(get_gc()))
 		{
 			g_exit_status = 130;
 			continue ;
@@ -217,6 +217,7 @@ void	wait_sub_process(t_info *exec_info)
 		{
 			write(2, "Quit (core dumped)\n", 19);
 			g_exit_status = 131;
+			return ;
 		}
 		i++;
 	}

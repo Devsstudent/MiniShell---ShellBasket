@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:21:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/04 19:07:38 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 16:56:10 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -71,7 +71,7 @@ static long long	ft_atoll(char *arg)
 		return ((long long)(num));
 }
 
-void	exec_exit(int ac, char **argv, t_bool display_exit, t_info *exec_info)
+void	exec_exit(int ac, char **argv, t_bool display_exit)
 {
 	if (display_exit)
 		ft_putstr_fd("exit\n", 1);
@@ -93,6 +93,5 @@ void	exec_exit(int ac, char **argv, t_bool display_exit, t_info *exec_info)
 			g_exit_status = (u_int8_t)ft_atoll(argv[1]);
 		}
 	}
-	free_each_turn(get_gc(), exec_info);
 	free_exit();
 }

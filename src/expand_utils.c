@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:19:05 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:31:06 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/06 19:29:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -43,7 +43,8 @@ int	total_char_to_add(char **val_arr)
 
 t_bool	check_char(char c)
 {
-	if (c > -1 && c < 48)
+	//if (c > -1 && c < 48 || (c > 57 && c < 65) || (c < 95 && c > 90) || (c == 123 || c == 125 || c == 126))
+	if (c != '?' && c != '_' && !ft_isalpha(c) && c != 0)
 		return (FALSE);
 	return (TRUE);
 }

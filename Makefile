@@ -41,7 +41,7 @@ OBJ = $(addprefix obj/, main.o \
 			dict_utils.o \
 			dict_to_double.o \
 			here_doc_utils.o \
-			garbage_collector_free.o \
+			bis.o \
 			lexing_handle.o \
 			lexing_fill_word.o \
 			handle_cmd_utils.o \
@@ -86,7 +86,7 @@ D_LST = $(addprefix obj/, main.d \
 			dict_utils.d \
 			dict_to_double.d \
 			here_doc_utils.d \
-			garbage_collector_free.d \
+			bis.d \
 			lexing_fill_word.d \
 			lexing_handle.d \
 			export_utils.d \

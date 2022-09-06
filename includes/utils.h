@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:12:03 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/06 17:58:54 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -18,12 +18,13 @@
 t_gc	*gc_new_node(t_type type, void *ptr);
 t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc);
 
+void	gc_free_one_node(t_gc *node, t_gc **gc);
+t_bool	free_each_turn(t_gc **gc);
 //garbage_collector_free.c
 t_gc	**get_gc(void);
 void	gc_free_node(t_gc *node);
 void	gc_free_node_addr(void *ptr, t_gc **gc);
 void	free_gc(t_gc **gc);
-t_bool	free_each_turn(t_gc **gc, t_info *exec_in);
 //free_exit.c
 void	free_exit(void);
 

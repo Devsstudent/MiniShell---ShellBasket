@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 14:54:26 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 17:59:00 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -69,8 +69,8 @@ void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
 t_bool	check_builtins(char **argv);
 size_t	get_ac(char **argv);
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
-t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork, t_info *exec_in);
-t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_info *exec_in);
+t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork);
+t_bool	execve_cmd(char *pathname, char **argv, t_dict *env);
 t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path);
 
 //cd.c
@@ -78,7 +78,7 @@ void	exec_cd(int ac, char **argv, t_dict *env);
 //echo.c
 void	exec_echo(int ac, char **argv, t_dict *env);
 //exit.c
-void	exec_exit(int ac, char **argv, t_bool display_exit, t_info *exec_info);
+void	exec_exit(int ac, char **argv, t_bool display_exit);
 //unset.c
 void	exec_unset(int ac, char **argv, t_dict *env);
 //export.c
@@ -91,5 +91,7 @@ t_bool	init_export(char *arg, int *i, t_bool *append);
 void	exec_env(int ac, char **argv, t_dict *env);
 //pwd.c
 void	exec_pwd(int ac, char **argv, t_dict *env);
+
+
 
 #endif

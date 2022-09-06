@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 15:57:39 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 17:05:03 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -54,7 +54,7 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 		return ;
 	ac = get_ac(exec_in->argv);
 	if (ft_strncmp(cmd_path, "exit", 5) == 0)
-		exec_exit(ac, exec_in->argv, 1, exec_in);
+		exec_exit(ac, exec_in->argv, 1);
 	else if (ft_strncmp(cmd_path, "cd", 3) == 0)
 		exec_cd(ac, exec_in->argv, env);
 	else if (ft_strncmp(cmd_path, "export", 7) == 0)
@@ -88,7 +88,7 @@ t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path)
 				close(exec_in->open_fd);
 			if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 				close(exec_in->out_fd);
-			if (!execve_test(cmd_path, exec_in->argv, env, exec_in))
+			if (!execve_cmd(cmd_path, exec_in->argv, env))
 			{
 				perror(exec_in->argv[0]);
 				free_exit();
@@ -98,7 +98,7 @@ t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path)
 	return (TRUE);
 }
 
-t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork, t_info *exec_in)
+t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 {
 	int	ac;
 
@@ -110,7 +110,7 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork, t_info *exec_in)
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
 		exec_env(ac, argv, env);
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		exec_exit(ac, argv, 0, exec_in);
+		exec_exit(ac, argv, 0);
 	else if (ft_strncmp(argv[0], "unset", 5) == 0)
 		exec_unset(ac, argv, env);
 	else if (ft_strncmp(argv[0], "export", 5) == 0)
@@ -125,13 +125,13 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork, t_info *exec_in)
 }
 
 //exit dans les builr in
-t_bool	execve_test(char *pathname, char **argv, t_dict *env, t_info *exec_in)
+t_bool	execve_cmd(char *pathname, char **argv, t_dict *env)
 {
 	char	**env_bis;
 	int		i;
 
 	env_bis = dict_to_double_char_env(env);
-	if (!exec_builtin(argv, env, 1, exec_in))
+	if (!exec_builtin(argv, env, 1))
 	{
 		i = 0;
 		while (argv[i])

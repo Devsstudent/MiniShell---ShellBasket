@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:47:20 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 17:55:10 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/06 17:57:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef ENUM_H
@@ -42,7 +42,7 @@ typedef enum	e_type{
 	DOUBLE,
 	SIMPLE,
 	TREE,
-	INFO
+	EXEC_INFO
 }	t_type;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/04 19:28:05 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/06 19:16:08 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -109,6 +109,7 @@ void	exec_export(int ac, char **argv, t_dict *env)
 {
 	int		i;
 
+	printf("argv[1] = %s\n", argv[1]);
 	if (ac == 1)
 	{
 		display_export_env(env);
