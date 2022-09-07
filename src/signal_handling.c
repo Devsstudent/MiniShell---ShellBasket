@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:02:58 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/06 15:47:21 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:26:49 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -19,7 +19,14 @@
 
 void	sigint_handler(int signum)
 {
-	if (errno == 140 || errno == 2 || errno == 9)
+	if (g_exit_status == 120)
+	{
+		close(STDIN_FILENO);
+		g_exit_status = 140;
+		write(1, "\n", 1);
+		return ;
+	}
+	if (errno == 2 || errno == 9)
 	{
 		errno = 89;
 		g_exit_status = 140;

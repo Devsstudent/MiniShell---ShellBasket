@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:47:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 12:55:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:33:44 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -91,6 +91,10 @@ void	close_reopen_here_doc(int turn, int *fd_arr, char *line)
 	char	*num;
 	char	*name;
 
+	if (!line && g_exit_status != 140)
+		write(2, "warning: here-document delimited by end-of-file\n", 48);
+	if (g_exit_status != 140)
+		g_exit_status = 0;
 	free(line);
 	close(fd_arr[turn]);
 	num = ft_itoa(turn);
