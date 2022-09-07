@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:41:30 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 17:21:57 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:27:31 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LEXING_PARSING_H
@@ -49,7 +49,7 @@ void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 //here_doc.c
 void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn);
 void	check_here_doc(t_line *sub, int turn, int *fd_arr);
-void	create_tmp(int *fd_arr, int turn); void	fill_here_doc(char *delim, int turn, int *fd_arr);
+void	create_tmp(int *fd_arr, int turn);
 void	fill_here_doc(char *delim, int turn, int *fd_arr);
 int	total_block(t_leaf *leaf);
 //here_doc_utils.c
