@@ -81,7 +81,7 @@ int	size_doll_val(char *word, int i)
 
 	size = 0;
 	i++;
-	if ((word[i] >= '0' && word[i] <= '9') || word[i] == '?')
+	if ((word[i] >= '0' && word[i] <= '9') || (word[i] == '?'))
 	{
 		size++;
 		return (size);
