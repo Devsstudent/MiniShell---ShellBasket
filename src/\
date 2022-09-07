@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/07 14:15:48 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:42:36 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,24 +55,6 @@ t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 	return (tree);
 }
 
-t_bool	malloc_pid_arr_no_pipe(t_info *exec_info, t_tree *tree)
-{
-	t_leaf	*leaf;
-
-	leaf = NULL;
-	if (tree->head)
-		leaf = tree->head;
-	if (leaf && leaf->type == CMD)
-	{
-		exec_info->pid = (int *)malloc(sizeof(int));
-		if (!exec_info->pid)
-			free_exit();
-		(exec_info->pid)[0] = -1;
-		return (TRUE);
-	}
-	return (FALSE);
-}
-
 void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 {
 	t_leaf	*leaf;
@@ -82,9 +64,16 @@ void	malloc_pid_arr(t_info *exec_info, t_tree *tree)
 	size = 0;
 	if (tree->head)
 		leaf = tree->head;
-	if (!malloc_pid_arr_no_pipe(exec_info, tree))
+	if (leaf && leaf->type == CMD)
 	{
-		while (leaf && leaf->type == PIPE_L)
+		exec_info->pid = (int *)malloc(sizeof(int));
+		if (!exec_info->pid)
+			free_exit();
+		(exec_info->pid)[0] = -1;
+	}
+	else
+	{
+		while (leaf->type == PIPE_L)
 		{
 			size++;
 			if (leaf->right)
@@ -173,8 +162,9 @@ int	main(int ac, char **av, char **envp)
 	t_info	*exec_info;
 
 	env = double_char_to_lst(envp);
-	dict_modify(env, ft_strdup("SHLVL"),
-		ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+	if (env != NULL && env->head != NULL)
+		dict_modify(env, ft_strdup("SHLVL"),
+			ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();

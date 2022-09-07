@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:42:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 19:18:32 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:48:02 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -64,7 +64,7 @@ void	dict_modify(t_dict	*dict, char *key, char *value)
 	if (strncmp(key, "_", 2) == 0)
 		return (free(value));
 	buff = dict->head;
-	while (buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
+	while (dict && buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
 		buff = buff->next;
 	if (buff)
 	{
@@ -95,6 +95,8 @@ char	*dict_get_value(t_dict *dict, char *key)
 {
 	t_elem	*buff;
 
+	if (!dict)
+		return (NULL);
 	buff = dict->head;
 	while (buff && ft_strncmp(buff->key, key, ft_strlen(key) + 1) != 0)
 		buff = buff->next;

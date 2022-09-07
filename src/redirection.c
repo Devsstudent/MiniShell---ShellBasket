@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 16:11:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 14:20:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -42,15 +42,15 @@ t_bool	check_file_permission(t_block *buff, t_info *exec, int type)
 			return (FALSE);
 		}
 	}
-/*	else
+	else if (type)
 	{
 		ft_putstr_fd(buff->next->word, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		if (type)
+		//if (type)
 			exec->open_fd = -2;
-		else
-			exec->out_fd = -2;
+		//else
+		//	exec->out_fd = -2;
 		return (FALSE);
-	}*/
+	}
 	return (TRUE);
 }

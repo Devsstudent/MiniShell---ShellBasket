@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 20:22:10 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:14:14 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,6 +24,25 @@ t_bool	check_quote(t_bool *d_quote, t_bool *quote, char word)
 	return (TRUE);
 }
 
+void	advance_if_space(char *word, int *j, int *last, int quote_status)
+{
+	if (word[*j] == ' ')
+	{
+		while (word[*j])
+		{
+			(*j)++;
+			if (word[*j] != ' ' && !quote_status)
+			{
+				*last = *j;
+				(*j)--;
+				break ;
+			}
+		}
+	}
+}
+
+//a quoi servent les quote dans la fonction loop_get_arg
+
 void	loop_get_arg(char *word, char **argv, int *i)
 {
 	int		j;
@@ -35,26 +54,14 @@ void	loop_get_arg(char *word, char **argv, int *i)
 	while (word[j])
 	{
 		if (word[j] == ' ' && j > 0 && word[j - 1] != ' '
-				&& !d_quote && !quote)
+			&& !d_quote && !quote)
 		{
 			argv[*i] = ft_substr(word, last, (j - last));
 			(*i)++;
 			if (word[j + 1])
 				last = j + 1;
 		}
-		if (word[j] == ' ')
-		{
-			while (word[j])
-			{
-				j++;
-				if (word[j] != ' ' && !quote && !d_quote)
-				{
-					last = j;
-					j--;
-					break ;
-				}
-			}
-		}
+		advance_if_space(word, &j, &last, quote + d_quote);
 		if (check_quote(&d_quote, &quote, word[j]) && !word[j])
 			break ;
 		else

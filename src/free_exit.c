@@ -6,10 +6,12 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 13:59:27 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 19:26:27 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:17:48 by mbelrhaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 
-void	free_exit()
+void	free_exit(void)
 {
 	rl_clear_history();
 	free_gc(get_gc());

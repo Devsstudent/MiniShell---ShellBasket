@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 15:58:56 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:07:38 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -106,6 +106,19 @@ t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
 	return (FALSE);
 }
 
+void	execute_cmd(t_info *exec_in, t_dict *env, int *pipe_fd, char *cmd_path)
+{
+	forking(cmd_path, exec_in, env, pipe_fd);
+	close(pipe_fd[1]);
+	if (!exec_in->end)
+		exec_in->tmp_fd = pipe_fd[0];
+	if (exec_in->open_fd != -1)
+		close(exec_in->open_fd);
+	if (exec_in->out_fd != -1)
+		close(exec_in->out_fd);
+	exec_in->turn++;
+}
+
 void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
@@ -130,13 +143,5 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 			close(exec_in->out_fd);
 		return ;
 	}
-	forking(cmd_path, exec_in, env, pipe_fd);
-	close(pipe_fd[1]);
-	if (!exec_in->end)
-		exec_in->tmp_fd = pipe_fd[0];
-	if (exec_in->open_fd != -1)
-		close(exec_in->open_fd);
-	if (exec_in->out_fd != -1)
-		close(exec_in->out_fd);
-	exec_in->turn++;
+	execute_cmd(exec_in, env, pipe_fd, cmd_path);
 }

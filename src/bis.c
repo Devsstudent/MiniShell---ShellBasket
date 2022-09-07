@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:45:07 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 20:30:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:16:54 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -86,6 +86,26 @@ void	free_gc(t_gc **gc)
 	}
 }
 
+void	free_exec_info(t_gc **gc)
+{
+	t_gc	*tmp;
+
+	tmp = *gc;
+	while (tmp)
+	{
+		if (tmp->type == EXEC_INFO)
+		{
+			if (tmp->content && ((t_info *)(tmp->content))->fd_arr)
+				remove_tmp_file(((t_info *)(tmp->content))->fd_arr_size,
+					((t_info *)(tmp->content))->fd_arr);
+			gc_free_one_node(tmp, gc);
+			if (((t_info *)(tmp->content))->fd_arr)
+				((t_info *)(tmp->content))->fd_arr = NULL;
+		}
+		tmp = tmp->next;
+	}
+}
+
 t_bool	free_each_turn(t_gc **gc)
 {
 	t_gc	*tmp;
@@ -99,21 +119,7 @@ t_bool	free_each_turn(t_gc **gc)
 			gc_free_one_node(tmp, gc);
 		tmp = tmp->next;
 	}
-	tmp = *gc;
-	while (tmp)
-	{
-		if (tmp->type == EXEC_INFO)
-		{
-			if (tmp->content && ((t_info *)(tmp->content))->fd_arr)
-			{
-				remove_tmp_file(((t_info *)(tmp->content))->fd_arr_size, ((t_info *)(tmp->content))->fd_arr);
-			}
-			gc_free_one_node(tmp, gc);
-			if (((t_info *)(tmp->content))->fd_arr)
-				((t_info *)(tmp->content))->fd_arr = NULL;
-		}
-		tmp = tmp->next;
-	}
+	free_exec_info(gc);
 	return (1);
 }
 
