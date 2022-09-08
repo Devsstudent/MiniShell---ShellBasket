@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:41:30 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 19:04:23 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:12:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LEXING_PARSING_H
@@ -55,7 +55,8 @@ void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn);
 void	check_here_doc(t_line *sub, int turn, int *fd_arr);
 void	create_tmp(int *fd_arr, int turn);
 void	fill_here_doc(char *delim, int turn, int *fd_arr);
-int	total_block(t_leaf *leaf);
+int		total_block(t_leaf *leaf);
+
 //here_doc_utils.c
 void	remove_tmp_file(int file_nb, int *fd_arr);
 char	*get_delim(char *delim);
@@ -66,8 +67,8 @@ void	close_reopen_here_doc(int turn, int *fd_arr, char *line);
 /********************************************/
 
 //check_symbol
-t_bool check_pipe(t_token next, t_token previous);
-t_bool check_symbol(t_block *block);
+t_bool	check_pipe(t_token next, t_token previous);
+t_bool	check_symbol(t_block *block);
 
 //tokenization
 t_bool	tokenization(t_line *line);

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 18:32:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:10:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -27,7 +27,8 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env);
 
 //cmd_not_found.c
-t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path, t_line *sub);
+t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
+			t_line *sub);
 t_bool	check_cmd_in_sub(t_line *sub);
 
 //handle_cmd_utils.c
@@ -74,7 +75,8 @@ size_t	get_ac(char **argv);
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
 t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork);
 t_bool	execve_cmd(char *pathname, char **argv, t_dict *env);
-t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path);
+t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env,
+			char *cmd_path);
 
 //cd.c
 void	exec_cd(int ac, char **argv, t_dict *env);
@@ -94,7 +96,5 @@ t_bool	init_export(char *arg, int *i, t_bool *append);
 void	exec_env(int ac, char **argv, t_dict *env);
 //pwd.c
 void	exec_pwd(int ac, char **argv, t_dict *env);
-
-
 
 #endif
