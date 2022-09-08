@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 18:30:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:31:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -76,9 +76,9 @@ void	execute_cmd(t_info *exec_in, t_dict *env, int *pipe_fd, char *cmd_path)
 	close(pipe_fd[1]);
 	if (!exec_in->end)
 		exec_in->tmp_fd = pipe_fd[0];
-	if (exec_in->open_fd != -1)
+	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 		close(exec_in->open_fd);
-	if (exec_in->out_fd != -1)
+	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 		close(exec_in->out_fd);
 	exec_in->turn++;
 }
@@ -101,9 +101,9 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	{
 		if (exec_in->end == 1)
 			exec_in->cmd_not_found = TRUE;
-		if (exec_in->open_fd != -1)
+		if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 			close(exec_in->open_fd);
-		if (exec_in->out_fd != -1)
+		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 			close(exec_in->out_fd);
 		return ;
 	}

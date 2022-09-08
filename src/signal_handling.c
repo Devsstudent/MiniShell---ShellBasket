@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:02:58 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/08 18:27:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 20:10:09 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,6 +16,15 @@
  * if we are in a heredoc, the function sigint_handler shouldn't be called twice
  * so we ignore one call
 */
+
+void	sigint_handler_exec(int signum)
+{
+	if (signum == SIGINT)
+	{
+		write(1, "\n", 1);
+		g_exit_status = 130;
+	}
+}
 
 void	sigint_handler(int signum)
 {
@@ -30,13 +39,12 @@ void	sigint_handler(int signum)
 	{
 		errno = 89;
 		g_exit_status = 140;
-		write(0, "\n", 1);
+		write(1, "\n", 1);
 		return ;
 	}
 	if (signum == SIGINT)
 	{
-		write(2, "TEST", 4);
-		write(0, "\n", 1);
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
