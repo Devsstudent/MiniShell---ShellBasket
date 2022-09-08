@@ -6,10 +6,21 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/07 14:20:52 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:58:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
+/*
+	else if (type)
+	{
+		ft_putstr_fd(buff->next->word, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		//if (type)
+			exec->open_fd = -2;
+		//else
+		//	exec->out_fd = -2;
+		return (FALSE);
+	}*/
 
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word)
 {
@@ -41,16 +52,6 @@ t_bool	check_file_permission(t_block *buff, t_info *exec, int type)
 				exec->out_fd = -2;
 			return (FALSE);
 		}
-	}
-	else if (type)
-	{
-		ft_putstr_fd(buff->next->word, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		//if (type)
-			exec->open_fd = -2;
-		//else
-		//	exec->out_fd = -2;
-		return (FALSE);
 	}
 	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:49:46 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 19:49:53 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 18:36:48 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -50,4 +50,47 @@ t_bool	add_to_gc(t_type type, void *ptr, t_gc **gc)
 		buff = buff->next;
 	buff->next = new;
 	return (TRUE);
+}
+
+void	gc_free_node_addr(void *ptr, t_gc **gc)
+{
+	t_gc	*lst;
+	t_gc	*prev;
+
+	lst = *gc;
+	if (lst->content == ptr)
+	{
+		*gc = lst->next;
+		gc_free_node(lst);
+		return ;
+	}
+	prev = lst;
+	while (lst)
+	{
+		if (lst->content == ptr)
+		{
+			prev->next = lst->next;
+			gc_free_node(lst);
+			return ;
+		}
+		prev = lst;
+		lst = lst->next;
+	}
+}
+
+t_bool	free_each_turn(t_gc **gc)
+{
+	t_gc	*tmp;
+
+	if (!gc)
+		return (1);
+	tmp = *gc;
+	while (tmp)
+	{
+		if (tmp->type != ENV && tmp->type != EXEC_INFO)
+			gc_free_one_node(tmp, gc);
+		tmp = tmp->next;
+	}
+	free_exec_info(gc);
+	return (1);
 }

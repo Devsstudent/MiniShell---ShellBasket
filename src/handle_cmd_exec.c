@@ -6,23 +6,10 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/07 13:14:14 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/08 16:50:38 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-t_bool	check_quote(t_bool *d_quote, t_bool *quote, char word)
-{
-	if (word == '\"' && !(*d_quote))
-		*d_quote = TRUE;
-	else if (word == '\"' && *d_quote)
-		*d_quote = FALSE;
-	if (word == '\'' && !(*quote))
-		*quote = TRUE;
-	else if (word == '\'' && *quote)
-		*quote = FALSE;
-	return (TRUE);
-}
 
 void	advance_if_space(char *word, int *j, int *last, int quote_status)
 {

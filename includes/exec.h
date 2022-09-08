@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 17:59:00 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 18:32:22 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -24,19 +24,22 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
 
 //exec.c
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
-t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path, t_line *sub);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env);
+
+//cmd_not_found.c
+t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path, t_line *sub);
+t_bool	check_cmd_in_sub(t_line *sub);
 
 //handle_cmd_utils.c
 size_t	get_nb_cmd_arg(t_line *sub);
 char	**get_cmd_arg(t_line *sub);
 void	get_size_word_in_word(char *word, size_t *size);
 void	init_loop_get_arg(int *j, int *last, t_bool *quote, t_bool *d_quote);
+t_bool	check_quote(t_bool *d_quote, t_bool *quote, char word);
 
 //handle_cmd_exec.c
 void	loop_get_arg(char *word, char **argv, int *i);
 char	*check_cmd(char **argv, t_dict *env);
-
 
 //redirection.c
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word);

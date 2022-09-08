@@ -6,31 +6,10 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/06 17:05:03 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 18:25:55 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-t_bool	check_builtins(char **argv)
-{
-	if (argv[0] == NULL)
-		return (FALSE);
-	if (ft_strncmp(argv[0], "echo", 5) == 0)
-		return (TRUE);
-	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		return (TRUE);
-	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
-		return (TRUE);
-	else if (ft_strncmp(argv[0], "cd", 3) == 0)
-		return (TRUE);
-	else if (ft_strncmp(argv[0], "export", 7) == 0)
-		return (TRUE);
-	else if (ft_strncmp(argv[0], "env", 4) == 0)
-		return (TRUE);
-	else if (ft_strncmp(argv[0], "unset", 6) == 0)
-		return (TRUE);
-	return (FALSE);
-}
 
 size_t	get_ac(char **argv)
 {
@@ -69,59 +48,6 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 		exec_echo(ac, exec_in->argv, env);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-}
-
-t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env, char *cmd_path)
-{
-	if (!check_builtins(exec_in->argv))
-	{
-		exec_in->pid[exec_in->turn] = fork();
-		if (exec_in->pid[exec_in->turn] < 0)
-		{
-			perror("shellbasket");
-			return (FALSE);
-		}
-		else if (exec_in->pid[exec_in->turn] == 0)
-		{
-			signal(SIGQUIT, SIG_DFL);
-			if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
-				close(exec_in->open_fd);
-			if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
-				close(exec_in->out_fd);
-			if (!execve_cmd(cmd_path, exec_in->argv, env))
-			{
-				perror(exec_in->argv[0]);
-				free_exit();
-			}
-		}
-	}
-	return (TRUE);
-}
-
-t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
-{
-	int	ac;
-
-	ac = get_ac(argv);
-	if (ft_strncmp(argv[0], "echo", 5) == 0)
-		exec_echo(ac, argv, env);
-	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
-		exec_pwd(ac, argv, env);
-	else if (ft_strncmp(argv[0], "env", 4) == 0)
-		exec_env(ac, argv, env);
-	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		exec_exit(ac, argv, 0);
-	else if (ft_strncmp(argv[0], "unset", 5) == 0)
-		exec_unset(ac, argv, env);
-	else if (ft_strncmp(argv[0], "export", 5) == 0)
-		exec_export(ac, argv, env);
-	else if (ft_strncmp(argv[0], "cd", 5) == 0)
-		exec_cd(ac, argv, env);
-	else
-		return (FALSE);
-	if (fork)
-		free_exit();
-	return (TRUE);
 }
 
 //exit dans les builr in

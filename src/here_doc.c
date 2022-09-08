@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:04:23 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/07 18:33:49 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 18:27:36 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -81,18 +81,6 @@ void	create_tmp(int *fd_arr, int turn)
 		perror("open crash");
 		return ;
 	}
-}
-
-t_bool	handle_ctrl_c(char **line, int stdi)
-{
-	if (g_exit_status == 140)
-	{
-		free(*line);
-		if (dup2(stdi, STDIN_FILENO) == -1)
-			return (FALSE);
-		*line = NULL;
-	}
-	return (TRUE);
 }
 
 //freeexit si open crash maybe
