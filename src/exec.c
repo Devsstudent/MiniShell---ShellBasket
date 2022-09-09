@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 19:31:04 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 16:38:42 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -93,10 +93,10 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	if (pipe(pipe_fd) == -1)
 		return (perror("pipe"));
 	check_redirection(exec_in, sub);
-	cmd_path = check_cmd(exec_in->argv, env);
-	add_to_gc(SIMPLE, cmd_path, get_gc());
 	while (exec_in->argv[++i])
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
+	cmd_path = check_cmd(exec_in->argv, env);
+	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (command_not_found(pipe_fd, exec_in, cmd_path, sub))
 	{
 		if (exec_in->end == 1)
