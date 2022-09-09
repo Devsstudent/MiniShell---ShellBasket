@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:41:30 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 19:12:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:14:28 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LEXING_PARSING_H
@@ -44,7 +44,7 @@ void	line_lst_addback(t_line *line, t_block *new);
 void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 
 //lexing_parsing.c
-t_bool	ms_line(char **line, t_info *exec_in);
+t_bool	ms_line(char **line);
 t_tree	*ms_lex_and_parse(char **line, t_info *exec_in);
 
 /********************************************/

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 21:43:30 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/07 13:19:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:20:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -33,10 +33,10 @@ void	go_to_path(char *path, t_dict *env)
 	if (ret != 0)
 	{
 		perror("cd");
-		g_exit_status = errno;
+		g_exit_status = 1;
 		return ;
 	}
-	g_exit_status = errno;
+	g_exit_status = 0;
 	pwd_key = ft_strdup("PWD");
 	pwd_value = ft_strdup(getcwd(buff, 4097));
 	dict_modify(env, pwd_key, pwd_value);

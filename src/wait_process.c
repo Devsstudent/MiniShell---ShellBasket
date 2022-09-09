@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 19:06:42 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:17:41 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,12 +18,15 @@ void	init_wait_sub_process(t_info *exec_info, int *i)
 		close(exec_info->tmp_fd);
 	if (dup2(exec_info->stdi, STDIN_FILENO) == -1)
 		perror("sell");
-	if (exec_info->stdi > 0)
-		close(exec_info->stdi);
+	close(exec_info->stdi);
 	if (exec_info->stdou != -1 && dup2(exec_info->stdou, STDOUT_FILENO) == -1)
 		perror("basket");
 	if (exec_info->stdou != -1)
 		close(exec_info->stdou);
+	if (exec_info->out_fd != -1 && exec_info->out_fd != -2)
+		close(exec_info->out_fd);
+	if (exec_info->open_fd != -1 && exec_info->open_fd != -2)
+		close(exec_info->open_fd);
 }
 
 void	wait_sub_process(t_info *exec_info)
