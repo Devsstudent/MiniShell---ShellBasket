@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:52:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/07 13:18:18 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:55:27 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -46,6 +46,6 @@ void	print_error(char *ope, int type)
 t_bool	perror_false(char *str)
 {
 	perror(str);
-	g_exit_status = errno;
+	g_exit_status = 1;
 	return (FALSE);
 }

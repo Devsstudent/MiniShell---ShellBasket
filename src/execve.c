@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 18:25:55 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:42:02 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,11 +24,11 @@ size_t	get_ac(char **argv)
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 {
 	int	ac;
-	int	pipe_fd[2];
+	/*int	pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
-		return (perror("pipe in forking cmd alone"));
-	if (!dup_cmd_alone(exec_in, pipe_fd)
+		return (perror("pipe in forking cmd alone"));*/
+	if (!dup_cmd_alone(exec_in/*, pipe_fd*/)
 		|| !exec_cmd_alone_not_builtin(exec_in, env, cmd_path))
 		return ;
 	ac = get_ac(exec_in->argv);
@@ -46,8 +46,8 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 		exec_env(ac, exec_in->argv, env);
 	else if (ft_strncmp(cmd_path, "echo", 5) == 0)
 		exec_echo(ac, exec_in->argv, env);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
+	//close(pipe_fd[0]);
+	//close(pipe_fd[1]);
 }
 
 //exit dans les builr in

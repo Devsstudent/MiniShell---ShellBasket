@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/03 15:45:58 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:52:33 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -30,7 +30,7 @@ t_bool	check_red_in(t_block *files, t_info *exec)
 	exec->open_fd = open(files->word, O_RDONLY);
 	if (exec->open_fd == -1)
 	{
-		perror(files->word);
+		perror_false(files->word);
 		exec->open_fd = -2;
 		return (FALSE);
 	}

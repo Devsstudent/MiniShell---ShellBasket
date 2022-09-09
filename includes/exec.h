@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 19:10:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:42:47 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -62,7 +62,7 @@ void	check_red_in_sub(t_line *sub_line, t_dict *env);
 char	*handle_quote(char *word);
 
 //exec_subprocess.c
-t_bool	dup_cmd_alone(t_info *exec_in, int pipe_fd[2]);
+t_bool	dup_cmd_alone(t_info *exec_in/*, int pipe_fd[2]*/);
 t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2]);
 void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
 

@@ -6,12 +6,12 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/03 15:56:00 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/09 17:39:18 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-t_bool	dup_cmd_alone(t_info *exec_in, int pipe_fd[2])
+t_bool	dup_cmd_alone(t_info *exec_in/*, int pipe_fd[2]*/)
 {
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 	{
@@ -21,12 +21,12 @@ t_bool	dup_cmd_alone(t_info *exec_in, int pipe_fd[2])
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
 			return (perror_false("shellbasket"));
-	if (exec_in->out_fd == -2)
+	/*if (exec_in->out_fd == -2)
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 			return (perror_false("close file crashed"));
 	if (exec_in->open_fd == -2)
 		if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-			return (perror_false("open_file crashed"));
+			return (perror_false("open_file crashed"));*/
 	return (TRUE);
 }
 
