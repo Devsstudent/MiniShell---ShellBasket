@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:28:43 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 18:32:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 20:35:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -37,11 +37,10 @@ t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
 			close(exec_in->tmp_fd);
 		if (!exec_in->end)
 			exec_in->tmp_fd = pipe_fd[0];
+		close(pipe_fd[0]);
 		if (errno != 13 && exec_in->open_fd != -2 && !cmd_path
 			&& check_cmd_in_sub(sub))
-		{
 			print_error(exec_in->argv[0], 2);
-		}
 		return (TRUE);
 	}
 	return (FALSE);

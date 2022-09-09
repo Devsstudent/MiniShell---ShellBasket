@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/09 16:15:02 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 19:58:56 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -19,7 +19,7 @@ static void	child_process(char *cmd_path, t_info *exec_in, int pipe_fd[2],
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		close_subprocess_fd(exec_in, pipe_fd);
-		if (!execve_cmd(cmd_path, exec_in->argv, env))
+		if (!execve_cmd(cmd_path, exec_in, env))
 		{
 			perror(exec_in->argv[0]);
 			free_exit();
@@ -74,7 +74,7 @@ static t_bool	child_process_alone_cmd(char *cmd_path, t_info *exec_in,
 			close(exec_in->open_fd);
 		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 			close(exec_in->out_fd);
-		if (!execve_cmd(cmd_path, exec_in->argv, env))
+		if (!execve_cmd(cmd_path, exec_in, env))
 		{
 			perror(exec_in->argv[0]);
 			free_exit();

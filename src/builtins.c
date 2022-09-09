@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 16:53:47 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 16:54:45 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 20:29:48 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,10 +32,12 @@ t_bool	check_builtins(char **argv)
 	return (FALSE);
 }
 
-t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
+t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 {
-	int	ac;
+	int		ac;
+	char	**argv;
 
+	argv = exec_in->argv;
 	ac = get_ac(argv);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		exec_echo(ac, argv, env);
@@ -44,7 +46,7 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
 		exec_env(ac, argv, env);
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		exec_exit(ac, argv, 0);
+		exec_exit(ac, exec_in, 0);
 	else if (ft_strncmp(argv[0], "unset", 5) == 0)
 		exec_unset(ac, argv, env);
 	else if (ft_strncmp(argv[0], "export", 5) == 0)
@@ -53,6 +55,7 @@ t_bool	exec_builtin(char **argv, t_dict *env, t_bool fork)
 		exec_cd(ac, argv, env);
 	else
 		return (FALSE);
+	close_subprocess_fd(exec_in, NULL);
 	if (fork)
 		free_exit();
 	return (TRUE);

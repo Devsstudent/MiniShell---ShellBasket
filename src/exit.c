@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:21:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/06 16:56:10 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 20:05:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -71,13 +71,13 @@ static long long	ft_atoll(char *arg)
 		return ((long long)(num));
 }
 
-void	exec_exit(int ac, char **argv, t_bool display_exit)
+void	exec_exit(int ac, t_info *exec_info, t_bool display_exit)
 {
 	if (display_exit)
 		ft_putstr_fd("exit\n", 1);
 	if (ac >= 2)
 	{
-		if (!arg_is_num(argv[1]) || !arg_is_ll(argv[1]))
+		if (!arg_is_num(exec_info->argv[1]) || !arg_is_ll(exec_info->argv[1]))
 		{
 			ft_putstr_fd("shellbasket: exit: numeric argument required\n", 2);
 			g_exit_status = 2;
@@ -90,8 +90,11 @@ void	exec_exit(int ac, char **argv, t_bool display_exit)
 		}
 		else
 		{
-			g_exit_status = (u_int8_t)ft_atoll(argv[1]);
+			g_exit_status = (u_int8_t)ft_atoll(exec_info->argv[1]);
 		}
 	}
+	close(exec_info->stdi);
+	if (exec_info->stdou != -1)
+		close(exec_info->stdou);
 	free_exit();
 }
