@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:40:35 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/10 15:20:36 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -95,6 +95,8 @@ static void	str_quote_parse(char *word, char *new_word)
 	new_word[j] = 0;
 }
 
+//if word is "" or '', the new word should be an empty string, not the same string even though in most cases, we don't see the difference, but we see it in echo '', and echo '""', which provide different outputs
+
 char	*handle_quote(char *word)
 {
 	char	*new_word;
@@ -102,10 +104,10 @@ char	*handle_quote(char *word)
 
 	if (word && ft_strlen(word) >= 2 && word[0] == '\"'
 		&& word[1] == '\"' && !word[2])
-		return (word);
+		return (free(word), ft_strdup(""));
 	if (word && ft_strlen(word) >= 2 && word[0] == '\''
 		&& word[1] == '\'' && !word[2])
-		return (word);
+		return (free(word), ft_strdup(""));
 	size = size_new_word_quote(word);
 	new_word = malloc(sizeof(*new_word) * size + 1);
 	if (!new_word)

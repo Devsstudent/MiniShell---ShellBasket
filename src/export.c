@@ -6,18 +6,10 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/09 16:27:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/10 15:40:11 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-//export can have multiple arguments //we have to parse each argument 
-//to understand what we have to do, only = and +=
-//errors if invalid name
-//no errors if += on an unexisting variable
-//after the =, + are possible and are characters
-//when between quotes "", works like when not betwwen quotes
-//remove quote before, and interpret it the right way
 
 void	fill_export_env(char *key, char *value, t_bool append, t_dict *env)
 {
