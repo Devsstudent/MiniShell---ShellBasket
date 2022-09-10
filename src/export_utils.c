@@ -6,10 +6,17 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:12:21 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/04 20:09:45 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/10 16:29:40 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
+
+static void	put_error_export(char *arg)
+{
+	ft_putstr_fd("shellbasket: export: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": not a valid identifier\n", 2);
+}
 
 t_bool	init_export(char *arg, int *i, t_bool *append)
 {
@@ -17,7 +24,7 @@ t_bool	init_export(char *arg, int *i, t_bool *append)
 	*append = FALSE;
 	if (!(ft_isalpha(arg[0]) || arg[0] == '_'))
 	{
-		ft_putstr_fd("hellbasket: export: not a valid identifier\n", 2);
+		put_error_export(arg);
 		g_exit_status = 1;
 		return (FALSE);
 	}
@@ -28,13 +35,13 @@ t_bool	check_sign_in_export(char *arg, int i, t_bool *append)
 {
 	if (!ft_isalnum(arg[i]) && arg[i] != '+' && arg[i] != '_')
 	{
-		ft_putstr_fd("ellbasket: export: not a valid identifier\n", 2);
+		put_error_export(arg);
 		g_exit_status = 1;
 		return (FALSE);
 	}
 	if (arg[i] == '+' && arg[i + 1] != '=')
 	{
-		ft_putstr_fd("basket: export: not a valid identifier\n", 2);
+		put_error_export(arg);
 		g_exit_status = 1;
 		return (FALSE);
 	}

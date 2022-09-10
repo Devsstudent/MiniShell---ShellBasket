@@ -6,22 +6,18 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 14:49:21 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/02 16:41:28 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/10 15:12:09 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-//without -e, the escape sequences are not interpreted
-//to do that, use write, char by char, not ft_printf,
-//it does it alone, it erases \ alone
 
 void	display_single_arg(char *arg)
 {
 	int	i;
 
 	i = 0;
-	if (ft_strncmp(arg, "''", 3) == 0 || ft_strncmp(arg, "\"\"", 3) == 0)
-		return ;
+	//if (ft_strncmp(arg, "''", 3) == 0 || ft_strncmp(arg, "\"\"", 3) == 0)
+	//	return ;
 	while (arg[i])
 	{
 		write(1, &arg[i], 1);
