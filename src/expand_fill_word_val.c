@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:26:17 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:34:37 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/10 19:57:55 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -46,6 +46,17 @@ static void	init_i_j_k(int *i, int *j, int *k)
 	*k = 0;
 }
 
+static void	fill_new_word_part_1(char *word, int *i)
+{
+	while (word[*i] && check_char(word[*i]))
+	{
+		if (word[*i - 1] && word[*i - 1] == '$'
+			&& char_is_num(word[*i], i) && word[*i] == '?')
+			break ;
+		(*i)++;
+	}
+}
+
 void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes)
 {
 	int		i;
@@ -62,14 +73,11 @@ void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes)
 		if (word[i] && i == indexes[k])
 		{
 			i++;
-			while (word[i] && check_char(word[i]))
-			{
-				if (word[i - 1] && word[i - 1] == '$'
-					&& char_is_num(word[i], &i) && word[i] != '?')
-					break ;
-				i++;
-			}
+			fill_new_word_part_1(word, &i);
 			replace_key(new_word, &j, &val_arr[k++]);
+			if (word[i - 1] && word[i - 1] == '$'
+				&& char_is_num(word[i], &i) && word[i] == '?')
+				break ;
 		}
 	}
 	new_word[j] = '\0';

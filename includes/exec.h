@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/09 19:59:39 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/10 16:49:52 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -62,7 +62,7 @@ void	check_red_in_sub(t_line *sub_line, t_dict *env);
 char	*handle_quote(char *word);
 
 //exec_subprocess.c
-t_bool	dup_cmd_alone(t_info *exec_in/*, int pipe_fd[2]*/);
+t_bool	dup_cmd_alone(t_info *exec_in);
 t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2]);
 void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
 
@@ -72,12 +72,12 @@ void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
 //execve.c
 size_t	get_ac(char **argv);
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
-t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env);
+t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env, int pipe_fd[2]);
 t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env,
 			char *cmd_path);
 
 //builtins.c
-t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in);
+t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in, int pipe_fd[2]);
 t_bool	check_builtins(char **argv);
 
 

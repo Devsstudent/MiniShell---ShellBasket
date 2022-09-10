@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/09 20:01:37 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/10 19:58:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -46,7 +46,8 @@ void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in)
 }
 
 //exit dans les builr in
-t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env)
+t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env,
+			int pipe_fd[2])
 {
 	char	**env_bis;
 	int		i;
@@ -54,7 +55,7 @@ t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env)
 
 	argv = exec_info->argv;
 	env_bis = dict_to_double_char_env(env);
-	if (!exec_builtin(env, 1, exec_info))
+	if (!exec_builtin(env, 1, exec_info, pipe_fd))
 	{
 		i = 0;
 		while (argv[i])
