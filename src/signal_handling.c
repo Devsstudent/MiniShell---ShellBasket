@@ -75,10 +75,12 @@ void	listen_to_sigs(void)
 	struct sigaction	action_quit;
 	struct sigaction	action_int;
 
-	sigemptyset(&action_int.sa_mask);
+	if (!sigemptyset(&action_int.sa_mask))
+		return ;
 	action_int.sa_handler = sigint_handler;
 	action_int.sa_flags = 0;
-	sigemptyset(&action_quit.sa_mask);
+	if (!sigemptyset(&action_quit.sa_mask))
+		return ;
 	action_quit.sa_handler = SIG_IGN;
 	action_quit.sa_flags = 0;
 	sigaction(SIGINT, &action_int, NULL);
