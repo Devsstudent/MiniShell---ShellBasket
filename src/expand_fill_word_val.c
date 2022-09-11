@@ -50,7 +50,7 @@ static void	fill_new_word_part_1(char *word, int *i)
 {
 	while (word[*i] && check_char(word[*i]))
 	{
-		if (word[*i - 1] && word[*i - 1] == '$'
+		if (*i - 1 >= 0 && word[*i - 1] == '$'
 			&& char_is_num(word[*i], i) && word[*i] == '?')
 			break ;
 		(*i)++;
@@ -75,9 +75,8 @@ void	fill_new_word(char *new_word, char *word, char **val_arr, int *indexes)
 			i++;
 			fill_new_word_part_1(word, &i);
 			replace_key(new_word, &j, &val_arr[k++]);
-			if (word[i - 1] && word[i - 1] == '$'
-				&& char_is_num(word[i], &i) && word[i] == '?')
-				break ;
+			if (i - 1 >= 0 && word[i - 1] == '$' && word[i] == '?')
+				i++;
 		}
 	}
 	new_word[j] = '\0';
