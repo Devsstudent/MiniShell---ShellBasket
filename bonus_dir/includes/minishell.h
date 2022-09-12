@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 13:02:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 13:29:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/12 17:02:56 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <signal.h>
+# include <dirent.h>
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
