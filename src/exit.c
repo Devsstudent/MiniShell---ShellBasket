@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:21:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/09 20:05:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/12 14:40:16 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -85,13 +85,12 @@ void	exec_exit(int ac, t_info *exec_info, t_bool display_exit)
 		else if (ac > 2)
 		{
 			ft_putstr_fd("shellbasket: exit: too many arguments\n", 2);
-			g_exit_status = 1;
+			if (g_exit_status != 127)
+				g_exit_status = 1;
 			return ;
 		}
 		else
-		{
 			g_exit_status = (u_int8_t)ft_atoll(exec_info->argv[1]);
-		}
 	}
 	close(exec_info->stdi);
 	if (exec_info->stdou != -1)

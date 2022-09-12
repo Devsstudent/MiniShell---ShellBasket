@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/10 15:40:11 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/12 14:14:39 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -60,26 +60,26 @@ void	get_key_value(char *arg, t_bool append, t_dict *env)
 	fill_export_env(key, value, append, env);
 }
 
-void	export_arg(char *arg, t_dict *env)
+t_bool	export_arg(char *arg, t_dict *env)
 {
 	int		i;
 	t_bool	append;
 
 	if (!init_export(arg, &i, &append))
-		return ;
+		return (FALSE);
 	while (arg[i])
 	{
 		if (arg[i] == '=')
 			break ;
 		if (!check_sign_in_export(arg, i, &append))
-			return ;
+			return (FALSE);
 		i++;
 	}
 	if (arg[i] == '\0')
 		handle_key(ft_strdup(arg), env);
 	else
 		get_key_value(arg, append, env);
-	g_exit_status = 0;
+	return (TRUE);
 }
 
 void	display_export_env(t_dict *env)
@@ -100,7 +100,9 @@ void	display_export_env(t_dict *env)
 void	exec_export(int ac, char **argv, t_dict *env)
 {
 	int		i;
+	t_bool	invalid_identifier;
 
+	invalid_identifier = FALSE;
 	if (ac == 1)
 	{
 		display_export_env(env);
@@ -110,7 +112,11 @@ void	exec_export(int ac, char **argv, t_dict *env)
 	i = 1;
 	while (i < ac)
 	{
-		export_arg(argv[i], env);
+		if (!export_arg(argv[i], env))
+			invalid_identifier = TRUE;
 		i++;
 	}
+	g_exit_status = 0;
+	if (invalid_identifier == TRUE)
+		g_exit_status = 1;
 }
