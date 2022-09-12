@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 14:49:21 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/10 15:12:09 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/10 16:52:16 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,8 +16,6 @@ void	display_single_arg(char *arg)
 	int	i;
 
 	i = 0;
-	//if (ft_strncmp(arg, "''", 3) == 0 || ft_strncmp(arg, "\"\"", 3) == 0)
-	//	return ;
 	while (arg[i])
 	{
 		write(1, &arg[i], 1);
