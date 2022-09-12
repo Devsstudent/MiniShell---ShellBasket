@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/10 16:54:50 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/12 16:32:22 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -38,7 +38,7 @@ static t_bool	dup_stdout(t_info *exec_in, int pipe_fd[2])
 	}
 	else
 	{
-		if (exec_in->out_fd != -2)
+		if (exec_in->out_fd == -1)
 		{
 			if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
 				return (perror_false("sheet"));

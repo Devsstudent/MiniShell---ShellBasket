@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/10 19:58:10 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/12 16:36:02 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,6 +18,8 @@ static void	child_process(char *cmd_path, t_info *exec_in, int pipe_fd[2],
 	{
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
+		if (!dup_in_pipe(exec_in, pipe_fd))
+			return ;
 		close_subprocess_fd(exec_in, pipe_fd);
 		if (!execve_cmd(cmd_path, exec_in, env, pipe_fd))
 		{
@@ -50,8 +52,6 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 	}
-	if (!dup_in_pipe(exec_in, pipe_fd))
-		return ;
 	child_process(cmd_path, exec_in, pipe_fd, env);
 	if (exec_in->tmp_fd != -1)
 		close(exec_in->tmp_fd);

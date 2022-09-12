@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:59:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 17:58:25 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/12 15:42:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -42,10 +42,10 @@ t_bool	check_file_permission(t_block *buff, t_info *exec, int type)
 	{
 		if (stat(buff->next->word, &statbuff) == -1)
 			perror("stat broslinecheck");
-		if ((statbuff.st_mode & S_IFMT) != S_IFREG)
+		if ((statbuff.st_mode & S_IFMT) == S_IFDIR)
 		{
 			ft_putstr_fd(buff->next->word, 2);
-			ft_putstr_fd(": Not a file\n", 2);
+			ft_putstr_fd(": Is a directory\n", 2);
 			if (type)
 				exec->open_fd = -2;
 			else
