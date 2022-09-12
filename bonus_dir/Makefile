@@ -17,7 +17,6 @@ OBJ = $(addprefix obj/, main.o \
 			abstract_syntax_tree_bonus.o \
 			remove_quote_before_exec.o \
 			ast_utils.o \
-			wildcard_handler.o \
 			error.o)
 D_LST = $(addprefix obj/, main.d \
 			garbage_collector.d \
@@ -35,7 +34,6 @@ D_LST = $(addprefix obj/, main.d \
 			error.d \
 			remove_quote_before_exec.d \
 			ast_utils.d \
-			wildcard_handler.d \
 			null.d)
 NAME = minishell
 

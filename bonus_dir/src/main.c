@@ -80,16 +80,18 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_tree	*tree;
-	t_dict	*env;
+	//t_dict	*env;
 
+	(void) envp;
 	if (av[1])
 		return (1);
-	env = double_char_to_lst(envp);
+	//env = double_char_to_lst(envp);
 	while (ac)
 	{
 		ms_line(&line);
 		tree = ms_lex_and_parse(&line);
-		browse_ast_apply_expand(tree->head, env);
+		browse_sub_tree(tree->head);
+	//	browse_ast_apply_expand(tree->head, env);
 	}
 	return (1);
 }

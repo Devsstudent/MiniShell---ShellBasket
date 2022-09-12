@@ -72,6 +72,11 @@ void	dict_modify(t_dict	*dict, char *key, char *value)
 		free(key);
 		buff->value = value;
 	}
+	else
+	{
+		free(key);
+		free(value);
+	}
 }
 
 void	dict_clear(t_dict *dict)
