@@ -11,6 +11,11 @@
 /* ************************************************************************** */
 #ifndef UTILS_H
 # define UTILS_H
+
+
+
+void	line_cpy_till_pend(t_block **buff, t_line *sub_lst);
+void    line_cpy_till_ope(t_block **buff, t_line *sub_lst);
 /********************************************/
 /*           garbage collector              */
 /********************************************/

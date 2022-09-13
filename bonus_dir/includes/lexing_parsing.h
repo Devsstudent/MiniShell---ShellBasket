@@ -102,5 +102,6 @@ void	fill_ast(t_line *line, t_tree *tree);
 //ast_utils.c
 t_leaf	*new_leaf(t_line *cmd, t_type_leaf type);
 void	clean_tree(t_leaf *leaf);
+void	fill_ast_bonus(t_line *line, t_tree *tree);
 
 #endif
