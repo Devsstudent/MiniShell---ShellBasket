@@ -49,4 +49,3 @@ t_bool	perror_false(char *str)
 	g_exit_status = 1;
 	return (FALSE);
 }
-
