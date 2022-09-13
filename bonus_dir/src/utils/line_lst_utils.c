@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/16 15:02:40 by odessein         ###   ########.fr       */
+/*   Updated: 2022/08/29 17:58:01 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -21,6 +21,7 @@ t_block	*new_block(char *word)
 	new_block->word = word;
 	new_block->next = NULL;
 	new_block->prev = NULL;
+	new_block->crash = FALSE;
 	return (new_block);
 }
 
@@ -29,9 +30,9 @@ void	line_lst_addback(t_line *line, t_block *new)
 	t_block	*buff;
 
 	if (!line)
-		return ;
+		return (free_exit());
 	if (!new)
-		return ;
+		return (free_exit());
 	if (!(line->head))
 	{
 		line->head = new;
@@ -66,51 +67,15 @@ void	line_clear(t_line *line)
 void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst)
 {
 	t_block	*new;
+	char	*cpy;
+	int		i;
 
+	i = 0;
 	while (*buff && (*buff)->token != PIPE)
 	{
-		new = new_block((*buff)->word);
-		if (!new)
-			return (free_exit());
-		new->token = (*buff)->token;
-		line_lst_addback(sub_lst, new);
-		*buff = (*buff)->next;
-	}
-}
-
-void    line_cpy_till_ope(t_block **buff, t_line *sub_lst)
-{
-    t_block *new;
-
-    while (*buff && !((*buff)->token == PIPE
-            || (*buff)->token == OR || (*buff)->token == AND))
-    {
-        new = new_block((*buff)->word);
-        if (!new)
-            return (free_exit());
-        new->token = (*buff)->token;
-        line_lst_addback(sub_lst, new);
-        *buff = (*buff)->next;
-    }
-}
-
-void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
-{
-	t_block	*new;
-	int		count;
-
-	count = -12;
-	while (*buff && count != 0)
-	{
-		if ((*buff)->token == P_OPEN)
-		{
-			if (count == -12)
-				count = 0;
-			count++;
-		}
-		if ((*buff)->token == P_CLOSE)
-			count--;
-		new = new_block((*buff)->word);
+		cpy = ft_strdup((*buff)->word);
+		i++;
+		new = new_block(cpy);
 		if (!new)
 			return (free_exit());
 		new->token = (*buff)->token;

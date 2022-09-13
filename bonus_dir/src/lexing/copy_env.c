@@ -5,10 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/29 14:19:25 by odessein          #+#    #+#             */ /*   Updated: 2022/08/03 14:27:19 by odessein         ###   ########.fr       */ /*                                                                            */ /* ************************************************************************** */
+/*   Created: 2022/07/29 14:19:25 by odessein          #+#    #+#             */
+/*   Updated: 2022/08/19 21:48:59 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 int	**size_env(char **env)
 {
 	int		**xy;
@@ -24,7 +27,8 @@ int	**size_env(char **env)
 	*xy = malloc(sizeof(**xy));
 	if (!(*xy))
 		return (NULL);
-	**xy = i; *(xy + 1) = malloc(sizeof(**xy) * i);
+	**xy = i;
+	*(xy + 1) = malloc(sizeof(**xy) * i);
 	if (!*(xy + 1))
 		return (NULL);
 	i = -1;
@@ -65,7 +69,7 @@ char	**copy_env(char **env)
 	}
 	env[i] = NULL;
 	return(new_env);
-}
+}*/
 
 t_dict	*double_char_to_lst(char **d_char)
 {
@@ -73,18 +77,17 @@ t_dict	*double_char_to_lst(char **d_char)
 	t_dict	*env;
 
 	env = (t_dict *)malloc(sizeof(t_dict));
-	add_to_gc(DICT, env, get_gc());
 	env->size = 0;
 	env->head = NULL;
 	env->last = NULL;
+	add_to_gc(ENV, env, get_gc());
 	while (*d_char != 0)
 	{
 		new = new_elem(*d_char);
-		//Free tous les elememt malloc avant ! Si ca crash
 		if (!new)
 			free_exit();
 		dict_addback(env, new);
 		d_char++;
 	}
-	return env;
+	return (env);
 }
