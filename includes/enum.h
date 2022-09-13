@@ -27,10 +27,6 @@ typedef enum e_token {
 	RED_OUT_APPEND,
 	HERE_DOC,
 	PIPE,
-	OR,
-	AND,
-	P_OPEN,
-	P_CLOSE,
 	CMD_ARG,
 	FILES,
 	DELIMITER

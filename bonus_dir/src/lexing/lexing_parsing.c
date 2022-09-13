@@ -43,9 +43,8 @@ t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 	if (line_lst == NULL)
 		return (tree->head = NULL, tree);
 	add_to_gc(LINE, line_lst, get_gc());
-	if (!tokenization(line_lst))
-		return (tree->head = NULL, tree);
-	fill_ast(line_lst, tree);
+	tokenization(line_lst);
+	fill_ast_bonus(line_lst, tree);
 	exec_in->fd_arr_size = total_block(tree->head);
 	exec_in->fd_arr = malloc(sizeof(int) * exec_in->fd_arr_size);
 	if (!exec_in->fd_arr)

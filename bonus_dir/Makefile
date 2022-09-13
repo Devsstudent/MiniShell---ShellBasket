@@ -1,23 +1,22 @@
-FLAG = -Wall -g -Wextra -MMD -Werror
-CC = gcc
-LIB = ../libft
-HEAD = ./includes
-SRC=$(shell find ./src -name "*.c")
-YO = $(SRC:.c=.o)
-OBJ = $(YO:./src%=./obj%)
+FLAG = -Wall -g -Wextra -Werror -MMD
+CC= gcc
+LIB= ../libft
+HEAD= ./includes
+SRC= $(shell find ./src -name "*.c")
+YO= $(SRC:.c=.o)
+OBJ= $(YO:./src%=./obj%)
+D_LST= $(OBJ:.o=.d)
+NAME= minishell
 
-D_LST = $(OBJ:.o:=.d)
+all: $(NAME)
 
-NAME = minishell
-
-all : $(OBJ)
-
-$(NAME):$(OBJ)
-	make bonus -s -C $(LIB)
+$(NAME): $(OBJ)
+	@make bonus -s -C $(LIB)
 	$(CC) $(FLAG) $(OBJ) -L /usr/local/opt/readline/lib  -lreadline -L $(LIB) -lft -o $(NAME)
 
-obj/%.o: src/%.c | object
+obj/%.o: src/%.c object
 	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -I /usr/local/opt/readline/include -c $< -o $@
+
 object:
 	@mkdir -p obj
 	@mkdir -p obj/lexing
@@ -28,16 +27,16 @@ object:
 	@mkdir -p obj/utils
 	@mkdir -p obj/error
 
-clean :
+clean:
 	make -s clean -C $(LIB)
 	rm -f $(NAME)
 
-fclean :
+fclean:
 	make -s fclean -C $(LIB)
 	rm -f $(NAME)
 	rm -rf obj
 
 re : fclean all
 
-.PHONY: all re clean fclean 
+.PHONY: all re clean fclean
 -include $(D_LST)

@@ -15,6 +15,9 @@
 typedef enum e_type_leaf {
 	CMD,
 	PIPE_L,
+	AND_L,
+	OR_L,
+	PRTS
 }	t_type_leaf;
 
 typedef enum e_token {
@@ -24,6 +27,10 @@ typedef enum e_token {
 	RED_OUT_APPEND,
 	HERE_DOC,
 	PIPE,
+	OR,
+	AND,
+	P_OPEN,
+	P_CLOSE,
 	CMD_ARG,
 	FILES,
 	DELIMITER

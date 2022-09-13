@@ -91,8 +91,8 @@ t_line		*fill_line_lst(char *line);
 /********************************************/
 
 void	remove_useless_quote(t_block *word);
-void	str_quote_parse(char *word, char *new_word);
-void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j);
+//void	str_quote_parse(char *word, char *new_word);
+//void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j);
 //size_t	size_new_word_quote(char *word);
 //size_t	size_till_next_char(char *word, char c, size_t *i);
 
