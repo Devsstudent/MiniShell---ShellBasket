@@ -41,13 +41,18 @@ OBJ = $(addprefix obj/, main.o \
 			dict_utils.o \
 			dict_to_double.o \
 			here_doc_utils.o \
-			bis.o \
+			garbage_collector_free.o \
 			lexing_handle.o \
 			lexing_fill_word.o \
 			handle_cmd_utils.o \
 			export_utils.o \
 			check_redir.o \
 			redir_ambiguous.o \
+			builtins.o \
+			cmd_not_found.o \
+			lexing_parsing.o \
+			wait_process.o \
+			malloc_pid_func.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
 			ast_utils.d \
@@ -86,13 +91,18 @@ D_LST = $(addprefix obj/, main.d \
 			dict_utils.d \
 			dict_to_double.d \
 			here_doc_utils.d \
-			bis.d \
+			garbage_collector_free.d \
 			lexing_fill_word.d \
 			lexing_handle.d \
 			export_utils.d \
 			check_redir.d \
 			redir_ambiguous.d \
+			builtins.d \
 			handle_cmd_utils.d \
+			lexing_parsing.d \
+			wait_process.d \
+			cmd_not_found.d \
+			malloc_pid_func.d \
 			null.d)
 NAME = minishell
 

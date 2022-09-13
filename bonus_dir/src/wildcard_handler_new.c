@@ -6,18 +6,10 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/01 14:35:27 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/12 17:01:36 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-//#include "minishell.h"
-#include <sys/types.h>
-#include <dirent.h>
-#include "stdio.h"
-#include "stdlib.h"
-#include "unistd.h"
-#include "errno.h"
-#include "../../libft/libft.h"
-
+#include "minishell.h"
 
 //expand before wildcards, so we have the right thing at hand
 //$something*, expand $something, then * is handled
@@ -77,8 +69,7 @@ void	fill_filenames(char **filenames, DIR **dir, struct dirent **ent)
 		{
 			filenames[i++] = ft_strjoin(ft_strdup((*ent)->d_name), "/");
 			if (!filenames[(i - 1)])
-				exit(0);
-				//free_exit();
+				free_exit();
 		}
 		filenames[i++] = ft_strdup((*ent)->d_name);
 	}
@@ -97,9 +88,8 @@ char	**get_filenames(void)
 	size = get_nb_files();
 	filenames = (char **) malloc(sizeof(char *) * (get_nb_files() + 1));
 	if (!filenames)
-		exit(0);
-		//free_exit();
-	//add_to_gc(DOUBLE, filenames, get_gc());
+		free_exit();
+	add_to_gc(DOUBLE, filenames, get_gc());
 	if (size == 0)
 		return (filenames[0] = NULL, filenames);
 	fill_filenames(filenames, &dir, &ent);
@@ -244,14 +234,13 @@ char	**handle_wildcards(char *word)
 	matches = malloc(sizeof(*matches) * (i + 1));
 	patterns = ft_split(word, '*');
 	if (!patterns)
-		exit(0);
-		//free_exit();
+		free_exit();
 	fill_matches(word, filenames, patterns, matches);
 	return (matches);
 }
 
 //if / at the end, only the directories should be displayed, if any
-
+/*
 int	main(void)
 {
 	char	**files;
@@ -264,4 +253,4 @@ int	main(void)
 		i++;
 	}
 	printf("THIS IS THE END\n");
-}
+}*/

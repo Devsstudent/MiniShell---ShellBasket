@@ -1,66 +1,42 @@
-FLAG = -Wall -g -Wextra -MMD -Werror
-CC = gcc
-LIB = ../libft
-HEAD = ./includes
-OBJ = $(addprefix obj/, main.o \
-			garbage_collector.o \
-			copy_env.o \
-			lst_utils.o \
-			lexing_bonus.o \
-			line_lst_utils.o \
-			free_exit.o \
-			singleton.o \
-			check_symbol.o \
-			tokenization_bonus.o \
-			signal_handling.o \
-			expand.o \
-			abstract_syntax_tree_bonus.o \
-			remove_quote_before_exec.o \
-			ast_utils.o \
-			wildcard_handler.o \
-			error.o)
-D_LST = $(addprefix obj/, main.d \
-			garbage_collector.d \
-			copy_env.d \
-			lst_utils.d \
-			lexing_bonus.d \
-			line_lst_utils.d \
-			free_exit.d \
-			singleton.d \
-			check_symbol.d \
-			tokenization_bonus.d \
-			signal_handling.d \
-			expand.d \
-			abstract_syntax_tree_bonus.d \
-			error.d \
-			remove_quote_before_exec.d \
-			ast_utils.d \
-			wildcard_handler.d \
-			null.d)
-NAME = minishell
+FLAG = -Wall -g -Wextra -Werror -MMD
+CC= gcc
+LIB= ../libft
+HEAD= ./includes
+SRC= $(shell find ./src -name "*.c")
+YO= $(SRC:.c=.o)
+OBJ= $(YO:./src%=./obj%)
+D_LST= $(OBJ:.o=.d)
+NAME= minishell
 
-all : $(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJ)
-	make bonus -s -C $(LIB)
+	@make bonus -s -C $(LIB)
 	$(CC) $(FLAG) $(OBJ) -L /usr/local/opt/readline/lib  -lreadline -L $(LIB) -lft -o $(NAME)
 
-obj/%.o: src/%.c | object
+obj/%.o: src/%.c object
 	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -I /usr/local/opt/readline/include -c $< -o $@
 
 object:
 	@mkdir -p obj
+	@mkdir -p obj/lexing
+	@mkdir -p obj/expand
+	@mkdir -p obj/exec
+	@mkdir -p obj/parsing
+	@mkdir -p obj/builtins
+	@mkdir -p obj/utils
+	@mkdir -p obj/error
 
-clean :
+clean:
 	make -s clean -C $(LIB)
 	rm -f $(NAME)
 
-fclean :
+fclean:
 	make -s fclean -C $(LIB)
 	rm -f $(NAME)
 	rm -rf obj
 
 re : fclean all
 
-.PHONY: all re clean fclean 
+.PHONY: all re clean fclean
 -include $(D_LST)

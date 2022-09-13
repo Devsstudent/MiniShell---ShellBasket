@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 12:38:41 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/19 13:19:15 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/08 19:17:50 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_bool	ft_check_dieze(char *str);
 t_bool	ft_is_digit(char c);
 t_bool	ft_check_space(char *str);
 void	ft_putnstr(char *str, int size, int *ret_val);
-int		ft_printf(t_bool err, const char *string, ...);
+int		ft_printf(const char *string, ...);
 void	ft_loop(char *string, va_list ap, int *ret_val);
 char	*ft_brows(char *str, va_list ap, int *ret_val);
 t_bool	ft_check_end(char c);

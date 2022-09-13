@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 13:02:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/20 13:29:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/12 17:02:56 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,105 +18,22 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 # include <signal.h>
+# include <dirent.h>
 # include <string.h>
+# include <errno.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
 # include "global.h"
-
-typedef enum	e_type_leaf{
-	CMD,
-	PIPE_L,
-    AND_L,
-    OR_L,
-    PRTS	
-}	t_type_leaf;
-
-typedef enum	e_token {
-	UNDEF,
-	RED_IN,
-	RED_OUT_TRUNC,
-	RED_OUT_APPEND,
-	HERE_DOC,
-	PIPE,
-	OR,
-	AND,
-	P_OPEN,
-	P_CLOSE,
-	CMD_ARG,
-	FILES,
-	DELIMITER
-}	t_token;
-
-typedef enum	e_quote{
-	NO,
-	SINGLE,
-	DOUBLE_QUOTE
-}	t_quote;
-
-typedef enum	e_type{
-	DICT,
-	LINE,
-	DOUBLE,
-	SIMPLE,
-	TREE,
-}	t_type;
-
-typedef struct	s_leaf{
-	//head de la sous-list
-	void			*content;
-	t_bool			parentheses;
-	t_type_leaf		type;
-	struct s_leaf	*right;
-	struct s_leaf	*left;
-}					t_leaf;
-
-typedef struct	s_tree{
-	t_leaf	*head;
-}			t_tree;
-
-typedef struct	s_elem{
-	struct s_elem	*next;
-	struct s_elem	*prev;
-	char			*key;
-	char			*value;
-}					t_elem;
-
-typedef struct	s_block{
-	struct s_block	*next;
-	struct s_block	*prev;
-	t_token			token;
-	//Maybe useful to store env_var in a lst for the expand
-//	t_env			*env_list;
-	char			*word;
-}				t_block;
-
-typedef struct	s_dict{
-	t_elem	*head;
-	t_elem	*last;
-	int		size;
-}			t_dict;
-
-typedef struct s_line{
-	t_block	*head;
-	t_block	*last;
-	int		size;
-}			t_line;
-
-typedef struct	s_gc{
-	void			*content;
-	struct	s_gc	*next;
-	t_type			type;
-}					t_gc;
-
-typedef struct	s_lexeur {
-	t_token			token;
-	void			*content;
-	struct s_lexeur	*next;
-}					t_lexeur;
-
-
+# include "struct.h"
+# include "exec.h"
+# include "lexing_parsing.h"
+# include "utils.h"
+# include "enum.h"
+# include "expand.h"
 
 void	free_exit(void);
 void	listen_to_sigs(void);
@@ -174,10 +91,10 @@ t_line		*fill_line_lst(char *line);
 /********************************************/
 
 void	remove_useless_quote(t_block *word);
-void	str_quote_parse(char *word, char *new_word);
-void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j);
-size_t	size_new_word_quote(char *word);
-size_t	size_till_next_char(char *word, char c, size_t *i);
+//void	str_quote_parse(char *word, char *new_word);
+//void	str_cp_till_quote(char *word, char *new_word, size_t *i, size_t *j);
+//size_t	size_new_word_quote(char *word);
+//size_t	size_till_next_char(char *word, char c, size_t *i);
 
 /********************************************/
 /*              tokenization                */

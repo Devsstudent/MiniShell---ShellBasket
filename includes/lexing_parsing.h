@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:41:30 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 17:21:57 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/09 20:11:08 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LEXING_PARSING_H
@@ -43,15 +43,20 @@ t_block	*new_block(char *word);
 void	line_lst_addback(t_line *line, t_block *new);
 void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 
+//lexing_parsing.c
+t_bool	ms_line(char **line, t_info *exec_in);
+t_tree	*ms_lex_and_parse(char **line, t_info *exec_in);
+
 /********************************************/
 /*                 here_doc                 */
 /********************************************/
 //here_doc.c
 void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn);
 void	check_here_doc(t_line *sub, int turn, int *fd_arr);
-void	create_tmp(int *fd_arr, int turn); void	fill_here_doc(char *delim, int turn, int *fd_arr);
+void	create_tmp(int *fd_arr, int turn);
 void	fill_here_doc(char *delim, int turn, int *fd_arr);
-int	total_block(t_leaf *leaf);
+int		total_block(t_leaf *leaf);
+
 //here_doc_utils.c
 void	remove_tmp_file(int file_nb, int *fd_arr);
 char	*get_delim(char *delim);
@@ -62,8 +67,8 @@ void	close_reopen_here_doc(int turn, int *fd_arr, char *line);
 /********************************************/
 
 //check_symbol
-t_bool check_pipe(t_token next, t_token previous);
-t_bool check_symbol(t_block *block);
+t_bool	check_pipe(t_token next, t_token previous);
+t_bool	check_symbol(t_block *block);
 
 //tokenization
 t_bool	tokenization(t_line *line);

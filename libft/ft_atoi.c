@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 16:12:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/07/08 22:46:56 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:52:00 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -27,6 +27,8 @@ int	ft_atoi(const char *nptr)
 	long long	res;
 	int			neg_sign;
 
+	if (nptr == NULL)
+		return (0);
 	ft_skip(nptr, &i, &res, &neg_sign);
 	if (nptr[i] == '-' || nptr[i] == '+')
 	{

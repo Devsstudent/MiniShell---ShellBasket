@@ -1,37 +1,5 @@
 #include "minishell.h"
 
-void	ms_line(char **line)
-{
-	listen_to_sigs();
-	*line = readline("@ShellBasket^$ ");
-	if (!(*line))
-		free_exit();
-	add_history(*line);
-	add_to_gc(SIMPLE, *line, get_gc());
-}
-
-t_tree	*ms_lex_and_parse(char **line)
-{
-	t_line	*line_lst;
-	t_tree	*tree;
-
-	tree = (t_tree *) malloc(sizeof(t_tree));
-	tree->head = NULL;
-	add_to_gc(TREE, tree, get_gc());
-	line_lst = fill_line_lst(*line);
-	add_to_gc(LINE, line_lst, get_gc());
-	tokenization(line_lst);
-	t_block	*buff;
-	buff = line_lst->head;
-	while (buff)
-	{
-		ft_printf(0, "word = %s ; token = %i\n", buff->word, buff->token);
-		buff = buff->next;
-	}
-	fill_ast_bonus(line_lst, tree);
-	return (tree);
-}
-
 void	browse_sub_tree(t_leaf *leaf)
 {
 	ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
@@ -74,52 +42,31 @@ void	browse_tree(t_tree *tree)
 	browse_sub_tree(buff);
 }
 
+//Function recursive d'exec
+//Function recursive de parcours de l'ast
+//Reset les init_info apres chaque exec + wait les pid
+//One thing by function !
+
 int	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_tree	*tree;
-	t_dict	*env;
+	t_info	*exec_in;
+	//t_dict	*env;
 
+	(void) envp;
+	exec_in = NULL;
 	if (av[1])
 		return (1);
-	env = double_char_to_lst(envp);
+	//env = double_char_to_lst(envp);
 	while (ac)
 	{
-		ms_line(&line);
-		tree = ms_lex_and_parse(&line);
-		browse_ast_apply_expand(tree->head, env);
+		ms_line(&line, exec_in);
+		tree = ms_lex_and_parse(&line, exec_in);
+		browse_sub_tree(tree->head);
+	//	browse_ast_apply_expand(tree->head, env);
 	}
 	return (1);
 }
-
-/*
-int	main(int ac, char **av, char **envp)
-{
-	t_dict	env;
-	t_elem	*buff;
-	t_elem	*new;
-	char	**arg;
-
-	arg = ft_split("COCO=COCO", '=');	
-	if (!double_char_to_lst(envp, &env))
-		return (1);
-	printf("here\n");
-	new = new_elem("COCO=PASCOCO");
-	if (!new)
-		return (3);
-	dict_addback(&env, new);
-	dict_modify(&env, arg[0], arg[1]);
-	buff = env.head;
-	while (buff)
-	{
-		printf("%s=%s\n", buff->key, buff->value);
-		buff = buff->next;
-	}
-	free(arg);
-	dict_clear(&env);
-	printf("done\n");
-	return (0);
-}
-*/
