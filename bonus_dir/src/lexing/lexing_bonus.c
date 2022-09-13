@@ -45,7 +45,7 @@ static t_bool	check_lines_quotes(char *line)
 	return (TRUE);
 }
 
-static t_bool	not_in_quote(char *line, int i)
+t_bool	not_in_quote(char *line, int i)
 {
 	static t_quote	quote;
 
