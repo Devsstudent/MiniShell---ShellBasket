@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/13 21:15:12 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/14 16:51:19 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -14,7 +14,7 @@
 void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 {
 	expand(sub, env);
-	handle_wildcards(sub, env);
+	handle_wildcards(sub->head->word);
 	exec_info->argv = get_cmd_arg(sub);
 	exec(exec_info, sub, env);
 }
@@ -25,13 +25,13 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		return ;
 	if (leaf->type == CMD)
 		exec_cmd(exec_in, leaf->content, env);
-	if (leaf->type == OR)
+	if (leaf->type == OR_L)
 	{
 		exec_tree(leaf->left, exec_in, env);
 		if (g_exit_status != 0)
 			exec_tree(leaf->right, exec_in, env);
 	}
-	if (leaf->type == AND)
+	if (leaf->type == AND_L)
 	{
 		exec_tree(leaf->left, exec_in, env);
 		if (g_exit_status == 0)

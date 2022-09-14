@@ -6,12 +6,12 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/12 13:46:35 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/14 16:41:43 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
+/*static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 {
 	char		*cmd_path;
 	int			i;
@@ -38,9 +38,9 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 		close(exec_in->out_fd);
 	exec_in->turn++;
-}
+}*/
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
+/*void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 {
 	if (!leaf)
 		return ;
@@ -65,7 +65,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 		exec_cmd(exec_in, leaf->content, env);
 	}
 }
-
+*/
 //On pourrait aussi define une value dans la struct line des quon ajoute un
 //token CMD on ++ (pour moins reparcourir la liste)
 //Return un double tableau avec la commandes et arg
