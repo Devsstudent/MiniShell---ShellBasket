@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:10:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 19:32:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 20:21:13 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,7 +20,6 @@ void	ambiguous_case(t_bool type, t_info *exec_in)
 		exec_in->out_fd = -2;
 	if (!type)
 		exec_in->open_fd = -2;
-	printf("YAYY\n");
 	write(2, msg, ft_strlen(msg));
 }
 
@@ -32,17 +31,18 @@ t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 
 	quote = FALSE;
 	d_quote = FALSE;
-	i = -1;
+	i = 0;
 	if (!word[i])
 		return (FALSE);
-	while (word[++i])
+	while (word[i])
 	{
 		check_quote_redir(&d_quote, &quote, word[i]);
-		if (i > 0 && is_white_space(word[i - 1]) && is_white_space(word[i]) && !quote && !d_quote)
+		if (i > 0 && !is_white_space(word[i - 1]) && is_white_space(word[i]) && !quote && !d_quote)
 		{
 			ambiguous_case(type, exec_in);
 			return (TRUE);
 		}
+		i++;
 	}
 	return (FALSE);
 }

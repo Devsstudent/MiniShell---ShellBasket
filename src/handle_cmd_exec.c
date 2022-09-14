@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 19:28:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 20:10:10 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -25,7 +25,7 @@ void	advance_if_space(char *word, int *j, int *last, int quote_status)
 		while (word[*j])
 		{
 			(*j)++;
-			if (is_white_space(word[*j]) && !quote_status)
+			if (!is_white_space(word[*j]) && !quote_status)
 			{
 				*last = *j;
 				(*j)--;
@@ -46,7 +46,7 @@ void	loop_get_arg(char *word, char **argv, int *i)
 	init_loop_get_arg(&j, &last, &quote, &d_quote);
 	while (word[j])
 	{
-		if (is_white_space(word[j]) && j > 0 && is_white_space(word[j - 1])
+		if (is_white_space(word[j]) && j > 0 && !is_white_space(word[j - 1])
 			&& !d_quote && !quote)
 		{
 			argv[*i] = ft_substr(word, last, (j - last));

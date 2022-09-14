@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 17:16:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 20:45:53 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -75,6 +75,8 @@ static t_bool	child_process_alone_cmd(char *cmd_path, t_info *exec_in,
 		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 			close(exec_in->out_fd);
 		close_subprocess_fd(exec_in, NULL);
+		if (exec_in->out_fd == -2)
+			free_exit();
 		if (!execve_cmd(cmd_path, exec_in, env, NULL))
 		{
 			perror(exec_in->argv[0]);
