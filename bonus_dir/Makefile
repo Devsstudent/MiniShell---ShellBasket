@@ -14,7 +14,7 @@ $(NAME): $(OBJ)
 	@make bonus -s -C $(LIB)
 	$(CC) $(FLAG) $(OBJ) -L /usr/local/opt/readline/lib  -lreadline -L $(LIB) -lft -o $(NAME)
 
-obj/%.o: src/%.c object
+obj/%.o: src/%.c | object
 	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -I /usr/local/opt/readline/include -c $< -o $@
 
 object:
