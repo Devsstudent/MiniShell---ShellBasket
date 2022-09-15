@@ -69,7 +69,10 @@ t_info	*init_exec_info(void)
 //One thing by function !
 
 int	g_exit_status = 0;
-
+//Same parsing, not same waiting pid 
+//reset de l'exec dans la recursion + les check redirection etc
+//Juste les here_doc au parsing enfaite (et encore)
+//Objectif : setup clean pour l'exec
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;

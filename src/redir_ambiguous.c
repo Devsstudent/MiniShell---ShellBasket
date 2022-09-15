@@ -23,7 +23,7 @@ void	ambiguous_case(t_bool type, t_info *exec_in)
 	printf("YAYY\n");
 	write(2, msg, ft_strlen(msg));
 }
-
+//Empty ou contient des whitespace
 t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 {
 	int		i;
@@ -34,7 +34,7 @@ t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 	d_quote = FALSE;
 	i = -1;
 	if (!word[i])
-		return (FALSE);
+		return (ambiguous_case(type, exec_in));
 	while (word[++i])
 	{
 		check_quote_redir(&d_quote, &quote, word[i]);
