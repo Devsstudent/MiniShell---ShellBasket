@@ -6,20 +6,21 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:48:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/09 20:10:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 15:50:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 t_bool	ms_line(char **line, t_info *exec_in)
 {
+	(void) exec_in;
 	listen_to_sigs();
-	*line = readline("@ShellBasket^$ ");
+	*line = readline("@ShellBasket % ");
 	if (!(*line))
 	{
-		if (exec_in->stdou != -1)
-			close(exec_in->stdou);
-		close(exec_in->stdi);
+		//if (exec_in->stdou != -1)
+		//close(exec_in->stdou);
+		//close(exec_in->stdi);
 		write(2, "exit\n", 5);
 		free_exit();
 	}

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:02:58 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/08 20:10:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 17:33:20 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -75,12 +75,10 @@ void	listen_to_sigs(void)
 	struct sigaction	action_quit;
 	struct sigaction	action_int;
 
-	if (!sigemptyset(&action_int.sa_mask))
-		return ;
+	sigemptyset(&action_int.sa_mask);
 	action_int.sa_handler = sigint_handler;
 	action_int.sa_flags = 0;
-	if (!sigemptyset(&action_quit.sa_mask))
-		return ;
+	sigemptyset(&action_quit.sa_mask);
 	action_quit.sa_handler = SIG_IGN;
 	action_quit.sa_flags = 0;
 	sigaction(SIGINT, &action_int, NULL);

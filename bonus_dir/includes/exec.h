@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/10 16:49:52 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 16:40:26 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -19,11 +19,11 @@
 /*                   exec                   */
 /********************************************/
 //forking.c
-void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2]);
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env);
 void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
 
 //exec.c
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
+//void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env);
 
 //cmd_not_found.c
@@ -99,5 +99,8 @@ t_bool	init_export(char *arg, int *i, t_bool *append);
 void	exec_env(int ac, char **argv, t_dict *env);
 //pwd.c
 void	exec_pwd(int ac, char **argv, t_dict *env);
+
+void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env);
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/09 20:11:23 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 18:22:36 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,9 +16,7 @@ void	browse_sub_tree(t_leaf *leaf)
 {
 	t_line	*line;
 	t_block	*buff;
-
-	if (leaf->type == CMD)
-	{
+if (leaf->type == CMD) {
 		line = leaf->content;
 		if (line)
 		{
@@ -46,7 +44,7 @@ void	browse_tree(t_tree *tree)
 }
 */
 
-t_info	*init_exec_info(void)
+static t_info	*init_exec_info(void)
 {
 	t_info	*exec_info;
 
@@ -96,7 +94,11 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
 		if (tree->head == NULL && free_each_turn(get_gc()))
+		{
+			close(exec_info->stdou);
+			close(exec_info->stdi);
 			continue ;
+		}
 		parse_here_doc(tree->head, exec_info->fd_arr, 0);
 		if (g_exit_status == 140 && free_each_turn(get_gc()))
 		{

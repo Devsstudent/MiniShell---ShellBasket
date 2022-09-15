@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 17:36:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 18:54:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -73,7 +73,7 @@ void	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 
 void	analyse_word(char *line, int *i, int *size_word, t_line *lst)
 {
-	if (line[*i] == ' ')
+	if (line[*i] == ' ' || (line[*i] >= 9 && line[*i] <= 13))
 		handle_space(line, i, size_word, lst);
 	else
 		analyse_symbol(line, i, size_word, lst);

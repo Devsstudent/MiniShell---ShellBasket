@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/12 16:07:40 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 18:30:19 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -27,6 +27,18 @@ void	init_wait_sub_process(t_info *exec_info, int *i)
 		close(exec_info->out_fd);
 	if (exec_info->open_fd != -1 && exec_info->open_fd != -2)
 		close(exec_info->open_fd);
+}
+
+static void	handle_backslash(void)
+{
+	write(2, "Quit (core dumped)\n", 19);
+	g_exit_status = 131;
+}
+
+static void	handle_core_dump(void)
+{
+	g_exit_status = 139;
+	write(2, "Segmentation fault (core dumped)\n", 34);
 }
 
 void	wait_sub_process(t_info *exec_info)
@@ -50,10 +62,8 @@ void	wait_sub_process(t_info *exec_info)
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 2)
 			g_exit_status = 130;
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 3)
-		{
-			write(2, "Quit (core dumped)\n", 19);
-			g_exit_status = 131;
-			return ;
-		}
+			handle_backslash();
+		else if (WIFSIGNALED(w_status) && WCOREDUMP(w_status))
+			handle_core_dump();
 	}
 }

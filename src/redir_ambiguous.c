@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:10:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/01 18:10:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/14 20:21:13 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,10 +32,16 @@ t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 	quote = FALSE;
 	d_quote = FALSE;
 	i = -1;
+	if (!word[0])
+	{
+		ambiguous_case(type, exec_in);
+		return (TRUE);
+	}
 	while (word[++i])
 	{
 		check_quote_redir(&d_quote, &quote, word[i]);
-		if (i > 0 && word[i - 1] != ' ' && word[i] == ' ' && !quote && !d_quote)
+		if (i > 0 && !is_white_space(word[i - 1]) && is_white_space(word[i])
+			&& !quote && !d_quote)
 		{
 			ambiguous_case(type, exec_in);
 			return (TRUE);
