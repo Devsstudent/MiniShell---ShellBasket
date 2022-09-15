@@ -22,7 +22,7 @@ void	ambiguous_case(t_bool type, t_info *exec_in)
 		exec_in->open_fd = -2;
 	write(2, msg, ft_strlen(msg));
 }
-
+//Empty ou contient des whitespace
 t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 {
 	int		i;
@@ -31,10 +31,13 @@ t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 
 	quote = FALSE;
 	d_quote = FALSE;
-	i = 0;
-	if (!word[i])
-		return (FALSE);
-	while (word[i])
+	i = -1;
+	if (!word[0])
+	{
+		ambiguous_case(type, exec_in);
+		return (TRUE);
+	}
+	while (word[++i])
 	{
 		check_quote_redir(&d_quote, &quote, word[i]);
 		if (i > 0 && !is_white_space(word[i - 1]) && is_white_space(word[i]) && !quote && !d_quote)
@@ -42,7 +45,6 @@ t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 			ambiguous_case(type, exec_in);
 			return (TRUE);
 		}
-		i++;
 	}
 	return (FALSE);
 }

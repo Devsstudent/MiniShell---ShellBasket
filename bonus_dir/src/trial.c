@@ -43,6 +43,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		exec_tree(leaf->right, exec_in, env);
 	}
 }
+//pipe on check a gauche du suivant si on a une cmd ou pas
 
 /*
 	when should we wait ? we wait at the end of each command
