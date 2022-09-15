@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/14 16:51:19 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/15 16:06:53 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -28,46 +28,32 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	if (leaf->type == OR_L)
 	{
 		exec_tree(leaf->left, exec_in, env);
+		wait_processes(exec_in);
 		if (g_exit_status != 0)
 			exec_tree(leaf->right, exec_in, env);
 	}
 	if (leaf->type == AND_L)
 	{
 		exec_tree(leaf->left, exec_in, env);
+		wait_processes(exec_in);
 		if (g_exit_status == 0)
 			exec_tree(leaf->right, exec_in, env);
 	}
 	if (leaf->type == PIPE_L)
 	{
+		//create a pipe and put it exec_in
 		exec_tree(leaf->left, exec_in, env);
 		exec_tree(leaf->right, exec_in, env);
 	}
 }
-//pipe on check a gauche du suivant si on a une cmd ou pas
 
-/*
-	when should we wait ? we wait at the end of each command
-	let's imagine (a && b) | super
-	can we wait after each command ?
-	after each fork, we wait for the processes to finish
-	can we wait at the end for all processes to finish, just like in no bonus ?
-	why do we have to wait to the end
-	because we just want it to finish all the children before we can go on to another line
-	or not ?
-*/
+void	wait_processes(t_info *exec_in)
+{
+	while (pids in linked list)
+	{
+		waitpid(exec_info->pid);
+	}
+	remove pids;
+}
 
-//waitpid des qu'on finit la pipeline, ou des qu'on finit une commande
-/*
-The struct exec_in contains : 
-
-start = tells us if it is the start
-end = tells us if it is the end
-the exit status is really important and should be handled well
-*/
-/*
-	Ce serait bien de faire le menage dans les fonctions de la 
-	partie obligatoire, ca nous permettrait de 
-	savoir ce dont on a reellement besoin
-	Essayer de fonctionner sans avoir besoin de start et de end
-	dans la struct exec_in serait bien
-*/
+//the last wait_processes has to be at the end of main like in mandatory part
