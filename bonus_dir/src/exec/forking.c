@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/15 19:04:03 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/15 19:58:48 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -58,5 +58,6 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 		close(exec_in->tmp_fd);
 	if (!exec_in->end)
 		exec_in->tmp_fd = exec_in->pipe_fd[0];
-	close(exec_in->pipe_fd[1]);
+	if (exec_in->pipe_fd[1] != -1)
+		close(exec_in->pipe_fd[1]);
 }

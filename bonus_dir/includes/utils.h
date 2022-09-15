@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/15 19:07:32 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/15 20:15:28 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -64,5 +64,6 @@ void	wait_sub_process(t_info *exec_info);
 //pid_utils
 t_pid	*new_pid(int pid);
 void	pid_li_addback(t_pid_li *pid_lst, t_pid *new);
+void	pid_li_clear(t_pid_li *pid_lst);
 
 #endif

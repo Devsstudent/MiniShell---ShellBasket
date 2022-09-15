@@ -56,6 +56,8 @@ t_info	*init_exec_info(void)
 	exec_info->fd_arr = NULL;
 	exec_info->fd_arr_size = 0;
 	exec_info->turn = 0;
+	exec_info->pipe_fd[0] = -1;
+	exec_info->pipe_fd[1] = -1;
 	exec_info->tmp_fd = -1;
 	exec_info->end = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);

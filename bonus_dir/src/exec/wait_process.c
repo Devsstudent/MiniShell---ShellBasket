@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/15 18:41:45 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/15 20:25:43 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -54,8 +54,15 @@ void	wait_sub_process(t_info *exec_info)
 		{
 			write(2, "Quit (core dumped)\n", 19);
 			g_exit_status = 131;
-			return ;
+			break ;
 		}
 		buff = buff->next;
 	}
+	pid_li_clear(exec_info->pid_li);
+	exec_info->argv = NULL;
+	exec_info->pid_li->head = NULL;
+	exec_info->pid_li->last = NULL;
+	exec_info->tmp_fd = -1;
+	exec_info->stdi = dup(STDIN_FILENO);
+	exec_info->stdou = dup(STDOUT_FILENO);
 }
