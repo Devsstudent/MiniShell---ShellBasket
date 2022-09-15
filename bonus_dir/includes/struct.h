@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:44:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 19:08:58 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/15 18:57:43 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef STRUCT_H
@@ -61,12 +61,13 @@ typedef struct s_tree{
 
 typedef struct s_pid{
 	int				pid;
-	struct s_int	*next;
+	struct s_pid	*next;
 }					t_pid;
 
 typedef struct s_pid_li{
 	t_pid	*head;
 	int		size;
+	t_pid	*last;
 }			t_pid_li;
 
 typedef struct s_gc{
@@ -76,7 +77,7 @@ typedef struct s_gc{
 }					t_gc;
 
 typedef struct s_info{
-	t_pid_li	pid_li;
+	t_pid_li	*pid_li;
 	char		**argv;
 	int			open_fd;
 	int			out_fd;

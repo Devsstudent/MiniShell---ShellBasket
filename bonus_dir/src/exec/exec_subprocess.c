@@ -6,34 +6,21 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/12 16:32:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/15 19:59:49 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-t_bool	dup_cmd_alone(t_info *exec_in)
-{
-	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
-	{
-		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
-			return (perror_false("shellbasket"));
-	}
-	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
-		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
-			return (perror_false("shellbasket"));
-	return (TRUE);
-}
-
-static t_bool	dup_stdout(t_info *exec_in, int pipe_fd[2])
+static t_bool	dup_stdout(t_info *exec_in)
 {
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 	{
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
 			return (perror_false("basket"));
 	}
-	else if (!exec_in->end)
+	else if (exec_in->pipe_fd[1] != -1)
 	{
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+		if (dup2(exec_in->pipe_fd[1], STDOUT_FILENO) == -1)
 			return (perror_false("shell"));
 	}
 	else
@@ -51,16 +38,16 @@ static t_bool	dup_stdout(t_info *exec_in, int pipe_fd[2])
 }
 
 //Gerer les erreurs et afficher perror return un booleen
-t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2])
+t_bool	dup_in_pipe(t_info *exec_in)
 {
-	if (!dup_stdout(exec_in, pipe_fd))
+	if (!dup_stdout(exec_in))
 		return (FALSE);
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 	{
 		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 			return (perror_false("set"));
 	}
-	else if (exec_in->tmp_fd != -1 && !exec_in->start)
+	else if (exec_in->tmp_fd != -1 /*&& !exec_in->start*/)
 	{
 		if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
 			return (perror_false("lasy"));
@@ -68,13 +55,12 @@ t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2])
 	return (TRUE);
 }
 
-void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2])
+void	close_subprocess_fd(t_info *exec_in)
 {
-	if (pipe_fd)
-	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
+	if (exec_in->pipe_fd[0] != -1)
+		close(exec_in->pipe_fd[0]);
+	if (exec_in->pipe_fd[1] != -1)
+		close(exec_in->pipe_fd[1]);
 	if (exec_in->stdi != -1)
 		close(exec_in->stdi);
 	if (exec_in->stdou != -1)

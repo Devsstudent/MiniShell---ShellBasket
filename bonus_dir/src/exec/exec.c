@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 16:41:43 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/15 19:56:10 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -70,7 +70,7 @@
 //token CMD on ++ (pour moins reparcourir la liste)
 //Return un double tableau avec la commandes et arg
 
-void	execute_cmd(t_info *exec_in, t_dict *env, int *pipe_fd, char *cmd_path)
+void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 {
 	forking(cmd_path, exec_in, env);
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)

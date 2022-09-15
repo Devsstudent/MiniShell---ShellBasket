@@ -6,14 +6,13 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/12 16:07:40 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/15 20:25:43 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	init_wait_sub_process(t_info *exec_info, int *i)
+void	init_wait_sub_process(t_info *exec_info)
 {
-	*i = -1;
 	if (exec_info->tmp_fd != -1)
 		close(exec_info->tmp_fd);
 	if (dup2(exec_info->stdi, STDIN_FILENO) == -1)
@@ -31,18 +30,20 @@ void	init_wait_sub_process(t_info *exec_info, int *i)
 
 void	wait_sub_process(t_info *exec_info)
 {
-	int	i;
-	int	w_status;
+	t_pid	*buff;
+	int		w_status;
 
-	init_wait_sub_process(exec_info, &i);
-	while (++i < exec_info->turn)
+	buff = exec_info->pid_li->head;
+	init_wait_sub_process(exec_info);
+	while (buff)
 	{
 		w_status = -81;
-		waitpid(exec_info->pid[i], &w_status, WCONTINUED);
-		if (exec_info->pid[i] == -1 || w_status == -81)
+		waitpid(buff->pid, &w_status, WCONTINUED);
+		if (buff->pid == -1 || w_status == -81)
 		{
-			if (exec_info->pid[i++] != -1 && w_status == -81)
+			if (buff->pid != -1 && w_status == -81)
 				g_exit_status = 130;
+			buff = buff->next;
 			continue ;
 		}
 		if (WIFEXITED(w_status) && !exec_info->cmd_not_found)
@@ -53,7 +54,15 @@ void	wait_sub_process(t_info *exec_info)
 		{
 			write(2, "Quit (core dumped)\n", 19);
 			g_exit_status = 131;
-			return ;
+			break ;
 		}
+		buff = buff->next;
 	}
+	pid_li_clear(exec_info->pid_li);
+	exec_info->argv = NULL;
+	exec_info->pid_li->head = NULL;
+	exec_info->pid_li->last = NULL;
+	exec_info->tmp_fd = -1;
+	exec_info->stdi = dup(STDIN_FILENO);
+	exec_info->stdou = dup(STDOUT_FILENO);
 }
