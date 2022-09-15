@@ -28,7 +28,10 @@ static t_bool	line_only_has_white_space(char *line)
 t_bool	ms_line(char **line, t_info *exec_in)
 {
 	listen_to_sigs();
-	*line = readline("@ShellBasket^$ ");
+	if (isatty(STDIN_FILENO))
+		*line = readline("@ShellBasket^$ ");
+	else
+		*line = readline("");
 	if (!(*line))
 	{
 		if (exec_in->stdou != -1)

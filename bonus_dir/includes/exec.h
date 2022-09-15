@@ -19,7 +19,7 @@
 /*                   exec                   */
 /********************************************/
 //forking.c
-void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2]);
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env);
 void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
 
 //exec.c
