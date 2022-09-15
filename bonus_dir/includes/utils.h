@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 19:48:26 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/15 19:07:32 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -17,7 +17,7 @@
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst);
 void    line_cpy_till_ope(t_block **buff, t_line *sub_lst);
 /********************************************/
-/*           garbage collector              */
+/*             garbage collector            */
 /********************************************/
 //garabage_collector.c
 t_gc	*gc_new_node(t_type type, void *ptr);
@@ -44,7 +44,7 @@ void	listen_to_sigs(void);
 t_bool	handle_ctrl_c(char **line, int stdi);
 
 /********************************************/
-/*                   errror                 */
+/*                 errror                   */
 /********************************************/
 //error.c
 void	print_syntax_error(char *ope, int type);
@@ -59,9 +59,10 @@ t_bool	perror_false(char *str);
 void	wait_sub_process(t_info *exec_info);
 
 /********************************************/
-/*               malloc_pid                 */
+/*                 pid lst                  */
 /********************************************/
-//malloc_pid_func.c
-void	malloc_pid_arr(t_info *exec_info, t_tree *tree);
+//pid_utils
+t_pid	*new_pid(int pid);
+void	pid_li_addback(t_pid_li *pid_lst, t_pid *new);
 
 #endif

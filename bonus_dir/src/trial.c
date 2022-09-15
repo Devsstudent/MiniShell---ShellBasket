@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/15 17:43:09 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/15 19:09:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -14,7 +14,7 @@
 void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 {
 	expand(sub, env);
-	handle_wildcards(sub->head->word);
+	//handle_wildcards(sub->head->word);
 	exec_info->argv = get_cmd_arg(sub);
 	exec(exec_info, sub, env);
 }
@@ -67,8 +67,6 @@ t_bool	check_end_pipe_line(t_leaf *leaf, t_info *exec_in)
 }*/
 
 
-
-
 //tant que pipeline on turn++ et on ajoute les pid a une liste chainee
 
 //function qui va checker si on fini la pipe_line ou pas
@@ -81,6 +79,7 @@ t_bool	check_end_pipe_line(t_leaf *leaf, t_info *exec_in)
 
 //pipe on check a gauche du suivant si on a une cmd ou pas
 
+/*
 void	wait_processes(t_info *exec_in)
 {
 	while (pids in linked list)
@@ -89,5 +88,6 @@ void	wait_processes(t_info *exec_in)
 	}
 	remove pids;
 }
+*/
 
 //the last wait_processes has to be at the end of main like in mandatory part

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	browse_sub_tree(t_leaf *leaf)
+/*void	browse_sub_tree(t_leaf *leaf)
 {
 	printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
@@ -41,6 +41,7 @@ void	browse_tree(t_tree *tree)
 	buff = tree->head;
 	browse_sub_tree(buff);
 }
+*/
 
 t_info	*init_exec_info(void)
 {
@@ -55,7 +56,6 @@ t_info	*init_exec_info(void)
 	exec_info->fd_arr = NULL;
 	exec_info->fd_arr_size = 0;
 	exec_info->turn = 0;
-	exec_info->
 	exec_info->tmp_fd = -1;
 	exec_info->end = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);
@@ -74,9 +74,21 @@ int	g_exit_status = 0;
 //reset de l'exec dans la recursion + les check redirection etc
 //Juste les here_doc au parsing enfaite (et encore)
 //Objectif : setup clean pour l'exec
+
+void	init_pid_lst(t_info *exec_info)
+{
+	exec_info->pid_li = malloc(sizeof(t_pid_li));
+	if (!(exec_info->pid_li))
+		free_exit();
+	add_to_gc(SIMPLE, exec_info->pid_li, get_gc());
+	exec_info->pid_li->head = NULL;
+	exec_info->pid_li->last = NULL;
+	exec_info->pid_li->size = 0;
+}
+
 static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 {
-	malloc_pid_arr(exec_info, tree);
+	init_pid_lst(exec_info);
 	exec_tree(tree->head, exec_info, env);
 	wait_sub_process(exec_info);
 	free_each_turn(get_gc());

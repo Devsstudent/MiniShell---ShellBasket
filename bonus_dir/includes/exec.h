@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 16:40:26 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/15 18:43:37 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -27,7 +27,7 @@ void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
 void	exec(t_info *exec_in, t_line *sub, t_dict *env);
 
 //cmd_not_found.c
-t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
+t_bool	command_not_found(t_info *exec_in, char *cmd_path,
 			t_line *sub);
 t_bool	check_cmd_in_sub(t_line *sub);
 
@@ -63,8 +63,8 @@ char	*handle_quote(char *word);
 
 //exec_subprocess.c
 t_bool	dup_cmd_alone(t_info *exec_in);
-t_bool	dup_in_pipe(t_info *exec_in, int pipe_fd[2]);
-void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
+t_bool	dup_in_pipe(t_info *exec_in);
+void	close_subprocess_fd(t_info *exec_in);
 
 /********************************************/
 /*                 execve                   */
@@ -72,12 +72,12 @@ void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
 //execve.c
 size_t	get_ac(char **argv);
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
-t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env, int pipe_fd[2]);
+t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env);
 t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env,
 			char *cmd_path);
 
 //builtins.c
-t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in, int pipe_fd[2]);
+t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in);
 t_bool	check_builtins(char **argv);
 
 
