@@ -59,6 +59,16 @@ typedef struct s_tree{
 	t_leaf	*head;
 }			t_tree;
 
+typedef struct s_pid{
+	int				pid;
+	struct s_int	*next;
+}					t_pid;
+
+typedef struct s_pid_li{
+	t_pid	*head;
+	int		size;
+}			t_pid_li;
+
 typedef struct s_gc{
 	void			*content;
 	struct s_gc		*next;
@@ -66,18 +76,18 @@ typedef struct s_gc{
 }					t_gc;
 
 typedef struct s_info{
-	char	**argv;
-	int		open_fd;
-	int		out_fd;
-	int		*pid;
-	int		*fd_arr;
-	int		fd_arr_size;
-	int		turn;
-	int		tmp_fd;
-	int		stdou;
-	int		stdi;
-	t_bool	cmd_not_found;
-	t_bool	start;
-	t_bool	end;
-}			t_info;
+	t_pid_li	pid_li;
+	char		**argv;
+	int			open_fd;
+	int			out_fd;
+	int			*fd_arr;
+	int			fd_arr_size;
+	int			turn;
+	int			pipe_fd[2];
+	int			tmp_fd;
+	int			stdou;
+	int			stdi;
+	t_bool		cmd_not_found;
+	t_bool		end;
+}				t_info;
 #endif

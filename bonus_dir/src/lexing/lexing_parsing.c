@@ -15,11 +15,11 @@ t_bool	ms_line(char **line, t_info *exec_in)
 {
 	(void) exec_in;
 	listen_to_sigs();
-	*line = readline("@ShellBasket^$ ");
+	*line = readline("@ShellBasket % ");
 	if (!(*line))
 	{
 		//if (exec_in->stdou != -1)
-		//	close(exec_in->stdou);
+		//close(exec_in->stdou);
 		//close(exec_in->stdi);
 		write(2, "exit\n", 5);
 		free_exit();
