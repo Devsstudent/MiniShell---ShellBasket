@@ -2,7 +2,7 @@
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	ft_printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+//	printf(0, "type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
@@ -13,21 +13,21 @@ void	browse_sub_tree(t_leaf *leaf)
 			buff = line->head;
 			while (buff)
 			{
-				ft_printf(0, "content = %s\n", buff->word);
+				printf("content = %s\n", buff->word);
 				buff = buff->next;
 			}
 		}
 	}
 	if (leaf->left != NULL)
 	{
-		ft_printf(0, "left\n");
+		printf("left\n");
 		browse_sub_tree(leaf->left);
 	}
 	else
 		return ;
 	if (leaf->right != NULL)
 	{
-		ft_printf(0, "right\n");
+		printf("right\n");
 		browse_sub_tree(leaf->right);
 	}
 	else
