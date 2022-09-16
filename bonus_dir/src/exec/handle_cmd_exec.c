@@ -6,19 +6,25 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 16:50:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:01:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
+t_bool	is_white_space(char c)
+{
+	if (c == ' ' || (c > 8 && c < 14))
+		return (TRUE);
+	return (FALSE);
+}
 
 void	advance_if_space(char *word, int *j, int *last, int quote_status)
 {
-	if (word[*j] == ' ')
+	if (is_white_space(word[*j]))
 	{
 		while (word[*j])
 		{
 			(*j)++;
-			if (word[*j] != ' ' && !quote_status)
+			if (!is_white_space(word[*j]) && !quote_status)
 			{
 				*last = *j;
 				(*j)--;
@@ -27,8 +33,6 @@ void	advance_if_space(char *word, int *j, int *last, int quote_status)
 		}
 	}
 }
-
-//a quoi servent les quote dans la fonction loop_get_arg
 
 void	loop_get_arg(char *word, char **argv, int *i)
 {
@@ -40,7 +44,7 @@ void	loop_get_arg(char *word, char **argv, int *i)
 	init_loop_get_arg(&j, &last, &quote, &d_quote);
 	while (word[j])
 	{
-		if (word[j] == ' ' && j > 0 && word[j - 1] != ' '
+		if (is_white_space(word[j]) && j > 0 && !is_white_space(word[j - 1])
 			&& !d_quote && !quote)
 		{
 			argv[*i] = ft_substr(word, last, (j - last));

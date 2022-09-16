@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/12 17:01:36 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:27:24 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -237,6 +237,62 @@ char	**handle_wildcards(char *word)
 		free_exit();
 	fill_matches(word, filenames, patterns, matches);
 	return (matches);
+}
+
+char	*double_arr_to_char(char **items);
+
+void	wildcard(t_line *sub)
+{
+	t_block	*buff;
+	char	**new_item;
+
+	buff = sub->head;
+	while (buff)
+	{
+		new_item = handle_wildcards(buff->word);
+		if (new_item)
+		{
+			free(buff->word);
+			buff->word = double_arr_to_char(new_item);
+		}
+		buff = buff->next;
+	}
+}
+
+char	*double_arr_to_char(char **items)
+{
+	int	i;
+	int	j;
+	int	size;
+	char	*word;
+	int		k;
+
+	i = 0;
+	size = 0;
+	while (items[i])
+	{
+		size += ft_strlen(items[i]);
+		size++;
+		i++;
+	}
+	word = malloc(sizeof(*word) * size + 1);
+	if (!word)
+		free_exit();
+	i = 0;
+	k = 0;
+	while (items[i])
+	{
+		j = 0;
+		while (items[i][j])
+			word[k++] = items[i][j++];
+		i++;
+		if (items[i])
+			word[k++] = ' ';
+		else
+			word[k] = 0;
+	}
+	ft_putstr_fd(word, 2);
+	return (word);
 }
 
 //if / at the end, only the directories should be displayed, if any
