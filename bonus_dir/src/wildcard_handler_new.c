@@ -231,6 +231,9 @@ char	**handle_wildcards(char *word)
 	while (filenames[i])
 		i++;
 	matches = malloc(sizeof(*matches) * (i + 1));
+	if (!matches)
+		free_exit();
+	add_to_gc(DOUBLE, matches, get_gc());
 	patterns = ft_split(word, '*');
 	if (!patterns)
 		free_exit();

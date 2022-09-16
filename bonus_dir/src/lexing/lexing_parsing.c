@@ -44,7 +44,8 @@ t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 	if (line_lst == NULL)
 		return (tree->head = NULL, tree);
 	add_to_gc(LINE, line_lst, get_gc());
-	tokenization(line_lst);
+	if (!tokenization(line_lst))
+		return (tree->head = NULL, tree);
 	fill_ast_bonus(line_lst, tree);
 	if (exec_in)
 	{

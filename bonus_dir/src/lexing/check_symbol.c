@@ -26,7 +26,7 @@ t_bool	check_parentheses(t_token next, t_token previous, t_token token)
 	if (token == P_CLOSE)
 	{
 		if (next == UNDEF || next == OR || next == AND || next == PIPE
-			|| next == P_CLOSE)
+			|| next == P_CLOSE || next == RED_IN || next == RED_OUT_TRUNC || next == RED_OUT_APPEND)
 			return (TRUE);
 	}
 	else if (token == P_OPEN)

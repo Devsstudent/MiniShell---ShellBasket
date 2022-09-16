@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	tokenization(t_line *line)
+t_bool	tokenization(t_line *line)
 {
 	t_block	*buff;
 
@@ -31,9 +31,11 @@ void	tokenization(t_line *line)
 				print_syntax_error(buff->next->word, 0);
 			else
 				print_syntax_error("newline", 0);
+			return (FALSE);
 		}
 		buff = buff->next;
 	}
+	return (TRUE);
 }
 
 t_token	get_next_token(t_block *next_block)

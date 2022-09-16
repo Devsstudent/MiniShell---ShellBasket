@@ -35,8 +35,8 @@ t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 	while (word[++i])
 	{
 		check_quote_redir(&d_quote, &quote, word[i]);
-		if (i > 0 && !is_white_space(word[i - 1] && is_white_space(word[i])
-			&& !quote && !d_quote))
+		if (i > 0 && !is_white_space(word[i - 1]) && is_white_space(word[i])
+			&& !quote && !d_quote)
 		{
 			ambiguous_case(type, exec_in);
 			return (TRUE);
