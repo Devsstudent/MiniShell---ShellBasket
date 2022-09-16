@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/16 14:47:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:24:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -14,7 +14,7 @@
 void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 {
 	expand(sub, env);
-	handle_wildcards(sub->head->word);
+	wildcard(sub);
 	exec_info->argv = get_cmd_arg(sub);
 	exec(exec_info, sub, env);
 }
