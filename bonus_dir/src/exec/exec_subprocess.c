@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/15 19:59:49 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/16 14:10:00 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,7 +18,7 @@ static t_bool	dup_stdout(t_info *exec_in)
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
 			return (perror_false("basket"));
 	}
-	else if (exec_in->pipe_fd[1] != -1)
+	else if (!exec_in->end && exec_in->pipe_fd[1] != -1)
 	{
 		if (dup2(exec_in->pipe_fd[1], STDOUT_FILENO) == -1)
 			return (perror_false("shell"));
@@ -34,6 +34,19 @@ static t_bool	dup_stdout(t_info *exec_in)
 			exec_in->stdou = -1;
 		}
 	}
+	return (TRUE);
+}
+
+t_bool	dup_cmd_alone(t_info *exec_in)
+{
+	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
+	{
+		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
+			return (perror_false("shellbasket"));
+	}
+	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
+		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
+			return (perror_false("shellbasket"));
 	return (TRUE);
 }
 

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/15 19:56:10 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/16 14:08:29 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -72,7 +72,15 @@
 
 void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 {
-	forking(cmd_path, exec_in, env);
+	if (exec_in->pipe || !check_builtins(exec_in->argv))
+		forking(cmd_path, exec_in, env);
+	else
+		execve_builtin_alone(cmd_path, env, exec_in);
+	if (exec_in->end)
+	{
+		close(exec_in->pipe_fd[0]);
+		close(exec_in->pipe_fd[1]);
+	}
 	if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
@@ -86,6 +94,8 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	int		i;
 
 	i = -1;
+//	if (exec_in->end)
+	//	printf("TEST\n");
 	check_redirection(exec_in, sub);
 	while (exec_in->argv[++i])
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);

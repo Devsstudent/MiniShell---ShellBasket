@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:52:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/09 17:55:27 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/16 13:21:07 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,7 +32,7 @@ void	print_error(char *ope, int type)
 	(void) ope;
 	if (type == 1)
 	{
-		write(2, "shellbasket: ambiguous redirect\n", 31);
+		write(2, "shellbasket: ambiguous redirect\n", 32);
 		g_exit_status = 1;
 	}
 	if (type == 2)

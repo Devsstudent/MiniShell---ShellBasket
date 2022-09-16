@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/15 20:15:58 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/16 14:04:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -23,7 +23,6 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
 	if (!leaf)
 		return ;
-//	check_end_pipe_line(leaf, exec_in);
 	if (leaf->type == CMD)
 	{
 		exec_cmd(exec_in, leaf->content, env);
@@ -46,6 +45,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	{
 		if (pipe(exec_in->pipe_fd) < 0)
 			return (perror("pipe_exec_tree CRASH"));
+		exec_in->pipe = TRUE;
 		exec_tree(leaf->left, exec_in, env);
 		if (leaf->right->type == CMD)
 			exec_in->end = TRUE;

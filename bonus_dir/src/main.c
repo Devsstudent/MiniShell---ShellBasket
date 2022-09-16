@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-/*void	browse_sub_tree(t_leaf *leaf)
+void	browse_sub_tree(t_leaf *leaf)
 {
 	printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
 	if (leaf->type == CMD)
@@ -41,7 +41,7 @@ void	browse_tree(t_tree *tree)
 	buff = tree->head;
 	browse_sub_tree(buff);
 }
-*/
+
 
 t_info	*init_exec_info(void)
 {
@@ -52,6 +52,7 @@ t_info	*init_exec_info(void)
 		free_exit();
 	add_to_gc(EXEC_INFO, exec_info, get_gc());
 	exec_info->pid_li = NULL;
+	exec_info->pipe = FALSE;
 	exec_info->argv = NULL;
 	exec_info->fd_arr = NULL;
 	exec_info->fd_arr_size = 0;
@@ -90,6 +91,7 @@ void	init_pid_lst(t_info *exec_info)
 
 static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 {
+	browse_tree(tree);
 	init_pid_lst(exec_info);
 	exec_tree(tree->head, exec_info, env);
 	wait_sub_process(exec_info);
