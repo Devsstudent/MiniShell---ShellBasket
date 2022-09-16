@@ -91,7 +91,7 @@ void	init_pid_lst(t_info *exec_info)
 
 static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 {
-	browse_tree(tree);
+	//browse_tree(tree);
 	init_pid_lst(exec_info);
 	exec_tree(tree->head, exec_info, env);
 	wait_sub_process(exec_info);

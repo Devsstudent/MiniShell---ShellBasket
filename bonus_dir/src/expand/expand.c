@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/10 19:59:08 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:22:17 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -52,6 +52,8 @@ void	handle_dollar_in_block(t_block *block, t_dict *dict)
 	int		*indexes;
 
 	size_double_arr = get_nb_of_dollar(block);
+	if (size_double_arr == 0)
+		return ;
 	indexes = get_indexes_expandables(block, size_double_arr);
 	add_to_gc(SIMPLE, indexes, get_gc());
 	key_arr = (char **) malloc(sizeof(*key_arr) * (size_double_arr + 1));
