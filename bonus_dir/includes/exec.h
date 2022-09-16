@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 14:01:51 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:00:26 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -41,6 +41,7 @@ t_bool	check_quote(t_bool *d_quote, t_bool *quote, char word);
 //handle_cmd_exec.c
 void	loop_get_arg(char *word, char **argv, int *i);
 char	*check_cmd(char **argv, t_dict *env);
+t_bool	is_white_space(char c);
 
 //redirection.c
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word);
