@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:52:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 13:21:07 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 16:05:29 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,7 +24,7 @@ void	print_syntax_error(char *ope, int type)
 	if (type == 1)
 		write(2, "syntax error: unclosed quote\n", 30);
 	else
-		write(2, "syntax error: unexpected token near field \n", 45);
+		write(2, "syntax error: unexpected token near field \n", 44);
 }
 
 void	print_error(char *ope, int type)

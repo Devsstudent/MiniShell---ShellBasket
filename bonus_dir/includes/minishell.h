@@ -108,7 +108,7 @@ t_bool		check_and(t_token next, t_token previous, t_token token);
 t_bool		check_or(t_token next, t_token previous, t_token token);
 
 //tokenization
-void	tokenization(t_line *line);
+t_bool	tokenization(t_line *line);
 t_token	get_next_token(t_block *next_block);
 void	attribute_token(t_block *block);
 t_token	get_previous_token(t_block *block);

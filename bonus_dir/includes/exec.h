@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 15:24:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/19 19:27:58 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -47,7 +47,7 @@ t_bool	is_white_space(char c);
 //redirection.c
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word);
 void	browse_line_check_red_in(t_leaf *leaf, t_dict *env);
-t_bool	check_file_permission(t_block *buff, t_info *exec, int type);
+t_bool	check_file_permission(char *file, t_info *exec, int type);
 
 //redir_ambiguous.c
 t_bool	check_ambiguous_bis(t_block *buff);

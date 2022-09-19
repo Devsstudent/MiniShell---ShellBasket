@@ -103,6 +103,8 @@ static void	check_cmd_path(char **res, char ***path_li, char **argv,
 	{
 		buff = ft_strjoin(ft_strdup((*path_li)[i]), "/");
 		buff = ft_strjoin(buff, argv[0]);
+		if (ft_strnstr(buff, "//", ft_strlen(buff)))
+			return (free(buff));
 		if (access(buff, X_OK) == 0)
 		{
 			*res = buff;
