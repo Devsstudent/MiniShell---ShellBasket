@@ -6,11 +6,8 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2022/09/19 23:30:42 by mbelrhaz         ###   ########.fr       */
-=======
+/*   Updated: 2022/09/19 23:43:57 by mbelrhaz         ###   ########.fr       */
 /*   Updated: 2022/09/19 22:29:09 by mbelrhaz         ###   ########.fr       */
->>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -57,8 +54,16 @@ t_type_leaf	get_type(t_token token)
 		return (PIPE_L);
 	else if (token == OR)
 		return (OR_L);
-	else
+	else if (token == AND)
 		return (AND_L);
+	else if (token == RED_IN)
+		return (RED_IN_L);
+	else if (token == RED_OUT_TRUNC)
+		return (RED_OUT_TRUNC_L);
+	else if (token == RED_OUT_APPEND)
+		return (RED_OUT_APPEND_L);
+	else
+		return (HERE_DOC_L);
 }
 
 t_line	*fill_till_ope(t_block **buff)
