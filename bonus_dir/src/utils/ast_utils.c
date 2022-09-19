@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:18:05 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:18:06 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/19 22:30:32 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -63,7 +63,8 @@ t_leaf	*new_leaf_bonus(t_line *sub, int lay_par)
 	{
 		if (sub->head && sub->head->token == P_OPEN)
 		{
-			remove_parentheses(sub);
+			if (sub->last->token == P_CLOSE)
+				remove_parentheses(sub);
 			leaf->type = PRTS;
 		}
 		else
