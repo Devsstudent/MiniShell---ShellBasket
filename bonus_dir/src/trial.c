@@ -44,7 +44,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	}
 	if (leaf->type == PIPE_L)
 	{
-		if (pipe(exec_in->pipe_fd) < 0)
+		if (pipe(exec_in->pipe_fd) < 0 && !exec_in->end)
 			return (perror("pipe_exec_tree CRASH"));
 		exec_tree(leaf->left, exec_in, env);
 		if (leaf->right->type == CMD)
