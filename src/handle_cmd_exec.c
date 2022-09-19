@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 20:10:10 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:01:51 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -34,7 +34,6 @@ void	advance_if_space(char *word, int *j, int *last, int quote_status)
 		}
 	}
 }
-//a quoi servent les quote dans la fonction loop_get_arg
 
 void	loop_get_arg(char *word, char **argv, int *i)
 {
