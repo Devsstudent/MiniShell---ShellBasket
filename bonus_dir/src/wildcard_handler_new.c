@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/12 17:01:36 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 16:35:02 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -68,7 +68,7 @@ void	fill_filenames(char **filenames, DIR **dir, struct dirent **ent)
 		if ((*ent)->d_type == DT_DIR)
 		{
 			filenames[i++] = ft_strjoin(ft_strdup((*ent)->d_name), "/");
-			if (!filenames[(i - 1)])
+			if (!filenames[i - 1])
 				free_exit();
 		}
 		filenames[i++] = ft_strdup((*ent)->d_name);
@@ -147,10 +147,10 @@ t_bool	check_match(char *filename, char **patterns, char *word)
 	i = 0;
 	j = 0;
 	ptr = filename;
-	if (filename[0] == '.' && word[0] != '.')
-	{
+	if ((filename[0] == '.' && word[0] != '.')
+			|| (filename[ft_strlen(filename) - 1] == '/' 
+					&& word[ft_strlen(word) - 1] != '/'))
 		return (FALSE);
-	}
 	while (patterns[i])
 	{
 		if (i == 0 && word[0] != '*' 
@@ -162,7 +162,7 @@ t_bool	check_match(char *filename, char **patterns, char *word)
 			return (FALSE);
 		ptr += ft_strlen(patterns[i]);
 		if (patterns[i + 1] == NULL && word[ft_strlen(word) - 1] != '*')
-			if (*(ptr + 1) != '\0')
+			if (*ptr && *(ptr + 1) != '\0')
 				return (FALSE);
 		i++;
 	}
@@ -200,7 +200,8 @@ void	fill_matches(char *word, char **filenames, char **patterns, char **matches)
 	{
 		while (filenames[i])
 		{
-			if (filenames[i][0] == '.')
+			if (filenames[i][0] == '.'
+				|| filenames[i][ft_strlen(filenames[i]) - 1] == '/')
 			{
 				i++;
 				continue ;
@@ -212,9 +213,7 @@ void	fill_matches(char *word, char **filenames, char **patterns, char **matches)
 		matches[j] = NULL;
 	}
 	else
-	{
 		select_filenames(filenames, patterns, matches, word);
-	}
 }
 
 char	**handle_wildcards(char *word)
@@ -232,11 +231,69 @@ char	**handle_wildcards(char *word)
 	while (filenames[i])
 		i++;
 	matches = malloc(sizeof(*matches) * (i + 1));
+	if (!matches)
+		free_exit();
+	add_to_gc(DOUBLE, matches, get_gc());
 	patterns = ft_split(word, '*');
 	if (!patterns)
 		free_exit();
 	fill_matches(word, filenames, patterns, matches);
 	return (matches);
+}
+
+char	*double_arr_to_char(char **items);
+
+void	wildcard(t_line *sub)
+{
+	t_block	*buff;
+	char	**new_item;
+
+	buff = sub->head;
+	while (buff)
+	{
+		new_item = handle_wildcards(buff->word);
+		if (new_item && new_item[0] != NULL)
+		{
+			free(buff->word);
+			buff->word = double_arr_to_char(new_item);
+		}
+		buff = buff->next;
+	}
+}
+
+char	*double_arr_to_char(char **items)
+{
+	int	i;
+	int	j;
+	int	size;
+	char	*word;
+	int		k;
+
+	i = 0;
+	size = 0;
+	while (items[i])
+	{
+		size += ft_strlen(items[i]);
+		size++;
+		i++;
+	}
+	word = malloc(sizeof(*word) * size + 1);
+	if (!word)
+		free_exit();
+	i = 0;
+	k = 0;
+	while (items[i])
+	{
+		j = 0;
+		while (items[i][j])
+			word[k++] = items[i][j++];
+		i++;
+		if (items[i])
+			word[k++] = ' ';
+		else
+			word[k] = 0;
+	}
+	return (word);
 }
 
 //if / at the end, only the directories should be displayed, if any

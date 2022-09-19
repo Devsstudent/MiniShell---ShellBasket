@@ -52,7 +52,8 @@ static int	get_size_delim(char *delim)
 	size = 0;
 	while (delim[i])
 	{
-		if (delim[i] != 21)
+		if ((delim[i + 1] && (delim[i] == '$' && delim[i + 1] != 21))
+			|| (delim[i] != 21 && delim[i] != '$'))
 			size++;
 		i++;
 	}
@@ -75,11 +76,10 @@ char	*get_delim(char *delim)
 	i = 0;
 	while (delim[i])
 	{
-		if (delim[i] != 21)
-		{
-			new_delim[j] = delim[i];
-			j++;
-		}
+		if (delim[i] == '$' && delim[i + 1] != 21)
+			new_delim[j++] = delim[i];
+		else if (delim[i] != 21 && delim[i] != '$')
+			new_delim[j++] = delim[i];
 		i++;
 	}
 	new_delim[j] = 0;

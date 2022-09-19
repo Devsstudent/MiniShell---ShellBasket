@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 19:45:07 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 18:34:19 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:26:03 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,8 +32,8 @@ void	gc_free_node(t_gc *node)
 		free_double_arr(node);
 	else if (node->type == ENV)
 		dict_clear(node->content);
-	else if (node->type == LINE)
-		line_clear(node->content);
+	//else if (node->type == LINE)
+	//	line_clear(node->content);
 	else if (node->type == TREE && node->content != NULL)
 	{
 		if (((t_tree *)(node->content))->head)

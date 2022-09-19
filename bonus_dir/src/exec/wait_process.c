@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/15 20:25:43 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/16 14:05:17 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -62,6 +62,7 @@ void	wait_sub_process(t_info *exec_info)
 	exec_info->argv = NULL;
 	exec_info->pid_li->head = NULL;
 	exec_info->pid_li->last = NULL;
+	exec_info->pipe = FALSE;
 	exec_info->tmp_fd = -1;
 	exec_info->stdi = dup(STDIN_FILENO);
 	exec_info->stdou = dup(STDOUT_FILENO);
