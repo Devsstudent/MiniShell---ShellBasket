@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/12 15:53:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/19 19:28:54 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -68,7 +68,7 @@ t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 
 static t_bool	check_token_red_in(t_block *buff, t_info *exec)
 {
-	if (!check_file_permission(buff, exec, 1))
+	if (!check_file_permission(buff->next->word, exec, 1))
 		return (FALSE);
 	else if (!check_ambiguous(buff->next->word, exec, FALSE)
 		&& !check_red_in(buff->next, exec))
@@ -78,7 +78,7 @@ static t_bool	check_token_red_in(t_block *buff, t_info *exec)
 
 static t_bool	check_token_red_out(t_block *buff, t_info *exec)
 {
-	if (!check_file_permission(buff, exec, 0))
+	if (!check_file_permission(buff->next->word, exec, 0))
 		return (FALSE);
 	else if (!check_ambiguous(buff->next->word, exec, TRUE)
 		&& !check_red_out(buff->next, exec, buff))
