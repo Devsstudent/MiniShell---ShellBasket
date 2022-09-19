@@ -1,5 +1,5 @@
 #include "minishell.h"
-/*
+
 void	browse_sub_tree(t_leaf *leaf)
 {
 	printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
@@ -40,7 +40,6 @@ void	browse_tree(t_tree *tree)
 	buff = tree->head;
 	browse_sub_tree(buff);
 }
-*/
 
 
 t_info	*init_exec_info(void)

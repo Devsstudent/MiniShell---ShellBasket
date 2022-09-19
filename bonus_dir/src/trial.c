@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/19 19:29:13 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/19 22:53:43 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -19,6 +19,7 @@ void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 	exec(exec_info, sub, env);
 }
 
+/*
 static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir_type)
 {
 	if (ft_strncmp(files->word, "", 2) == 0)
@@ -33,13 +34,43 @@ static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (redir_type == RED_OUT_TRUNC_L)
-		exec->stdou = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+		exec->std = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
 	else
 		exec->stdou = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
 	if (exec->stdou == -1)
 	{
 		perror(files->word);
 		exec->stdou = dup(STDOUT_FILENO);
+		return (FALSE);
+	}
+	return (TRUE);
+}
+*/
+
+t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf red)
+{
+	if (exec->out_fd != -1 && exec->out_fd != -2)
+		close(exec->out_fd);
+	exec->out_fd = -1;
+	if (ft_strncmp(files->word, "", 2) == 0)
+	{
+		print_error(NULL, 1);
+		return (FALSE);
+	}
+	else if (ft_strncmp(files->word, "\"\"", 3) == 0
+		|| ft_strncmp(files->word, "\'\'", 3) == 0)
+	{
+		write(2, " :", 2);
+		ft_bzero(files->word, ft_strlen(files->word));
+	}
+	if (red == RED_OUT_TRUNC_L)
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+	else
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
+	if (exec->out_fd == -1)
+	{
+		perror(files->word);
+		exec->out_fd = -2;
 		return (FALSE);
 	}
 	return (TRUE);
@@ -102,8 +133,6 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	{
 		check_redir_tree(leaf->type, leaf->right->content->head, exec_in);
 		exec_tree(leaf->left, exec_in, env);
-		close(exec_in->stdou);
-		exec_in->stdou = dup(STDOUT_FILENO);
 	}
 }
 //pipe on check a gauche du suivant si on a une cmd ou pas
