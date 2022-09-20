@@ -1,4 +1,8 @@
 #include "minishell.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> maha
 void	browse_sub_tree(t_leaf *leaf)
 {
 	printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);

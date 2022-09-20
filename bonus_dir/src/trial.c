@@ -3,8 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trial.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */ /*                                                +#+#+#+#+#+   +#+           */ /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/19 20:54:14 by odessein         ###   ########.fr       */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/20 13:16:02 by odessein          #+#    #+#             */
+/*   Updated: 2022/09/20 13:17:38 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,6 +18,7 @@ void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 	exec_info->argv = get_cmd_arg(sub);
 	exec(exec_info, sub, env);
 }
+
 /*
 static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir_type)
 {
@@ -31,7 +34,7 @@ static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (redir_type == RED_OUT_TRUNC_L)
-		exec->stdou = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+		exec->std = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
 	else
 		exec->stdou = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
 	if (exec->stdou == -1)
@@ -43,6 +46,35 @@ static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir
 	return (TRUE);
 }
 */
+
+t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf red)
+{
+	if (exec->out_fd != -1 && exec->out_fd != -2)
+		close(exec->out_fd);
+	exec->out_fd = -1;
+	if (ft_strncmp(files->word, "", 2) == 0)
+	{
+		print_error(NULL, 1);
+		return (FALSE);
+	}
+	else if (ft_strncmp(files->word, "\"\"", 3) == 0
+		|| ft_strncmp(files->word, "\'\'", 3) == 0)
+	{
+		write(2, " :", 2);
+		ft_bzero(files->word, ft_strlen(files->word));
+	}
+	if (red == RED_OUT_TRUNC_L)
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+	else
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
+	if (exec->out_fd == -1)
+	{
+		perror(files->word);
+		exec->out_fd = -2;
+		return (FALSE);
+	}
+	return (TRUE);
+}
 
 void	check_redir_tree(t_type_leaf redir_type, t_block *buff, t_info *exec_in)
 {

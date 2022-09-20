@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/16 16:35:02 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/16 16:53:04 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -39,7 +39,7 @@ int	get_nb_files(void)
 		if (errno != 0)
 			perror("shellbasket");
 		if (ent == NULL)
-			break;
+			break ;
 		if (ent->d_type == DT_DIR)
 			i++;
 		i++;
@@ -141,23 +141,21 @@ void	order_filenames(char **filenames)
 t_bool	check_match(char *filename, char **patterns, char *word)
 {
 	int		i;
-	int		j;
 	char	*ptr;
 
 	i = 0;
-	j = 0;
 	ptr = filename;
 	if ((filename[0] == '.' && word[0] != '.')
-			|| (filename[ft_strlen(filename) - 1] == '/' 
-					&& word[ft_strlen(word) - 1] != '/'))
+		|| (filename[ft_strlen(filename) - 1] == '/'
+			&& word[ft_strlen(word) - 1] != '/'))
 		return (FALSE);
 	while (patterns[i])
 	{
-		if (i == 0 && word[0] != '*' 
-				&& ft_strncmp(filename, patterns[0],
-					ft_strlen(patterns[0])) != 0)
+		if (i == 0 && word[0] != '*'
+			&& ft_strncmp(filename, patterns[0],
+				ft_strlen(patterns[0])) != 0)
 			return (FALSE);
-		ptr = ft_strnstr(ptr, patterns[i], ft_strlen(filename + j));
+		ptr = ft_strnstr(ptr, patterns[i], ft_strlen(filename));
 		if (ptr == NULL)
 			return (FALSE);
 		ptr += ft_strlen(patterns[i]);
@@ -169,14 +167,14 @@ t_bool	check_match(char *filename, char **patterns, char *word)
 	return (TRUE);
 }
 
-void	select_filenames(char **filenames, char **patterns, char **matches, char *word)
+void	select_filenames(char **filenames, char **patterns, char **matches,
+	char *word)
 {
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-
 	while (filenames[i])
 	{
 		if (check_match(filenames[i], patterns, word))
@@ -189,7 +187,8 @@ void	select_filenames(char **filenames, char **patterns, char **matches, char *w
 	matches[j] = NULL;
 }
 
-void	fill_matches(char *word, char **filenames, char **patterns, char **matches)
+void	fill_matches(char *word, char **filenames, char **patterns,
+	char **matches)
 {
 	int	i;
 	int	j;
@@ -263,20 +262,16 @@ void	wildcard(t_line *sub)
 
 char	*double_arr_to_char(char **items)
 {
-	int	i;
-	int	j;
-	int	size;
+	int		i;
+	int		j;
+	int		size;
 	char	*word;
 	int		k;
 
 	i = 0;
 	size = 0;
-	while (items[i])
-	{
-		size += ft_strlen(items[i]);
-		size++;
-		i++;
-	}
+	while (items[i++])
+		size += ft_strlen(items[i]) + 1;
 	word = malloc(sizeof(*word) * size + 1);
 	if (!word)
 		free_exit();
