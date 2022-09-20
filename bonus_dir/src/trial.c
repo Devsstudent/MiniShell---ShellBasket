@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/20 13:16:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/20 13:17:38 by odessein         ###   ########.fr       */
+/*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
+/*   Updated: 2022/09/20 15:16:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -49,9 +49,9 @@ static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir
 
 t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf red)
 {
-	if (exec->out_fd != -1 && exec->out_fd != -2)
-		close(exec->out_fd);
-	exec->out_fd = -1;
+	if (exec->final_out != -1 && exec->final_out != -2)
+		close(exec->final_out);
+	exec->final_out = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
 	{
 		print_error(NULL, 1);
@@ -64,13 +64,13 @@ t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf red)
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (red == RED_OUT_TRUNC_L)
-		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+		exec->final_out = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
 	else
-		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
-	if (exec->out_fd == -1)
+		exec->final_out = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
+	if (exec->final_out == -1)
 	{
 		perror(files->word);
-		exec->out_fd = -2;
+		exec->final_out = -2;
 		return (FALSE);
 	}
 	return (TRUE);
@@ -102,6 +102,8 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		return ;
 	if (leaf->type == CMD)
 	{
+		if (exec_in->pipe == FALSE)
+			exec_in->end = TRUE;
 		exec_cmd(exec_in, leaf->content, env);
 	}
 	if (leaf->type == OR_L)
@@ -132,7 +134,9 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		|| leaf->type == RED_OUT_APPEND_L)
 	{
 		check_redir_tree(leaf->type, leaf->right->content->head, exec_in);
+		printf("exec final out = %i\n", exec_in->final_out);
 		exec_tree(leaf->left, exec_in, env);
+		exec_in->final_out = -1;
 	}
 }
 //pipe on check a gauche du suivant si on a une cmd ou pas

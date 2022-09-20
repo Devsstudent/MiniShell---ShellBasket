@@ -1,8 +1,5 @@
 #include "minishell.h"
-<<<<<<< HEAD
-=======
 
->>>>>>> maha
 void	browse_sub_tree(t_leaf *leaf)
 {
 	printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
@@ -63,6 +60,7 @@ t_info	*init_exec_info(void)
 	exec_info->pipe_fd[1] = -1;
 	exec_info->tmp_fd = -1;
 	exec_info->open_fd = -1;
+	exec_info->final_out = -1;
 	exec_info->out_fd = -1;
 	exec_info->end = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);
