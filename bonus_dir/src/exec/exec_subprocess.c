@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 14:10:00 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/19 21:23:33 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,7 +16,11 @@ static t_bool	dup_stdout(t_info *exec_in)
 	if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 	{
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
+		{
+			ft_putnbr_fd(exec_in->out_fd, 2);
+			write(2, "\n", 1);
 			return (perror_false("basket"));
+		}
 	}
 	else if (!exec_in->end && exec_in->pipe_fd[1] != -1)
 	{

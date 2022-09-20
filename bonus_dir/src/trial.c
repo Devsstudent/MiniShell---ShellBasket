@@ -3,10 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   trial.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/19 19:29:13 by mbelrhaz         ###   ########.fr       */
+/*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */ /*                                                +#+#+#+#+#+   +#+           */ /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
+/*   Updated: 2022/09/19 20:54:14 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,7 +16,7 @@ void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 	exec_info->argv = get_cmd_arg(sub);
 	exec(exec_info, sub, env);
 }
-
+/*
 static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir_type)
 {
 	if (ft_strncmp(files->word, "", 2) == 0)
@@ -44,6 +42,7 @@ static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir
 	}
 	return (TRUE);
 }
+*/
 
 void	check_redir_tree(t_type_leaf redir_type, t_block *buff, t_info *exec_in)
 {
@@ -60,7 +59,7 @@ void	check_redir_tree(t_type_leaf redir_type, t_block *buff, t_info *exec_in)
 		if (!check_file_permission(buff->word, exec_in, 0))
 			return ;
 		else if (!check_ambiguous(buff->word, exec_in, TRUE)
-			&& !check_red_out_tree(buff, exec_in, redir_type))
+			&& !check_red_out(buff, exec_in, TRUE))
 			return ;
 	}
 }
@@ -102,8 +101,6 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	{
 		check_redir_tree(leaf->type, leaf->right->content->head, exec_in);
 		exec_tree(leaf->left, exec_in, env);
-		close(exec_in->stdou);
-		exec_in->stdou = dup(STDOUT_FILENO);
 	}
 }
 //pipe on check a gauche du suivant si on a une cmd ou pas

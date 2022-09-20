@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/31 18:45:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/19 21:52:03 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -105,7 +105,8 @@ void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 	int		count;
 
 	count = -12;
-	while (*buff && count != 0)
+	while (*buff && count != 0 && !((*buff)->token == PIPE
+            || (*buff)->token == OR || (*buff)->token == AND))
 	{
 		if ((*buff)->token == P_OPEN)
 		{
@@ -116,6 +117,7 @@ void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 		if ((*buff)->token == P_CLOSE)
 			count--;
 		new = new_block((*buff)->word);
+		printf("%s", (*buff)->word);
 		if (!new)
 			return (free_exit());
 		new->token = (*buff)->token;

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 14:46:33 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/19 21:07:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -37,7 +37,8 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	i = -1;
 	//	if (exec_in->end)
 	//	printf("TEST\n");
-	check_redirection(exec_in, sub);
+	if (exec_in->open_fd == -1 && exec_in->out_fd == -1)
+		check_redirection(exec_in, sub);
 	while (exec_in->argv[++i])
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
 	cmd_path = check_cmd(exec_in->argv, env);

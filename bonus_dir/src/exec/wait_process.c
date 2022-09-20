@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 14:05:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/19 21:34:59 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -22,14 +22,11 @@ void	init_wait_sub_process(t_info *exec_info)
 		perror("basket");
 	if (exec_info->stdou != -1)
 		close(exec_info->stdou);
-	if (exec_info->out_fd != -1 && exec_info->out_fd != -2)
-		close(exec_info->out_fd);
-	if (exec_info->open_fd != -1 && exec_info->open_fd != -2)
-		close(exec_info->open_fd);
 }
 
 void	wait_sub_process(t_info *exec_info)
 {
+	ft_putstr_fd("YOOO", 2);
 	t_pid	*buff;
 	int		w_status;
 
@@ -52,12 +49,17 @@ void	wait_sub_process(t_info *exec_info)
 			g_exit_status = 130;
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 3)
 		{
-			write(2, "Quit (core dumped)\n", 19);
-			g_exit_status = 131;
+			write(2, "Quit (core dumped)\n", 19); g_exit_status = 131;
 			break ;
 		}
 		buff = buff->next;
 	}
+	if (exec_info->out_fd != -1 && exec_info->out_fd != -2)
+	{
+		close(exec_info->out_fd);
+	}
+	if (exec_info->open_fd != -1 && exec_info->open_fd != -2)
+		close(exec_info->open_fd);
 	pid_li_clear(exec_info->pid_li);
 	exec_info->argv = NULL;
 	exec_info->pid_li->head = NULL;

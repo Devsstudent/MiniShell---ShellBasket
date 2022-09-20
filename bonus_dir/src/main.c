@@ -1,5 +1,4 @@
 #include "minishell.h"
-/*
 void	browse_sub_tree(t_leaf *leaf)
 {
 	printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
@@ -40,7 +39,6 @@ void	browse_tree(t_tree *tree)
 	buff = tree->head;
 	browse_sub_tree(buff);
 }
-*/
 
 
 t_info	*init_exec_info(void)
@@ -116,6 +114,7 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
+		browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 19:27:58 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/19 20:43:54 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -56,7 +56,7 @@ t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type);
 
 //check_redir.c
 t_bool	check_red_in(t_block *files, t_info *exec);
-t_bool	check_red_out(t_block *files, t_info *exec, t_block *red);
+t_bool	check_red_out(t_block *files, t_info *exec, t_bool red);
 void	check_redirection(t_info *exec, t_line *sub);
 void	check_red_in_sub(t_line *sub_line, t_dict *env);
 
