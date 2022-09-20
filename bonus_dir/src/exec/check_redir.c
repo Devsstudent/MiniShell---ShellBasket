@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/20 14:45:56 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/20 15:45:35 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -94,8 +94,11 @@ void	check_redirection(t_info *exec, t_line *sub)
 		buff = sub->head;
 	else
 		return ;
-	exec->open_fd = -1;
+	if (exec->first_in != 1)
+		exec->open_fd = -1;
 	exec->out_fd = -1;
+	if (exec->first_in == 1)
+		exec->first_in = -1;
 	while (buff)
 	{
 		if (buff->token == RED_IN)
