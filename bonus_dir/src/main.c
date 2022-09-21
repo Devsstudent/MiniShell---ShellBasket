@@ -60,7 +60,6 @@ t_info	*init_exec_info(void)
 	exec_info->pipe_fd[1] = -1;
 	exec_info->tmp_fd = -1;
 	exec_info->open_fd = -1;
-	exec_info->first_in = -1;
 	exec_info->final_out = -1;
 	exec_info->out_fd = -1;
 	exec_info->end = FALSE;
@@ -117,6 +116,7 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
+		browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);
