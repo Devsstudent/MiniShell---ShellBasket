@@ -36,12 +36,7 @@ void	browse_sub_tree(t_leaf *leaf)
 void	browse_tree(t_tree *tree)
 {
 	t_leaf  *buff;
-
-	buff = tree->head;
-	browse_sub_tree(buff);
-}
-
-
+buff = tree->head; browse_sub_tree(buff); } 
 t_info	*init_exec_info(void)
 {
 	t_info	*exec_info;
@@ -98,6 +93,10 @@ static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 	init_pid_lst(exec_info);
 	exec_tree(tree->head, exec_info, env);
 	wait_sub_process(exec_info);
+	if (exec_info->stdi > -1)
+		close(exec_info->stdi);
+	if (exec_info->stdou > -1)
+		close(exec_info->stdou);
 	free_each_turn(get_gc());
 }
 
@@ -117,6 +116,7 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
+		browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);

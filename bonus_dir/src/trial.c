@@ -6,18 +6,10 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/20 15:43:20 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/21 15:58:44 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
-{
-	expand(sub, env);
-	wildcard(sub);
-	exec_info->argv = get_cmd_arg(sub);
-	exec(exec_info, sub, env);
-}
 
 /*
 static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir_type)
@@ -95,6 +87,15 @@ void	check_redir_tree(t_type_leaf redir_type, t_block *buff, t_info *exec_in)
 			&& !check_red_out_tree(buff, exec_in, redir_type))
 			return ;
 	}
+}
+
+void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
+{
+	expand(sub, env);
+	wildcard(sub);
+	exec_info->argv = get_cmd_arg(sub);
+	if (exec_info->final_out != -2 && exec_info->open_fd != -2)
+		exec(exec_info, sub, env);
 }
 
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)

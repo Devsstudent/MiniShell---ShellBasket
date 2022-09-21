@@ -6,14 +6,14 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/20 15:45:35 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/21 15:15:53 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 t_bool	check_red_in(t_block *files, t_info *exec)
 {
-	if (exec->open_fd != -1 && exec->open_fd != -2)
+	if (exec->open_fd > -1)
 		close(exec->open_fd);
 	exec->open_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
@@ -39,7 +39,7 @@ t_bool	check_red_in(t_block *files, t_info *exec)
 
 t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 {
-	if (exec->out_fd != -1 && exec->out_fd != -2)
+	if (exec->out_fd > -1)
 		close(exec->out_fd);
 	exec->out_fd = -1;
 	if (ft_strncmp(files->word, "", 2) == 0)
