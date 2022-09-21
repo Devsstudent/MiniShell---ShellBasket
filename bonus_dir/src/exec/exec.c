@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/21 15:17:21 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/21 18:07:09 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,7 +20,7 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 	}
 	else
 		execve_builtin_alone(cmd_path, env, exec_in);
-	if (exec_in->end)
+	if (exec_in->end && exec_in->pipe)
 	{
 		close(exec_in->pipe_fd[0]);
 		close(exec_in->pipe_fd[1]);
