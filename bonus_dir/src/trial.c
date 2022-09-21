@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/20 14:53:32 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/20 15:43:20 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -85,6 +85,7 @@ void	check_redir_tree(t_type_leaf redir_type, t_block *buff, t_info *exec_in)
 		else if (!check_ambiguous(buff->word, exec_in, TRUE)
 			&& !check_red_in(buff, exec_in))
 			return ;
+		exec_in->first_in = 1;
 	}
 	if (redir_type == RED_OUT_TRUNC_L || redir_type == RED_OUT_APPEND_L)
 	{

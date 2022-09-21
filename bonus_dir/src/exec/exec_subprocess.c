@@ -6,14 +6,14 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/20 15:20:20 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/20 15:12:16 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 static t_bool	dup_stdout(t_info *exec_in)
 {
-	if (exec_in->end && exec_in->out_fd == -1 && exec_in->final_out != -1)
+	if (exec_in->end == TRUE && exec_in->out_fd == -1 && exec_in->final_out != -1)
 	{
 		if (dup2(exec_in->final_out, STDOUT_FILENO) == -1)
 			return (perror_false("coco"));
