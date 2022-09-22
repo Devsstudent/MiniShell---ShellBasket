@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 23:43:57 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:50:17 by odessein         ###   ########.fr       */
 /*   Updated: 2022/09/19 22:29:09 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -80,7 +80,7 @@ t_line	*fill_till_ope(t_block **buff)
 
 static void	last_elem(t_line *line, t_leaf *leaf, int lay_par)
 {
-	leaf->left = new_leaf_bonus(line, lay_par);
+	leaf->left = new_leaf_bonus(line, lay_par, leaf->type);
 	if (leaf->left->type == PRTS)
 	{
 		leaf->left = NULL;
@@ -98,7 +98,7 @@ int	fill_leaf(t_leaf *leaf, t_block *buff, int lay_par, t_line *sub)
 {
 	leaf->type = get_type(buff->token);
 	leaf->parentheses = lay_par;
-	leaf->left = new_leaf_bonus(sub, lay_par);
+	leaf->left = new_leaf_bonus(sub, lay_par, leaf->type);
 	return (lay_par);
 }
 
@@ -165,7 +165,7 @@ void	test(t_leaf *leaf, t_line *line, int lay_par)
 		new_lay_par = fill_leaf(leaf, buff, lay_par, sub);
 		if (leaf->left->type == PRTS)
 			test(leaf->left, sub, ++new_lay_par);
-		leaf->right = new_leaf_bonus(NULL, lay_par);
+		leaf->right = new_leaf_bonus(NULL, lay_par, leaf->type);
 		leaf = leaf->right;
 		buff = buff->next;
 	}
@@ -173,6 +173,6 @@ void	test(t_leaf *leaf, t_line *line, int lay_par)
 
 void	fill_ast_bonus(t_line *line, t_tree *tree)
 {
-	tree->head = new_leaf_bonus(NULL, 0);
+	tree->head = new_leaf_bonus(NULL, 0, NONE);
 	test(tree->head, line, 0);
 }

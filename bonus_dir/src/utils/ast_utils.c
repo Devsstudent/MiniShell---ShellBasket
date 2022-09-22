@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:18:05 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 22:30:32 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:47:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -48,7 +48,7 @@ t_leaf	*new_leaf(t_line *cmd, t_type_leaf type)
 	return (leaf);
 }
 
-t_leaf	*new_leaf_bonus(t_line *sub, int lay_par)
+t_leaf	*new_leaf_bonus(t_line *sub, int lay_par, t_type_leaf p_type)
 {
 	t_leaf	*leaf;
 
@@ -58,6 +58,7 @@ t_leaf	*new_leaf_bonus(t_line *sub, int lay_par)
 	leaf->content = sub;
 	leaf->right = NULL;
 	leaf->parentheses = lay_par;
+	leaf->parent_type = p_type;
 	leaf->left = NULL;
 	if (sub != NULL)
 	{

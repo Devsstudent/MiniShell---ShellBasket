@@ -1,7 +1,0 @@
-exec_in->tmp_fd = 8
-includes
-Makefile
-minishell
-obj
-out
-src

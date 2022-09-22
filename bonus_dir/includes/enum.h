@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:47:20 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 19:36:52 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:50:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef ENUM_H
@@ -21,7 +21,8 @@ typedef enum e_type_leaf {
 	RED_OUT_TRUNC_L,
 	RED_OUT_APPEND_L,
 	HERE_DOC_L,
-	PRTS
+	PRTS,
+	NONE
 }	t_type_leaf;
 
 typedef enum e_token {

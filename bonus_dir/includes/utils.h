@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/15 20:15:28 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:47:57 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -65,5 +65,20 @@ void	wait_sub_process(t_info *exec_info);
 t_pid	*new_pid(int pid);
 void	pid_li_addback(t_pid_li *pid_lst, t_pid *new);
 void	pid_li_clear(t_pid_li *pid_lst);
+
+//line_lst_utils.c
+t_block	*new_block(char *word);
+void	line_lst_addback(t_line *line, t_block *new);
+void	line_clear(t_line *line);
+
+//here_doc_utils.c
+void	remove_tmp_file(int file_nb, int *fd_arr);
+char	*get_delim(char *delim);
+void	close_reopen_here_doc(int turn, int *fd_arr, char *line);
+
+//ast_utils.c
+//t_leaf	*new_leaf(t_line *cmd, t_type_leaf type);
+void	clean_tree(t_leaf *leaf);
+t_leaf	*new_leaf_bonus(t_line *sub, int lay_par, t_type_leaf p_type);
 
 #endif

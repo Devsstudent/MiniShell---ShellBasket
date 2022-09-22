@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:41:30 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/09 20:11:08 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:48:35 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LEXING_PARSING_H
@@ -38,14 +38,18 @@ char	*dict_get_key(t_dict *dict, char *key);
 /********************************************/
 /*                parsing                   */
 /********************************************/
-//line_lst_utils.c
-t_block	*new_block(char *word);
-void	line_lst_addback(t_line *line, t_block *new);
-void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst);
 
 //lexing_parsing.c
 t_bool	ms_line(char **line, t_info *exec_in);
 t_tree	*ms_lex_and_parse(char **line, t_info *exec_in);
+
+//abstract_syntax_tree.c
+void		test(t_leaf *leaf, t_line *line, int lay_par);
+void		fill_ast_bonus(t_line *line, t_tree *tree);
+void		remove_parentheses(t_line *line);
+t_line		*fill_parentheses_block(t_block **buff);
+t_type_leaf	get_type(t_token token);
+t_line		*fill_till_ope(t_block **buff);
 
 /********************************************/
 /*                 here_doc                 */
@@ -57,20 +61,22 @@ void	create_tmp(int *fd_arr, int turn);
 void	fill_here_doc(char *delim, int turn, int *fd_arr);
 int		total_block(t_leaf *leaf);
 
-//here_doc_utils.c
-void	remove_tmp_file(int file_nb, int *fd_arr);
-char	*get_delim(char *delim);
-void	close_reopen_here_doc(int turn, int *fd_arr, char *line);
-
 /********************************************/
 /*              tokenization                */
 /********************************************/
+//tokenization_bonus.c
+t_bool	tokenization(t_line *line);
+t_token	get_next_token(t_block *next_block);
+void	attribute_token(t_block *block);
+t_token	get_previous_token(t_block *block);
+t_bool	attribute_symbol(t_block *block);
 
-//check_symbol
-//t_bool	check_pipe(t_token next, t_token previous);
-//t_bool	check_symbol(t_block *block);
-
-void	line_clear(t_line *line);
+//check_symbol.c
+t_bool		check_pipe(t_token next, t_token previous);
+t_bool		check_symbol(t_block *block);
+t_bool		check_parentheses(t_token next, t_token previous, t_token token);
+t_bool		check_and(t_token next, t_token previous, t_token token);
+t_bool		check_or(t_token next, t_token previous, t_token token);
 
 /********************************************/
 /*                  lexing                  */
