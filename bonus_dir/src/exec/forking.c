@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 14:47:33 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/21 16:17:50 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -55,10 +55,12 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	else
 		signal(SIGINT, sigint_handler_exec);
 	child_process(cmd_path, exec_in, env);
-	if (exec_in->tmp_fd != -1)
+	if (exec_in->tmp_fd > -1)
+	{
 		close(exec_in->tmp_fd);
+	}
 	if (!exec_in->end)
 		exec_in->tmp_fd = exec_in->pipe_fd[0];
-	if (exec_in->pipe_fd[1] != -1 && !exec_in->end)
+	if (exec_in->pipe_fd[1] > -1 && !exec_in->end)
 		close(exec_in->pipe_fd[1]);
 }

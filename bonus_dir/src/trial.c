@@ -6,19 +6,12 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/19 19:29:13 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/21 15:58:44 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
-{
-	expand(sub, env);
-	wildcard(sub);
-	exec_info->argv = get_cmd_arg(sub);
-	exec(exec_info, sub, env);
-}
-
+/*
 static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir_type)
 {
 	if (ft_strncmp(files->word, "", 2) == 0)
@@ -33,13 +26,43 @@ static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (redir_type == RED_OUT_TRUNC_L)
-		exec->stdou = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+		exec->std = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
 	else
 		exec->stdou = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
 	if (exec->stdou == -1)
 	{
 		perror(files->word);
 		exec->stdou = dup(STDOUT_FILENO);
+		return (FALSE);
+	}
+	return (TRUE);
+}
+*/
+
+t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf red)
+{
+	if (exec->final_out != -1 && exec->final_out != -2)
+		close(exec->final_out);
+	exec->final_out = -1;
+	if (ft_strncmp(files->word, "", 2) == 0)
+	{
+		print_error(NULL, 1);
+		return (FALSE);
+	}
+	else if (ft_strncmp(files->word, "\"\"", 3) == 0
+		|| ft_strncmp(files->word, "\'\'", 3) == 0)
+	{
+		write(2, " :", 2);
+		ft_bzero(files->word, ft_strlen(files->word));
+	}
+	if (red == RED_OUT_TRUNC_L)
+		exec->final_out = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+	else
+		exec->final_out = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
+	if (exec->final_out == -1)
+	{
+		perror(files->word);
+		exec->final_out = -2;
 		return (FALSE);
 	}
 	return (TRUE);
@@ -54,6 +77,7 @@ void	check_redir_tree(t_type_leaf redir_type, t_block *buff, t_info *exec_in)
 		else if (!check_ambiguous(buff->word, exec_in, TRUE)
 			&& !check_red_in(buff, exec_in))
 			return ;
+		exec_in->first_in = 1;
 	}
 	if (redir_type == RED_OUT_TRUNC_L || redir_type == RED_OUT_APPEND_L)
 	{
@@ -63,6 +87,15 @@ void	check_redir_tree(t_type_leaf redir_type, t_block *buff, t_info *exec_in)
 			&& !check_red_out_tree(buff, exec_in, redir_type))
 			return ;
 	}
+}
+
+void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
+{
+	expand(sub, env);
+	wildcard(sub);
+	exec_info->argv = get_cmd_arg(sub);
+	if (exec_info->final_out != -2 && exec_info->open_fd != -2)
+		exec(exec_info, sub, env);
 }
 
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
@@ -83,6 +116,8 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		printf("??\n");
 	if (leaf->type == CMD)
 	{
+		if (exec_in->pipe == FALSE)
+			exec_in->end = TRUE;
 		exec_cmd(exec_in, leaf->content, env);
 	}
 	if (leaf->type == OR_L)
@@ -113,9 +148,9 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		|| leaf->type == RED_OUT_APPEND_L)
 	{
 		check_redir_tree(leaf->type, leaf->right->content->head, exec_in);
+		printf("exec final out = %i\n", exec_in->final_out);
 		exec_tree(leaf->left, exec_in, env);
-		close(exec_in->stdou);
-		exec_in->stdou = dup(STDOUT_FILENO);
+		exec_in->final_out = -1;
 	}
 }
 //pipe on check a gauche du suivant si on a une cmd ou pas

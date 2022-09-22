@@ -6,7 +6,8 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 19:37:30 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/19 23:43:57 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/19 22:29:09 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -103,9 +104,31 @@ int	fill_leaf(t_leaf *leaf, t_block *buff, int lay_par, t_line *sub)
 
 void	fill_sub(t_block **buff, t_bool *par, t_line **sub)
 {
+	int		i;
+	t_block	*new;
+
+	i = 0;
 	if ((*buff)->token == P_OPEN)
 	{
 		*sub = fill_parentheses_block(buff);
+		if (*buff && ((*buff)->token == RED_IN
+			|| (*buff)->token == RED_OUT_TRUNC
+			|| (*buff)->token == RED_OUT_APPEND)
+			&& (*buff)->next->next)
+		{
+			while (i < 2)
+			{
+				new = new_block((*buff)->word);
+				if (!new)
+					return (free_exit());
+				new->token = (*buff)->token;
+				line_lst_addback(*sub, new);
+				*buff = (*buff)->next;
+				i++;
+			}
+			*par = TRUE;
+			return ;
+		}
 		*par = TRUE;
 	}
 	else

@@ -33,6 +33,7 @@ void	browse_sub_tree(t_leaf *leaf)
 	else
 		return ;
 }
+
 void	browse_tree(t_tree *tree)
 {
 	t_leaf  *buff;
@@ -40,8 +41,6 @@ void	browse_tree(t_tree *tree)
 	buff = tree->head;
 	browse_sub_tree(buff);
 }
-
-
 
 t_info	*init_exec_info(void)
 {
@@ -61,6 +60,8 @@ t_info	*init_exec_info(void)
 	exec_info->pipe_fd[1] = -1;
 	exec_info->tmp_fd = -1;
 	exec_info->open_fd = -1;
+	exec_info->first_in = -1;
+	exec_info->final_out = -1;
 	exec_info->out_fd = -1;
 	exec_info->end = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);
@@ -97,6 +98,10 @@ static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 	init_pid_lst(exec_info);
 	exec_tree(tree->head, exec_info, env);
 	wait_sub_process(exec_info);
+	if (exec_info->stdi > -1)
+		close(exec_info->stdi);
+	if (exec_info->stdou > -1)
+		close(exec_info->stdou);
 	free_each_turn(get_gc());
 }
 
