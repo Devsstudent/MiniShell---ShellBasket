@@ -101,6 +101,6 @@ void	exec_env(int ac, char **argv, t_dict *env);
 void	exec_pwd(int ac, char **argv, t_dict *env);
 
 void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env);
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env);
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
 
 #endif

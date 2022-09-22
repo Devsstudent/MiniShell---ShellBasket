@@ -22,6 +22,7 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 		execve_builtin_alone(cmd_path, env, exec_in);
 	if (exec_in->end && exec_in->pipe)
 	{
+		printf("yo");
 		close(exec_in->pipe_fd[0]);
 		close(exec_in->pipe_fd[1]);
 	}

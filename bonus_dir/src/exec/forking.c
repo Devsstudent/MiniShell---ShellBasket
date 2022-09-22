@@ -59,8 +59,7 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	{
 		close(exec_in->tmp_fd);
 	}
-	if (!exec_in->end)
-		exec_in->tmp_fd = exec_in->pipe_fd[0];
+	exec_in->tmp_fd = exec_in->pipe_fd[0];
 	if (exec_in->pipe_fd[1] > -1 && !exec_in->end)
 		close(exec_in->pipe_fd[1]);
 }
