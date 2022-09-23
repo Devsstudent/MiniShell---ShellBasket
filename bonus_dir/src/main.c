@@ -62,6 +62,9 @@ t_info	*init_exec_info(void)
 	exec_info->open_fd = -1;
 	exec_info->first_in = -1;
 	exec_info->final_out = -1;
+	exec_info->right = FALSE;
+	exec_info->left = FALSE;
+	exec_info->stdout_pipe = -1;
 	exec_info->out_fd = -1;
 	exec_info->end = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);
@@ -96,7 +99,7 @@ static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 {
 	//browse_tree(tree);
 	init_pid_lst(exec_info);
-	exec_tree(tree->head, exec_info, env);
+	exec_tree(tree->head, exec_info, env, NONE);
 	wait_sub_process(exec_info);
 	if (exec_info->stdi > -1)
 		close(exec_info->stdi);

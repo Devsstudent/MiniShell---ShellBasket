@@ -13,21 +13,36 @@
 
 static t_bool	dup_stdout(t_info *exec_in)
 {
-	if (exec_in->end && exec_in->out_fd == -1 && exec_in->final_out != -1)
+	/*
+	if (exec_in->out_fd == -1 && exec_in->final_out != -1)
 	{
 		if (dup2(exec_in->final_out, STDOUT_FILENO) == -1)
 			return (perror_false("coco"));
 		return (TRUE);
-	}
+	}*/
 	if (exec_in->out_fd > -1)
 	{
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
 			return (perror_false("basket"));
 	}
-	else if (!exec_in->end && exec_in->pipe_fd[1] > -1)
+	else if (exec_in->pipe_fd[1] > -1)
 	{
 		if (dup2(exec_in->pipe_fd[1], STDOUT_FILENO) == -1)
-			return (perror_false("shell"));
+		{
+			if (exec_in->out_fd == -1 && exec_in->stdou > -1)
+			{
+				if (exec_in->stdout_pipe != -1)
+				{
+					if (dup2(exec_in->stdout_pipe, STDOUT_FILENO) == -1)
+						return (perror_false("not good"));
+				}
+				else if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
+					return (perror_false("sheet"));
+				if (exec_in->stdou != -1)
+					close(exec_in->stdou);
+				exec_in->stdou = -1;
+			}
+		}
 	}
 	else
 	{
@@ -45,7 +60,7 @@ static t_bool	dup_stdout(t_info *exec_in)
 
 t_bool	dup_cmd_alone(t_info *exec_in)
 {
-	if (exec_in->end && exec_in->out_fd == -1 && exec_in->final_out > -1)
+	if (exec_in->out_fd == -1 && exec_in->final_out > -1)
 	{
 		if (dup2(exec_in->final_out, STDOUT_FILENO) == -1)
 			return (perror_false("coco"));
@@ -71,11 +86,8 @@ t_bool	dup_in_pipe(t_info *exec_in)
 			return (perror_false("set"));
 	}
 	else if (exec_in->tmp_fd > -1)
-	{
-		printf("exec_in->tmp_fd = %i\n", exec_in->tmp_fd);
 		if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
 			return (perror_false("lasy"));
-	}
 	return (TRUE);
 }
 

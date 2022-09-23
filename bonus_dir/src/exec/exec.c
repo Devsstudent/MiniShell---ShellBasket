@@ -20,17 +20,10 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 	}
 	else
 		execve_builtin_alone(cmd_path, env, exec_in);
-	if (exec_in->end && exec_in->pipe)
-	{
-		close(exec_in->pipe_fd[0]);
-		close(exec_in->pipe_fd[1]);
-	}
 	if (exec_in->open_fd > -1)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd > -1)
 		close(exec_in->out_fd);
-	if (exec_in->end && exec_in->final_out > -1)
-		close(exec_in->final_out);
 	exec_in->turn++;
 }
 
@@ -47,8 +40,10 @@ void	exec(t_info *exec_in, t_line *sub, t_dict *env)
 	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (command_not_found(exec_in, cmd_path, sub))
 	{
+	/*
 		if (exec_in->end)
 			exec_in->cmd_not_found = TRUE;
+	*/
 		if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
 			close(exec_in->open_fd);
 		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)

@@ -31,6 +31,8 @@ int	exec_tree(t_leaf *leaf, t_info *exec_in)
 }
 */
 
+//Connexion between pipe
+
 void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 {
 	expand(sub, env);
@@ -40,110 +42,53 @@ void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 		exec(exec_info, sub, env);
 }
 
-static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env, t_side side)
+static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
 {
-	if (side == NONE)
-	{
-		side = LEFT;
-		exec_tree(leaf->left, exec_in, env, TRUE);
-		wait_sub_process(exec_in);
-		if (g_exit_status != 0)
-		{
-			side = RIGHT;
-			exec_tree(leaf->right, exec_in, env, FALSE);
-		}
-	}
-	else
-	{
-		exec_tree(leaf->left, exec_in, env, TRUE);
-		wait_sub_process(exec_in);
-		if (g_exit_status != 0)
-			exec_tree(leaf->right, exec_in, env, FALSE);
-
-	}
+	(void) prev;
+	exec_tree(leaf->left, exec_in, env, leaf->type);
+	wait_sub_process(exec_in);
+	if (g_exit_status != 0)
+		exec_tree(leaf->right, exec_in, env, leaf->type);
 }
 
-static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_side side)
+static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
 {
-	if (side == NONE)
-	{
-		side = LEFT;
-		exec_tree(leaf->left, exec_in, env, TRUE);
-		wait_sub_process(exec_in);
-		if (g_exit_status == 0)
-		{
-			side = RIGHT;
-			exec_tree(leaf->right, exec_in, env, FALSE);
-		}
-	}
-	else
-	{
-		exec_tree(leaf->left, exec_in, env, side);
-		wait_sub_process(exec_in);
-		if (g_exit_status == 0)
-		exec_tree(leaf->right, exec_in, env, side);
-	}
+	(void) prev;
+	exec_tree(leaf->left, exec_in, env, leaf->type);
+	wait_sub_process(exec_in);
+	if (g_exit_status == 0)
+		exec_tree(leaf->right, exec_in, env, leaf->type);
 }
 
-static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_side side)
+static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
 {
-	if (side == NONE)
+	(void) prev;
+	if (leaf->type == PIPE_L)
 	{
-		side = LEFT;
-		if (leaf->type == PIPE_L)
-		{
-			if (pipe(exec_in->pipe_fd) == -1)
-				return (perror("CRASH PIPE EXEC"));
-			exec_tree(leaf->left, exec_in, env, side);
-			side = RIGHT;
-			if (leaf->right->type == CMD && side == RIGHT)
-			{
-				ft_putstr_fd("END ??\n", 2);
-				exec_in->end = TRUE;
-			}
-			exec_tree(leaf->right, exec_in, env, side);
-		}
-		else
-		{
-			side = RIGHT;
-			exec_cmd(exec_in, leaf->content, env);
-		}
+		if (prev == PIPE_L && exec_in->left == TRUE)
+			exec_in->stdout_pipe = exec_in->pipe_fd[1];
+		if (pipe(exec_in->pipe_fd) == -1)
+			return (perror("CRASH PIPE EXEC"));
+		exec_in->left = TRUE;
+		exec_in->right = FALSE;
+		exec_tree(leaf->left, exec_in, env, leaf->type);
+		exec_in->right = TRUE;
+		exec_in->left = FALSE;
+		exec_tree(leaf->right, exec_in, env, leaf->type);
+		exec_in->stdout_pipe = -1;
 	}
 	else
-	{
-		if (leaf->type == PIPE_L)
-		{
-			if (pipe(exec_in->pipe_fd) == -1)
-				return (perror("CRASH PIPE EXEC"));
-			exec_tree(leaf->left, exec_in, env, side);
-			if (leaf->right->type == CMD || (leaf->right->type == CMD && leaf->parent_type != PIPE_L))
-			{
-				ft_putstr_fd("END ??\n", 2);
-				exec_in->end = TRUE;
-			}
-			exec_tree(leaf->right, exec_in, env, side);
-			exec_in->pipe = TRUE;
-		}
-		else
-			exec_cmd(exec_in, leaf->content, env);
-
-	}
+		exec_cmd(exec_in, leaf->content, env);
 }
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_side side)
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
 {
 	if (!leaf)
 		return ;
 	if (leaf->type == PIPE_L || leaf->type == CMD)
-	{
-		leaf_type_cmd_pipe(leaf, exec_in, env, side);
-	}
+		leaf_type_cmd_pipe(leaf, exec_in, env, prev);
 	else if (leaf->type == OR_L)
-	{
-		leaf_type_or(leaf, exec_in, env, side);
-	}
+		leaf_type_or(leaf, exec_in, env, prev);
 	else if (leaf->type == AND_L)
-	{
-		leaf_type_and(leaf, exec_in, env, side);
-	}
+		leaf_type_and(leaf, exec_in, env, prev);
 }

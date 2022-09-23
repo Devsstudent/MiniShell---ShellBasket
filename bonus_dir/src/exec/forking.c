@@ -55,9 +55,15 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	else
 		signal(SIGINT, sigint_handler_exec);
 	child_process(cmd_path, exec_in, env);
-	if (exec_in->tmp_fd > -1)
+	if (exec_in->tmp_fd > -1 && exec_in->tmp_fd != exec_in->pipe_fd[0])
+	{
+//		ft_putnbr_fd(exec_in->tmp_fd, 2);
+//		write(2, "\n", 1);
 		close(exec_in->tmp_fd);
+	}
 	exec_in->tmp_fd = exec_in->pipe_fd[0];
+//	ft_putnbr_fd(exec_in->tmp_fd, 2);
+//	write(2, "\n", 1);
 	if (exec_in->pipe_fd[1] > -1)
 		close(exec_in->pipe_fd[1]);
 }

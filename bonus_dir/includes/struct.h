@@ -86,11 +86,14 @@ typedef struct s_info{
 	int			fd_arr_size;
 	int			turn;
 	int			pipe_fd[2];
+	int			stdout_pipe;
 	int			tmp_fd;
 	int			stdou;
 	int			first_in;
 	int			final_out;
 	int			stdi;
+	t_bool		left;
+	t_bool		right;
 	t_bool		cmd_not_found;
 	t_bool		pipe;
 	t_bool		end;

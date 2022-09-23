@@ -30,7 +30,7 @@ t_bool	ms_line(char **line, t_info *exec_in)
 	listen_to_sigs();
 	if (isatty(STDIN_FILENO))
 		*line = readline("@ShellBasket^$ ");
-	else
+	else 
 		*line = readline("");
 	if (!(*line))
 	{
