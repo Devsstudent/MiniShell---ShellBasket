@@ -65,6 +65,7 @@ void	wait_sub_process(t_info *exec_info)
 	exec_info->pid_li->last = NULL;
 	exec_info->pipe = FALSE;
 	exec_info->tmp_fd = -1;
+	exec_info->end = FALSE;
 	if (exec_info->stdi > -1)
 		close(exec_info->stdi);
 	if (exec_info->stdou > -1)

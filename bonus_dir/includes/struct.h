@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:44:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/20 15:40:23 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:49:08 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef STRUCT_H
@@ -39,6 +39,7 @@ typedef struct s_leaf{
 	t_line			*content;
 	t_bool			parentheses;
 	t_type_leaf		type;
+	t_type_leaf		parent_type;
 	struct s_leaf	*right;
 	struct s_leaf	*left;
 }					t_leaf;

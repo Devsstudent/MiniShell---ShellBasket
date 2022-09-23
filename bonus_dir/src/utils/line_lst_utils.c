@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/08/29 17:58:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:32:19 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -62,24 +62,4 @@ void	line_clear(t_line *line)
 		buff = tmp;
 	}
 	free(line);
-}
-
-void	line_cpy_till_pipe(t_block **buff, t_line *sub_lst)
-{
-	t_block	*new;
-	char	*cpy;
-	int		i;
-
-	i = 0;
-	while (*buff && (*buff)->token != PIPE)
-	{
-		cpy = ft_strdup((*buff)->word);
-		i++;
-		new = new_block(cpy);
-		if (!new)
-			return (free_exit());
-		new->token = (*buff)->token;
-		line_lst_addback(sub_lst, new);
-		*buff = (*buff)->next;
-	}
 }

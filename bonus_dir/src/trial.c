@@ -6,12 +6,12 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 19:40:39 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/21 15:58:44 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/22 16:54:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
 /*
+
 static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir_type)
 {
 	if (ft_strncmp(files->word, "", 2) == 0)
@@ -38,7 +38,7 @@ static t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf redir
 	return (TRUE);
 }
 */
-
+/*
 t_bool	check_red_out_tree(t_block *files, t_info *exec, t_type_leaf red)
 {
 	if (exec->final_out != -1 && exec->final_out != -2)
@@ -154,7 +154,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	}
 }
 //pipe on check a gauche du suivant si on a une cmd ou pas
-
+*/
 /*
 t_bool	check_end_pipe_line(t_leaf *leaf, t_info *exec_in)
 {
@@ -182,4 +182,4 @@ t_bool	check_end_pipe_line(t_leaf *leaf, t_info *exec_in)
 //pipe on check a gauche du suivant si on a une cmd ou pas
 
 
-//the last wait_processes has to be at the end of main like in mandatory part
+//the last wait_processes has to be at the end of main like in mandatory part*/

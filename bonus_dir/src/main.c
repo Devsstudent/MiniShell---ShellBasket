@@ -2,7 +2,7 @@
 
 void	browse_sub_tree(t_leaf *leaf)
 {
-	printf("type = %i, PAR = %i\n", leaf->type, leaf->parentheses);
+	printf("type = %i, PAR = %i p_type = %i\n", leaf->type, leaf->parentheses, leaf->parent_type);
 	if (leaf->type == CMD)
 	{
 		t_line *line;
