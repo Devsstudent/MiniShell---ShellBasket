@@ -66,14 +66,26 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_typ
 	if (leaf->type == PIPE_L)
 	{
 		if (prev == PIPE_L && exec_in->left == TRUE)
-			exec_in->stdout_pipe = exec_in->pipe_fd[1];
+		{
+			exec_in->stdout_pipe = 1;
+			exec_in->old_pipe_fd[1] = exec_in->pipe_fd[1];
+			exec_in->old_pipe_fd[0] = exec_in->pipe_fd[0];
+			printf("old pipes = %i %i\n", exec_in->old_pipe_fd[0], exec_in->old_pipe_fd[1]);
+		}
 		if (pipe(exec_in->pipe_fd) == -1)
 			return (perror("CRASH PIPE EXEC"));
+		printf("pipes = %i %i\n", exec_in->pipe_fd[0], exec_in->pipe_fd[1]);
 		exec_in->left = TRUE;
 		exec_in->right = FALSE;
 		exec_tree(leaf->left, exec_in, env, leaf->type);
 		exec_in->right = TRUE;
 		exec_in->left = FALSE;
+		printf("pipe_fd[0] = %i, pipe_fd[1] = %i\n", exec_in->pipe_fd[0], exec_in->pipe_fd[1]);
+		if (prev == PIPE_L)
+		{
+			exec_in->pipe_fd[0] = exec_in->old_pipe_fd[0];
+			exec_in->pipe_fd[1] = exec_in->old_pipe_fd[1];
+		}
 		exec_tree(leaf->right, exec_in, env, leaf->type);
 		exec_in->stdout_pipe = -1;
 	}
