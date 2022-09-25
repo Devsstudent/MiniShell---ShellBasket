@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/25 18:28:15 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/25 22:48:40 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -33,8 +33,6 @@ static t_bool	dup_stdout(t_info *exec_in)
 			{
 				if (exec_in->stdout_pipe != -1)
 				{
-					printf("COCO\n");
-					exec_in->pipe_fd[0] = exec_in->old_pipe_fd[0];
 					if (dup2(exec_in->old_pipe_fd[1], STDOUT_FILENO) == -1)
 						return (perror_false("not good"));
 				}
@@ -88,8 +86,11 @@ t_bool	dup_in_pipe(t_info *exec_in)
 			return (perror_false("set"));
 	}
 	else if (exec_in->tmp_fd > -1)
+	{
+		//write(2, "super\n", 6);
 		if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
 			return (perror_false("lasy"));
+	}
 	return (TRUE);
 }
 
