@@ -60,6 +60,33 @@ static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_lea
 		exec_tree(leaf->right, exec_in, env, leaf->type);
 }
 
+
+
+//Checker si on a pipe avant
+
+//Comment stocker les info du pipe precedent ?
+
+//Quand es-ce-qu'on les closes ?
+
+//Si on pipe a gauche et a droite on peux close le pipe quand on aura exec celui de droite
+
+
+//Si oui lire sur pipe precedent
+	//et que deux cmd apres : ecrire sur le fd du premier pipe (celui qu'on aura garder)
+//Sinon stdin
+//Ecrire sur le pipe precedent ou precedent ++;
+
+//Lire sur le precredent ecrire sur le precedent
+
+//Lire sur le precedent pipe ou ecrire sur le suivant ? Au choix
+
+//Checker si a gauche il y a un pipe
+//Si oui : Lire sur le precedent /// Ecrire sur le prochain / Save ou quoi
+//Si non : exec la cmd sur le pipe 
+	//Si pas de pipe a droite : Ecrit sur stdout : read sur le pipe
+
+//
+
 static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
 {
 	(void) prev;
