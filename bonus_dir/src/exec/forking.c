@@ -6,12 +6,12 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/21 16:17:50 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/27 19:51:56 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env)
+static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 {
 	if (exec_in->pid_li->last->pid == 0)
 	{
@@ -22,9 +22,9 @@ static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env)
 		}
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
-		if (!dup_in_pipe(exec_in))
+		if (!dup_in_pipe(exec_in, pipe_fd))
 			return ;
-		close_subprocess_fd(exec_in);
+		close_subprocess_fd(exec_in, pipe_fd);
 		if (!execve_cmd(cmd_path, exec_in, env))
 		{
 			perror(exec_in->argv[0]);
@@ -42,7 +42,7 @@ static t_bool	check_new_shell(char *cmd_path)
 	return (FALSE);
 }
 
-void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 {
 	int	pid;
 
@@ -54,16 +54,5 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 		signal(SIGINT, SIG_IGN);
 	else
 		signal(SIGINT, sigint_handler_exec);
-	child_process(cmd_path, exec_in, env);
-	if (exec_in->tmp_fd > -1 && exec_in->tmp_fd != exec_in->pipe_fd[0])
-	{
-//		ft_putnbr_fd(exec_in->tmp_fd, 2);
-//		write(2, "\n", 1);
-		close(exec_in->tmp_fd);
-	}
-	exec_in->tmp_fd = exec_in->pipe_fd[0];
-//	ft_putnbr_fd(exec_in->tmp_fd, 2);
-//	write(2, "\n", 1);
-	if (exec_in->pipe_fd[1] > -1)
-		close(exec_in->pipe_fd[1]);
+	child_process(cmd_path, exec_in, env, pipe_fd);
 }

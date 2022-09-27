@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 19:27:58 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/27 19:19:45 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -20,12 +20,12 @@ void	wildcard(t_line *sub);
 /*                   exec                   */
 /********************************************/
 //forking.c
-void	forking(char *cmd_path, t_info *exec_in, t_dict *env);
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2]);
 void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
 
 //exec.c
 //void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
-void	exec(t_info *exec_in, t_line *sub, t_dict *env);
+void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev);
 
 //cmd_not_found.c
 t_bool	command_not_found(t_info *exec_in, char *cmd_path,
@@ -65,8 +65,8 @@ char	*handle_quote(char *word);
 
 //exec_subprocess.c
 t_bool	dup_cmd_alone(t_info *exec_in);
-t_bool	dup_in_pipe(t_info *exec_in);
-void	close_subprocess_fd(t_info *exec_in);
+t_bool	dup_in_pipe(t_info *exec_in,int pipe_fd[2]);
+void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
 
 /********************************************/
 /*                 execve                   */
@@ -100,7 +100,7 @@ void	exec_env(int ac, char **argv, t_dict *env);
 //pwd.c
 void	exec_pwd(int ac, char **argv, t_dict *env);
 
-void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env);
+void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env, t_leaf *prev);
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev);
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev);
 #endif
