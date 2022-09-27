@@ -22,8 +22,8 @@ int	exec_tree(t_leaf *leaf, t_info *exec_in)
 	}
 	//Check la type de leaf
 	//On regarge toujours a gauche tant qu'on a pas de pipe ou une cmd
-	//A partir du moment ou on a un pipe : on execc a gauche puis on check a droite 
-	//En gros quand on a pipe on descend et on recupere le tous de l'exec avec la fonction pipe qui s'executer 
+	//A partir du moment ou on a un pipe : on execc a gauche puis on check a droite
+	//En gros quand on a pipe on descend et on recupere le tous de l'exec avec la fonction pipe qui s'executer
 	//on recuper l'exit status on remonte sur la feuille precedente
 	//en function si on a un retour positif ou pas si c'est un et ou un ou
 	//on va voir a droite
@@ -82,7 +82,7 @@ static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *pr
 
 //Checker si a gauche il y a un pipe
 //Si oui : Lire sur le precedent /// Ecrire sur le prochain / Save ou quoi
-//Si non : exec la cmd sur le pipe 
+//Si non : exec la cmd sur le pipe
 	//Si pas de pipe a droite : Ecrit sur stdout : read sur le pipe
 
 //A voir comment on rempli la exec_info pour reussir l'exec :)
@@ -103,7 +103,7 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 			//On va faire un dup sur prev->pipe_fd[0] pour la cmd de gauche
 			//Ecrire sur le pipe actuel pour la cmd de gauche
 			//Lire sur le pipe actuel pour la cmd de droite
-			//On va faire un dup sur prev->pipe_fd[1] pour la cmd de droite 
+			//On va faire un dup sur prev->pipe_fd[1] pour la cmd de droite
 		}
 		else
 		{
@@ -124,7 +124,11 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 		exec_in->stdout_pipe = -1;
 	}
 	else
+	{
+		if (!prev)
+			exec_in->end = TRUE;
 		exec_cmd(exec_in, leaf, env, prev);
+	}
 }
 
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)

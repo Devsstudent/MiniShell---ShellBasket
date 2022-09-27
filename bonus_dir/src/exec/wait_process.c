@@ -13,8 +13,6 @@
 
 void	init_wait_sub_process(t_info *exec_info)
 {
-	if (exec_info->tmp_fd > -1)
-		close(exec_info->tmp_fd);
 	if (dup2(exec_info->stdi, STDIN_FILENO) == -1)
 		perror("sell");
 	if (exec_info->stdi > -1)

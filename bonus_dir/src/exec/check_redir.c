@@ -54,9 +54,9 @@ t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
 	if (red->token == RED_OUT_TRUNC)
-		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0600);
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else
-		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0600);
+		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (exec->out_fd == -1)
 	{
 		perror(files->word);

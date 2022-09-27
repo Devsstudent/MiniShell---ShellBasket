@@ -32,11 +32,6 @@ static t_bool	dup_stdout(t_info *exec_in, int pipe_fd[2])
 			return (perror_false("error in dup out"));
 		exec_in->end = FALSE;
 	}
-	else if (exec_in->left)
-	{
-		if (dup2(exec_in->pipe_fd_actual[1], STDOUT_FILENO) == -1)
-			return (perror_false("perror YAY"));
-	}
 	else if (exec_in->prev_pipe && exec_in->right)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
