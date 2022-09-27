@@ -45,19 +45,19 @@ void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
 {
 	(void) prev;
-	exec_tree(leaf->left, exec_in, env, leaf->type);
+	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
 	if (g_exit_status != 0)
-		exec_tree(leaf->right, exec_in, env, leaf->type);
+		exec_tree(leaf->right, exec_in, env, leaf);
 }
 
 static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
 {
 	(void) prev;
-	exec_tree(leaf->left, exec_in, env, leaf->type);
+	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
 	if (g_exit_status == 0)
-		exec_tree(leaf->right, exec_in, env, leaf->type);
+		exec_tree(leaf->right, exec_in, env, leaf);
 }
 
 
@@ -85,30 +85,47 @@ static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_lea
 //Si non : exec la cmd sur le pipe 
 	//Si pas de pipe a droite : Ecrit sur stdout : read sur le pipe
 
-//
+//A voir comment on rempli la exec_info pour reussir l'exec :)
 
-static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
+static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
 	(void) prev;
 	if (leaf->type == PIPE_L)
 	{
 		if (prev == PIPE_L && exec_in->left == TRUE)
 			exec_in->stdout_pipe = exec_in->pipe_fd[1];
-		if (pipe(exec_in->pipe_fd) == -1)
+		if (pipe(leaf->pipe_fd) == -1)
 			return (perror("CRASH PIPE EXEC"));
+		if (prev->type == PIPE_L)
+		{
+			//On va faire un dup sur prev->pipe_fd[0] pour la cmd de gauche
+			//Ecrire sur le pipe actuel pour la cmd de gauche
+			//Lire sur le pipe actuel pour la cmd de droite
+			//On va faire un dup sur prev->pipe_fd[1] pour la cmd de droite 
+		}
+		else
+			//Read sur stdin :)
+		if (leaf->left->type == PIPE_L)
+		{
+			//
+		}
+		else
+			//exec left sur le pipe
 		exec_in->left = TRUE;
 		exec_in->right = FALSE;
-		exec_tree(leaf->left, exec_in, env, leaf->type);
+		exec_tree(leaf->left, exec_in, env, leaf);
 		exec_in->right = TRUE;
 		exec_in->left = FALSE;
-		exec_tree(leaf->right, exec_in, env, leaf->type);
+		exec_tree(leaf->right, exec_in, env, leaf);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
 		exec_in->stdout_pipe = -1;
 	}
 	else
 		exec_cmd(exec_in, leaf->content, env);
 }
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
 	if (!leaf)
 		return ;
