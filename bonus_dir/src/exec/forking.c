@@ -46,6 +46,8 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	int	pid;
 
+	//pipe here ?
+	pipe(exec_in->pipe_fd);
 	pid = fork();
 	if (pid < 0)
 		return (perror("shebasket"));
@@ -55,4 +57,11 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	else
 		signal(SIGINT, sigint_handler_exec);
 	child_process(cmd_path, exec_in, env);
+	//dup pipe_fd[0] on STDIN
+	if (pid > 0)
+	{
+		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
+		close(exec_in->pipe_fd[0]);
+		close(exec_in->pipe_fd[1]);
+	}
 }

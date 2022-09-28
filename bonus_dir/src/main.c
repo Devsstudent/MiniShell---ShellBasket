@@ -120,11 +120,11 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		if (pipe(exec_info->pipe_fd) == -1)
+		/*if (pipe(exec_info->pipe_fd) == -1)
 		{
 			perror("main.c : cannot open pipe");
 			break ;
-		}
+		}*/
 		//browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{

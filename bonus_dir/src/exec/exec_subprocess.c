@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/28 16:16:51 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/28 19:59:15 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -67,12 +67,7 @@ t_bool	dup_in_pipe(t_info *exec_in)
 		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 			return (perror_false("set"));
 	}
-	else if (exec_in->left && exec_in->pipe)
-	{
-		if (dup2(exec_in->pipe_fd[0], STDIN_FILENO) == -1)
-			return (perror_false("read to actual pipe :)"));
-	}
-	else if (exec_in->right && exec_in->pipe)
+	else if ((exec_in->left || exec_in->right) && exec_in->prev_pipe)
 	{
 		if (dup2(exec_in->pipe_fd[0], STDIN_FILENO) == -1)
 			return (perror_false("read to actual pipe :)"));
