@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/27 19:19:24 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:50:36 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,7 +15,7 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 {
 	if (exec_in->pipe || !check_builtins(exec_in->argv))
 	{
-		if (exec_in->final_out != -2 && exec_in->open_fd != -2)
+		if (exec_in->open_fd != -2)
 			forking(cmd_path, exec_in, env);
 	}
 	else
@@ -24,8 +24,6 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 		close(exec_in->open_fd);
 	if (exec_in->out_fd > -1)
 		close(exec_in->out_fd);
-//	exec_in->turn++;
-//	ft_putnbr_fd(exec_in->turn ,2);
 }
 
 void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
@@ -33,6 +31,7 @@ void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
 	char	*cmd_path;
 	int		i;
 
+	(void) prev;
 	i = -1;
 	check_redirection(exec_in, leaf->content);
 	while (exec_in->argv[++i])
@@ -47,26 +46,7 @@ void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
 			close(exec_in->open_fd);
 		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
 			close(exec_in->out_fd);
-		if (exec_in->final_out > -1)
-			close(exec_in->final_out);
 		return ;
 	}
-	if (prev)
-	{
-		if (exec_in->left && exec_in->prev_pipe)
-		{
-			int save_pipe = dup(exec_in->pipe_fd_actual[0]);
-			if (dup2(exec_in->pipe_fd_actual[0], prev->pipe_fd[0]) == -1)
-				perror("YOLOOO");
-			execute_cmd(exec_in, env, cmd_path);
-			if (dup2(exec_in->pipe_fd_actual[0], save_pipe) == -1)
-				perror("YOLOOO @2");
-			close(prev->pipe_fd[0]);
-		}
-		else 
-			execute_cmd(exec_in, env, cmd_path);
-		close(exec_in->pipe_fd_actual[1]);
-	}
-	else
-		execute_cmd(exec_in, env, cmd_path);
+	execute_cmd(exec_in, env, cmd_path);
 }

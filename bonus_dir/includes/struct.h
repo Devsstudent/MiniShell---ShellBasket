@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:44:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/27 17:57:44 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:30:38 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef STRUCT_H
@@ -37,7 +37,6 @@ typedef struct s_line{
 
 typedef struct s_leaf{
 	t_line			*content;
-	int				pipe_fd[2];
 	t_bool			parentheses;
 	t_type_leaf		type;
 	t_type_leaf		parent_type;
@@ -87,13 +86,9 @@ typedef struct s_info{
 	int			*fd_arr;
 	int			fd_arr_size;
 	int			turn;
-	int			stdout_pipe;
-	int			tmp_fd;
 	int			stdou;
-	int			first_in;
-	int			final_out;
 	int			stdi;
-	int			pipe_fd_actual[2];
+	int			pipe_fd[2];
 	t_bool		left;
 	t_bool		right;
 	t_bool		prev_pipe;

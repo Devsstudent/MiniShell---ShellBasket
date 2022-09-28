@@ -5,8 +5,7 @@ int	exec_tree(t_leaf *leaf, t_info *exec_in)
 	if (leaf->type == PIPE_L || CMD_ARG)
 	{
 		//if pipe fork()
-		//if cmd exec
-		exec_pipe_line_cmd(leaf);
+		//if cmd exec exec_pipe_line_cmd(leaf);
 	}
 	else if (leaf->type == OR_L)
 	{
@@ -38,7 +37,7 @@ void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env, t_leaf *prev)
 	expand(leaf->content, env);
 	wildcard(leaf->content);
 	exec_info->argv = get_cmd_arg(leaf->content);
-	if (exec_info->final_out != -2 && exec_info->open_fd != -2)
+	if (exec_info->open_fd != -2)
 		exec(exec_info, leaf, env, prev);
 }
 
@@ -91,19 +90,12 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 {
 	if (leaf->type == PIPE_L)
 	{
-		if (pipe(leaf->pipe_fd) == -1)
-			return (perror("CRASH PIPE EXEC"));
-		exec_in->pipe_fd_actual[0] = leaf->pipe_fd[0];
-		exec_in->pipe_fd_actual[1] = leaf->pipe_fd[1];
+		exec_in->pipe = TRUE;
 		if (prev && prev->type == PIPE_L)
 		{
 			if (prev->head && exec_in->right)
 				leaf->head = TRUE;
 			exec_in->prev_pipe = TRUE;
-			//On va faire un dup sur prev->pipe_fd[0] pour la cmd de gauche
-			//Ecrire sur le pipe actuel pour la cmd de gauche
-			//Lire sur le pipe actuel pour la cmd de droite
-			//On va faire un dup sur prev->pipe_fd[1] pour la cmd de droite
 		}
 		else
 		{
@@ -119,9 +111,6 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 		if ((leaf->head && leaf->right->type != PIPE_L && exec_in->right))
 			exec_in->end = TRUE;
 		exec_tree(leaf->right, exec_in, env, leaf);
-		close(leaf->pipe_fd[0]);
-		close(leaf->pipe_fd[1]);
-		exec_in->stdout_pipe = -1;
 	}
 	else
 	{

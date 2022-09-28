@@ -56,16 +56,11 @@ t_info	*init_exec_info(void)
 	exec_info->fd_arr = NULL;
 	exec_info->prev_pipe = FALSE;
 	exec_info->fd_arr_size = 0;
-	exec_info->turn = 0;
-	exec_info->pipe_fd_actual[0] = -1;
-	exec_info->pipe_fd_actual[1] = -1;
-	exec_info->tmp_fd = -1;
+	exec_info->pipe_fd[0] = -1;
+	exec_info->pipe_fd[1] = -1;
 	exec_info->open_fd = -1;
-	exec_info->first_in = -1;
-	exec_info->final_out = -1;
 	exec_info->right = FALSE;
 	exec_info->left = FALSE;
-	exec_info->stdout_pipe = -1;
 	exec_info->out_fd = -1;
 	exec_info->end = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);
@@ -125,7 +120,12 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		browse_tree(tree);
+		if (pipe(exec_info->pipe_fd) == -1)
+		{
+			perror("main.c : cannot open pipe");
+			break ;
+		}
+		//browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);

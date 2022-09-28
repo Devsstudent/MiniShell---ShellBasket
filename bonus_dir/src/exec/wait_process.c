@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/21 16:15:32 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:48:23 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -25,6 +25,10 @@ void	init_wait_sub_process(t_info *exec_info)
 		close(exec_info->out_fd);
 	if (exec_info->open_fd > -1)
 		close(exec_info->open_fd);
+	if (exec_info->pipe_fd[1] > -1)
+		close(exec_info->pipe_fd[1]);
+	if (exec_info->pipe_fd[0] > -1)
+		close(exec_info->pipe_fd[0]);
 }
 
 void	wait_sub_process(t_info *exec_info)
