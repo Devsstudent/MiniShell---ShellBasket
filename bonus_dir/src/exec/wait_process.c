@@ -36,6 +36,7 @@ void	wait_sub_process(t_info *exec_info)
 	init_wait_sub_process(exec_info);
 	while (buff)
 	{
+		ft_putstr_fd("BONJOUR\n", 2);
 		w_status = -81;
 		waitpid(buff->pid, &w_status, WCONTINUED);
 		if (buff->pid == -1 || w_status == -81)

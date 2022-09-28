@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path, int pipe_fd[2])
+void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 {
 	if (exec_in->pipe || !check_builtins(exec_in->argv))
 	{
 		if (exec_in->final_out != -2 && exec_in->open_fd != -2)
-			forking(cmd_path, exec_in, env, pipe_fd);
+			forking(cmd_path, exec_in, env);
 	}
 	else
 		execve_builtin_alone(cmd_path, env, exec_in);
@@ -24,7 +24,8 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path, int pipe_fd[2])
 		close(exec_in->open_fd);
 	if (exec_in->out_fd > -1)
 		close(exec_in->out_fd);
-	exec_in->turn++;
+//	exec_in->turn++;
+//	ft_putnbr_fd(exec_in->turn ,2);
 }
 
 void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
@@ -51,7 +52,21 @@ void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
 		return ;
 	}
 	if (prev)
-		execute_cmd(exec_in, env, cmd_path, prev->pipe_fd);
+	{
+		if (exec_in->left && exec_in->prev_pipe)
+		{
+			int save_pipe = dup(exec_in->pipe_fd_actual[0]);
+			if (dup2(exec_in->pipe_fd_actual[0], prev->pipe_fd[0]) == -1)
+				perror("YOLOOO");
+			execute_cmd(exec_in, env, cmd_path);
+			if (dup2(exec_in->pipe_fd_actual[0], save_pipe) == -1)
+				perror("YOLOOO @2");
+			close(prev->pipe_fd[0]);
+		}
+		else 
+			execute_cmd(exec_in, env, cmd_path);
+		close(exec_in->pipe_fd_actual[1]);
+	}
 	else
-		execute_cmd(exec_in, env, cmd_path, NULL);
+		execute_cmd(exec_in, env, cmd_path);
 }

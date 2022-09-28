@@ -20,7 +20,7 @@ void	wildcard(t_line *sub);
 /*                   exec                   */
 /********************************************/
 //forking.c
-void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2]);
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env);
 void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
 
 //exec.c
@@ -65,8 +65,8 @@ char	*handle_quote(char *word);
 
 //exec_subprocess.c
 t_bool	dup_cmd_alone(t_info *exec_in);
-t_bool	dup_in_pipe(t_info *exec_in,int pipe_fd[2]);
-void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
+t_bool	dup_in_pipe(t_info *exec_in);
+void	close_subprocess_fd(t_info *exec_in);
 
 /********************************************/
 /*                 execve                   */

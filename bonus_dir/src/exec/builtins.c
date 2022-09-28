@@ -55,7 +55,7 @@ t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 		exec_cd(ac, argv, env);
 	else
 		return (FALSE);
-	close_subprocess_fd(exec_in, NULL);
+	close_subprocess_fd(exec_in);
 	if (fork)
 		free_exit();
 	return (TRUE);

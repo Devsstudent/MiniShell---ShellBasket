@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
+static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	if (exec_in->pid_li->last->pid == 0)
 	{
@@ -22,9 +22,9 @@ static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env, int pipe
 		}
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
-		if (!dup_in_pipe(exec_in, pipe_fd))
+		if (!dup_in_pipe(exec_in))
 			return ;
-		close_subprocess_fd(exec_in, pipe_fd);
+		close_subprocess_fd(exec_in);
 		if (!execve_cmd(cmd_path, exec_in, env))
 		{
 			perror(exec_in->argv[0]);
@@ -42,7 +42,7 @@ static t_bool	check_new_shell(char *cmd_path)
 	return (FALSE);
 }
 
-void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
+void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	int	pid;
 
@@ -54,5 +54,5 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env, int pipe_fd[2])
 		signal(SIGINT, SIG_IGN);
 	else
 		signal(SIGINT, sigint_handler_exec);
-	child_process(cmd_path, exec_in, env, pipe_fd);
+	child_process(cmd_path, exec_in, env);
 }
