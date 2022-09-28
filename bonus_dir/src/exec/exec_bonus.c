@@ -1,37 +1,4 @@
 #include "minishell.h"
-/*
-int	exec_tree(t_leaf *leaf, t_info *exec_in)
-{
-	if (leaf->type == PIPE_L || CMD_ARG)
-	{
-		//if pipe fork()
-		//if cmd exec
-		exec_pipe_line_cmd(leaf);
-	}
-	else if (leaf->type == OR_L)
-	{
-		exec_tree(leaf->left, exec_in);
-		if (check_exit_status)
-			exec_tree(leaf->right, exec_in);
-	}
-	else if (leaf->type == AND_L)
-	{
-		exec_tree(leaf->left, exec_in);
-		if (check_exit_status)
-			exec_tree(leaf->right, exec_in);
-	}
-	//Check la type de leaf
-	//On regarge toujours a gauche tant qu'on a pas de pipe ou une cmd
-	//A partir du moment ou on a un pipe : on execc a gauche puis on check a droite 
-	//En gros quand on a pipe on descend et on recupere le tous de l'exec avec la fonction pipe qui s'executer 
-	//on recuper l'exit status on remonte sur la feuille precedente
-	//en function si on a un retour positif ou pas si c'est un et ou un ou
-	//on va voir a droite
-	//etc ..
-}
-*/
-
-//Connexion between pipe
 
 void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 {
@@ -42,66 +9,49 @@ void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 		exec(exec_info, sub, env);
 }
 
-static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
+static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
-	(void) prev;
-	exec_tree(leaf->left, exec_in, env, leaf->type);
+	exec_tree(leaf->left, exec_in, env);
 	wait_sub_process(exec_in);
 	if (g_exit_status != 0)
-		exec_tree(leaf->right, exec_in, env, leaf->type);
+		exec_tree(leaf->right, exec_in, env);
 }
 
-static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
+static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
-	(void) prev;
-	exec_tree(leaf->left, exec_in, env, leaf->type);
+	exec_tree(leaf->left, exec_in, env);
 	wait_sub_process(exec_in);
 	if (g_exit_status == 0)
-		exec_tree(leaf->right, exec_in, env, leaf->type);
+		exec_tree(leaf->right, exec_in, env);
 }
 
-static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
+//imagine we have a subshell
+//we fork, then in the fork, we execute the rest of the tree
+//when we fork, we have to have a clean slate, a new exec_in, that can be filled with new instructions, pipes, and everything, once it is over, we wait then go back to reality, ooh there goes gravity ooh
+
+static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
-	(void) prev;
-	if (leaf->type == PIPE_L)
+	if (leaf->type == CMD)
+		return (exec_cmd(exec_in, leaf->content, env));
+	if (pipe(exec_in->pipe_fd) == -1)
+		return (perror("CRASH PIPE EXEC"));
+	exec_tree(leaf->left, exec_in, env);
+	exec_tree(leaf->right, exec_in, env);
+}
+
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
+{
+	static int	PAR;
+
+	if (leaf->parentheses > PAR)
 	{
-		if (prev == PIPE_L && exec_in->left == TRUE)
-		{
-			exec_in->stdout_pipe = 1;
-			exec_in->old_pipe_fd[1] = exec_in->pipe_fd[1];
-			exec_in->old_pipe_fd[0] = exec_in->pipe_fd[0];
-		}
-		if (pipe(exec_in->pipe_fd) == -1)
-			return (perror("CRASH PIPE EXEC"));
-		exec_in->left = TRUE;
-		exec_in->right = FALSE;
-		exec_tree(leaf->left, exec_in, env, leaf->type);
-		exec_in->right = TRUE;
-		exec_in->left = FALSE;
-		if (leaf->left->type == PIPE_L)
-		{
-			exec_in->pipe_fd[0] = exec_in->old_pipe_fd[0];
-			exec_in->pipe_fd[1] = exec_in->old_pipe_fd[1];
-			exec_in->tmp_fd = exec_in->pipe_fd[0];
-			close(exec_in->pipe_fd[1]);
-			//printf("first line is : %s", get_next_line(exec_in->pipe_fd[0]));
-			//printf("first line is : %s, %i\n", get_next_line(exec_in->tmp_fd), exec_in->tmp_fd);
-		}
-		exec_tree(leaf->right, exec_in, env, leaf->type);
-		exec_in->stdout_pipe = -1;
-	}
-	else
-		exec_cmd(exec_in, leaf->content, env);
-}
-
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev)
-{
-	if (!leaf)
+		exec_subshell(leaf, exec_in, env, &PAR);
 		return ;
+	}
 	if (leaf->type == PIPE_L || leaf->type == CMD)
-		leaf_type_cmd_pipe(leaf, exec_in, env, prev);
+		leaf_type_cmd_pipe(leaf, exec_in, env);
 	else if (leaf->type == OR_L)
-		leaf_type_or(leaf, exec_in, env, prev);
+		leaf_type_or(leaf, exec_in, env);
 	else if (leaf->type == AND_L)
-		leaf_type_and(leaf, exec_in, env, prev);
+		leaf_type_and(leaf, exec_in, env);
 }

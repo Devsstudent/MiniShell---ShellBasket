@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 19:27:58 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/27 16:55:03 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -15,6 +15,7 @@
 # include "enum.h"
 # include "struct.h"
 
+void	exec_subshell(t_leaf *laef, t_info *exec_in, t_dict *env, int *PAR);
 void	wildcard(t_line *sub);
 /********************************************/
 /*                   exec                   */
@@ -102,5 +103,5 @@ void	exec_pwd(int ac, char **argv, t_dict *env);
 
 void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env);
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_type_leaf prev);
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env);
 #endif

@@ -101,7 +101,7 @@ static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 {
 	//browse_tree(tree);
 	init_pid_lst(exec_info);
-	exec_tree(tree->head, exec_info, env, NONE);
+	exec_tree(tree->head, exec_info, env);
 	wait_sub_process(exec_info);
 	if (exec_info->stdi > -1)
 		close(exec_info->stdi);
