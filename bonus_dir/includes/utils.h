@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/22 16:47:57 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 14:57:35 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -16,6 +16,14 @@
 
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst);
 void    line_cpy_till_ope(t_block **buff, t_line *sub_lst);
+
+/********************************************/
+/*                   init                   */
+/********************************************/
+//main.c
+void	init_pid_lst(t_info *exec_info);
+t_info	*init_exec_info(void);
+
 /********************************************/
 /*             garbage collector            */
 /********************************************/

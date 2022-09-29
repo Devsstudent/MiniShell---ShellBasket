@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
+/*   Updated: 2022/09/29 14:35:29 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 
 void	browse_sub_tree(t_leaf *leaf)
@@ -59,6 +70,7 @@ t_info	*init_exec_info(void)
 	exec_info->pipe_fd[0] = -1;
 	exec_info->pipe_fd[1] = -1;
 	exec_info->open_fd = -1;
+	exec_info->par_lvl = 0;
 	exec_info->right = FALSE;
 	exec_info->left = FALSE;
 	exec_info->out_fd = -1;
@@ -125,7 +137,7 @@ int	main(int ac, char **av, char **envp)
 			perror("main.c : cannot open pipe");
 			break ;
 		}*/
-		//browse_tree(tree);
+		browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);

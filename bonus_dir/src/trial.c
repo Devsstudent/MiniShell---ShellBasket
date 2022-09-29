@@ -98,7 +98,52 @@ void	exec_cmd(t_info *exec_info, t_line *sub, t_dict *env)
 		exec(exec_info, sub, env);
 }
 
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
+//Reparcourir le tree et verifier qu'on a soit pas de pipe du coter droit, soit qu'on est bien sur un des pipes de droite quoi
+t_bool	check_end(t_leaf *leaf, t_info *exec_in, t_leaf *pos)
+{
+	t_leaf	*buff;
+	t_bool	check;
+
+	(void) exec_in;
+	buff = pos;
+	check = FALSE;
+	while (pos)
+	{
+		if (pos->type == PIPE_L)
+			check = TRUE;
+		if (pos->right && pos->right->type == CMD)
+		{
+			if (pos->right == leaf && check)
+			{
+				printf("YES ASAP\n");
+				printf("%s\n", pos->right->content->head->word);
+				return (TRUE);
+			}
+			else
+				return (FALSE);
+		}
+		pos = pos->right;
+	}
+	check = FALSE;
+	while (buff)
+	{
+		if (buff->type == PIPE_L)
+			check = TRUE;
+		if (buff->right && buff->right->type == CMD)
+		{
+			if (buff->right == leaf && check)
+			{
+				printf("YES ASAF\n");
+				printf("%s", buff->right->content->head->word);
+				return (TRUE);
+			}
+		}
+		buff = buff->left;
+	}
+	return (FALSE);
+}
+
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree)
 {
 	if (!leaf)
 		return ;
@@ -122,34 +167,35 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	}
 	if (leaf->type == OR_L)
 	{
-		exec_tree(leaf->left, exec_in, env);
+		exec_tree(leaf->left, exec_in, env, tree);
 		wait_sub_process(exec_in);
 		if (g_exit_status != 0)
-			exec_tree(leaf->right, exec_in, env);
+			exec_tree(leaf->right, exec_in, env, tree);
 	}
 	if (leaf->type == AND_L)
 	{
-		exec_tree(leaf->left, exec_in, env);
+		exec_tree(leaf->left, exec_in, env, tree);
 		wait_sub_process(exec_in);
 		if (g_exit_status == 0)
-			exec_tree(leaf->right, exec_in, env);
+			exec_tree(leaf->right, exec_in, env, tree);
 	}
 	if (leaf->type == PIPE_L)
 	{
 		if (pipe(exec_in->pipe_fd) < 0 && !exec_in->end)
 			return (perror("pipe_exec_tree CRASH"));
 		exec_in->pipe = TRUE;
-		exec_tree(leaf->left, exec_in, env);
-		if (leaf->right->type == CMD)
+		exec_tree(leaf->left, exec_in, env, tree);
+		printf("CMD :%s\n", leaf->right->content->head->word);
+		if (check_end(leaf->right, exec_in, tree->head))
 			exec_in->end = TRUE;
-		exec_tree(leaf->right, exec_in, env);
+		exec_tree(leaf->right, exec_in, env, tree);
 	}
 	if (leaf->type == RED_IN_L || leaf->type == RED_OUT_TRUNC_L
 		|| leaf->type == RED_OUT_APPEND_L)
 	{
 		check_redir_tree(leaf->type, leaf->right->content->head, exec_in);
 		printf("exec final out = %i\n", exec_in->final_out);
-		exec_tree(leaf->left, exec_in, env);
+		exec_tree(leaf->left, exec_in, env, tree);
 		exec_in->final_out = -1;
 	}
 }

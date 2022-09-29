@@ -55,6 +55,7 @@ static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *pr
 	(void) prev;
 	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
+	ft_putstr_fd("test 123", 2);
 	if (g_exit_status == 0)
 		exec_tree(leaf->right, exec_in, env, leaf);
 }
@@ -86,6 +87,7 @@ static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *pr
 
 //A voir comment on rempli la exec_info pour reussir l'exec :)
 
+
 static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
 	if (leaf->type == PIPE_L)
@@ -116,15 +118,62 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 	{
 		if (!prev)
 			exec_in->end = TRUE;
+		ft_putstr_fd("just checking\n", 2);
 		exec_cmd(exec_in, leaf, env, prev);
 	}
+}
+
+static void	leaf_type_parenthese(t_leaf *leaf, t_info *exec_in, t_dict *env)
+{
+	int		pid;
+	t_info	*fork_info;
+//	int		yo;
+//	int		i;
+
+	pid = 1;
+	fork_info = init_exec_info();
+	init_pid_lst(fork_info);
+//	i = 1;
+	ft_putstr_fd("okay how many ?\n", 2);
+//	yo = leaf->parentheses - exec_in->par_lvl;
+/*	while (i < yo)
+	{
+		if (pid > 0)
+		{
+			pid = fork();
+			if (pid < 0)
+				return (perror("Error on fork:"));
+			pid_li_addback(exec_in->pid_li, new_pid(pid));
+		}
+		i++;
+	}
+*/
+	if (pid > 0)
+	{
+		exec_in->par_lvl = leaf->parentheses;
+		fork_info->par_lvl = leaf->parentheses;
+		pid = fork();
+		if (pid < 0)
+			return (perror("Error on fork:"));
+		pid_li_addback(exec_in->pid_li, new_pid(pid));
+	}
+	if (pid == 0)
+	{
+		exec_tree(leaf, fork_info, env, leaf);
+		exec_in->par_lvl--;
+		free_exit();
+	}
+//	exec_tree(leaf->left, exec_in, env, leaf);
+//	exec_tree(leaf->right, exec_in, env, leaf);
 }
 
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
 	if (!leaf)
 		return ;
-	if (leaf->type == PIPE_L || leaf->type == CMD)
+	if (leaf->parentheses > exec_in->par_lvl)
+		leaf_type_parenthese(leaf, exec_in, env);
+	else if (leaf->type == PIPE_L || leaf->type == CMD)
 		leaf_type_cmd_pipe(leaf, exec_in, env, prev);
 	else if (leaf->type == OR_L)
 		leaf_type_or(leaf, exec_in, env, prev);

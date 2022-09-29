@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/27 19:19:45 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 13:08:09 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -101,6 +101,5 @@ void	exec_env(int ac, char **argv, t_dict *env);
 void	exec_pwd(int ac, char **argv, t_dict *env);
 
 void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env, t_leaf *prev);
-
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev);
 #endif
