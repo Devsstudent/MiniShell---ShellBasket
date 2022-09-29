@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/29 15:14:15 by odessein          #+#    #+#             */
+/*   Updated: 2022/09/29 15:38:49 by odessein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 /*
 int	exec_tree(t_leaf *leaf, t_info *exec_in)
@@ -41,21 +52,18 @@ void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env, t_leaf *prev)
 		exec(exec_info, leaf, env, prev);
 }
 
-static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
+static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
-	(void) prev;
 	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
 	if (g_exit_status != 0)
 		exec_tree(leaf->right, exec_in, env, leaf);
 }
 
-static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
+static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
-	(void) prev;
 	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
-	ft_putstr_fd("test 123", 2);
 	if (g_exit_status == 0)
 		exec_tree(leaf->right, exec_in, env, leaf);
 }
@@ -118,11 +126,11 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 	{
 		if (!prev)
 			exec_in->end = TRUE;
-		ft_putstr_fd("just checking\n", 2);
+		//ft_putstr_fd("just checking\n", 2);
 		exec_cmd(exec_in, leaf, env, prev);
 	}
 }
-
+/*
 static void	leaf_type_parenthese(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
 	int		pid;
@@ -136,7 +144,7 @@ static void	leaf_type_parenthese(t_leaf *leaf, t_info *exec_in, t_dict *env)
 //	i = 1;
 	ft_putstr_fd("okay how many ?\n", 2);
 //	yo = leaf->parentheses - exec_in->par_lvl;
-/*	while (i < yo)
+	while (i < yo)
 	{
 		if (pid > 0)
 		{
@@ -147,7 +155,7 @@ static void	leaf_type_parenthese(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		}
 		i++;
 	}
-*/
+
 	if (pid > 0)
 	{
 		exec_in->par_lvl = leaf->parentheses;
@@ -165,18 +173,19 @@ static void	leaf_type_parenthese(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	}
 //	exec_tree(leaf->left, exec_in, env, leaf);
 //	exec_tree(leaf->right, exec_in, env, leaf);
-}
+}*/
 
 void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
-	if (!leaf)
-		return ;
 	if (leaf->parentheses > exec_in->par_lvl)
-		leaf_type_parenthese(leaf, exec_in, env);
+	{
+		exec_subshell(leaf, exec_in, env, prev);
+		return ;
+	}
 	else if (leaf->type == PIPE_L || leaf->type == CMD)
 		leaf_type_cmd_pipe(leaf, exec_in, env, prev);
 	else if (leaf->type == OR_L)
-		leaf_type_or(leaf, exec_in, env, prev);
+		leaf_type_or(leaf, exec_in, env);
 	else if (leaf->type == AND_L)
-		leaf_type_and(leaf, exec_in, env, prev);
+		leaf_type_and(leaf, exec_in, env);
 }

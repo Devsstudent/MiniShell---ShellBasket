@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 14:35:20 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 15:31:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -36,7 +36,6 @@ void	wait_sub_process(t_info *exec_info)
 	init_wait_sub_process(exec_info);
 	while (buff)
 	{
-		ft_putstr_fd("BONJOUR\n", 2);
 		w_status = -81;
 		waitpid(buff->pid, &w_status, WCONTINUED);
 		if (buff->pid == -1 || w_status == -81)
