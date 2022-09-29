@@ -6,16 +6,16 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:31:25 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 18:42:06 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 void	init_wait_sub_process(t_info *exec_info)
 {
-	if (dup2(exec_info->stdi, STDIN_FILENO) == -1)
+	if (!exec_info->fork && dup2(exec_info->stdi, STDIN_FILENO) == -1)
 		perror("sell");
-	if (exec_info->stdou > -1 && dup2(exec_info->stdou, STDOUT_FILENO) == -1)
+	if (!exec_info->fork && exec_info->stdou > -1 && dup2(exec_info->stdou, STDOUT_FILENO) == -1)
 		perror("basketttttt");
 	if (exec_info->out_fd > -1)
 		close(exec_info->out_fd);

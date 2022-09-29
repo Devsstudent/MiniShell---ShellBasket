@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:11:44 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 18:36:20 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -75,6 +75,7 @@ t_info	*init_exec_info(void)
 	exec_info->left = FALSE;
 	exec_info->out_fd = -1;
 	exec_info->end = FALSE;
+	exec_info->fork = FALSE;
 	exec_info->stdi = dup(STDIN_FILENO);
 	exec_info->cmd_not_found = FALSE;
 	exec_info->stdou = dup(STDOUT_FILENO);
@@ -137,7 +138,7 @@ int	main(int ac, char **av, char **envp)
 			perror("main.c : cannot open pipe");
 			break ;
 		}*/
-		//browse_tree(tree);
+		browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);

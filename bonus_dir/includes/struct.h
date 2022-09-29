@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:44:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:16:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 18:35:07 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef STRUCT_H
@@ -92,6 +92,7 @@ typedef struct s_info{
 	int			par_lvl;
 	t_bool		left;
 	t_bool		right;
+	t_bool		fork;
 	t_bool		prev_pipe;
 	t_bool		cmd_not_found;
 	t_bool		pipe;
