@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:11:44 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 16:18:43 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -132,12 +132,6 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		/*if (pipe(exec_info->pipe_fd) == -1)
-		{
-			perror("main.c : cannot open pipe");
-			break ;
-		}*/
-		//browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);
