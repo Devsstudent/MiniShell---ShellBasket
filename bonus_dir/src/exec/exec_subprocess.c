@@ -67,11 +67,6 @@ t_bool	dup_in_pipe(t_info *exec_in)
 		if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 			return (perror_false("set"));
 	}
-	else if ((exec_in->left || exec_in->right) && exec_in->prev_pipe)
-	{
-		if (dup2(exec_in->pipe_fd[0], STDIN_FILENO) == -1)
-			return (perror_false("read to actual pipe :)"));
-	}
 	return (TRUE);
 }
 
