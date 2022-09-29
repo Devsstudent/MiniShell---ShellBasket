@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/29 15:51:51 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 16:56:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	exec_subshell(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 	pid_li_addback(exec_in->pid_li, new_pid(pid));
 	if (pid == 0)
 	{
+		leaf->head = TRUE;
 		sub_exec_in = init_exec_info();
 		sub_exec_in->par_lvl = exec_in->par_lvl;
 		if (prev && prev->type == PIPE_L)
