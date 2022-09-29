@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 14:35:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 15:07:21 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -137,7 +137,7 @@ int	main(int ac, char **av, char **envp)
 			perror("main.c : cannot open pipe");
 			break ;
 		}*/
-		browse_tree(tree);
+		//browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);
