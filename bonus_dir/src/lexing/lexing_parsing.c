@@ -6,16 +6,32 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:48:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 16:51:11 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/29 23:14:34 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
+static t_bool	line_only_has_white_space(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!((line[i] >= 9 && line[i] <= 13) || line[i] == 32))
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
 t_bool	ms_line(char **line, t_info *exec_in)
 {
-	(void) exec_in;
 	listen_to_sigs();
-	*line = readline("@ShellBasket % ");
+	if (isatty(STDIN_FILENO))
+		*line = readline("@ShellBasket % ");
+	else
+		*line = readline("");
 	if (!(*line))
 	{
 		if (exec_in->stdou > -1)
@@ -26,8 +42,8 @@ t_bool	ms_line(char **line, t_info *exec_in)
 	}
 	add_history(*line);
 	add_to_gc(SIMPLE, *line, get_gc());
-	if (*line && !(*line[0]))
-		return (TRUE);
+	if (*line && (!(*line[0]) || line_only_has_white_space(*line)))
+		return (close(exec_in->stdi), close(exec_in->stdou), TRUE);
 	return (FALSE);
 }
 

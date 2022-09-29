@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/19 22:32:50 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/29 23:30:47 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -83,20 +83,21 @@ char	*dict_get_key(t_dict *dict, char *key)
 	else
 		return (NULL);
 }
-void    line_cpy_till_ope(t_block **buff, t_line *sub_lst)
-{
-    t_block *new;
 
-    while (*buff && !((*buff)->token == PIPE
-            || (*buff)->token == OR || (*buff)->token == AND))
-    {
-        new = new_block((*buff)->word);
-        if (!new)
-            return (free_exit());
-        new->token = (*buff)->token;
-        line_lst_addback(sub_lst, new);
-        *buff = (*buff)->next;
-    }
+void	line_cpy_till_ope(t_block **buff, t_line *sub_lst)
+{
+	t_block *new;
+
+	while (*buff && !((*buff)->token == PIPE
+			|| (*buff)->token == OR || (*buff)->token == AND))
+	{
+		new = new_block(ft_strdup((*buff)->word));
+		if (!new)
+			return (free_exit());
+		new->token = (*buff)->token;
+		line_lst_addback(sub_lst, new);
+		*buff = (*buff)->next;
+	}
 }
 
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
@@ -115,7 +116,7 @@ void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 		}
 		if ((*buff)->token == P_CLOSE)
 			count--;
-		new = new_block((*buff)->word);
+		new = new_block(ft_strdup((*buff)->word));
 		if (!new)
 			return (free_exit());
 		new->token = (*buff)->token;

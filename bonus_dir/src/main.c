@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 19:43:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/29 22:24:40 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -126,19 +126,13 @@ int	main(int ac, char **av, char **envp)
 
 	env = double_char_to_lst(envp);
 	dict_modify(env, ft_strdup("SHLVL"),
-	ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+		ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		/*if (pipe(exec_info->pipe_fd) == -1)
-		{
-			perror("main.c : cannot open pipe");
-			break ;
-		}*/
-		browse_tree(tree);
 		if (tree->head == NULL && free_each_turn(get_gc()))
 		{
 			close(exec_info->stdou);
