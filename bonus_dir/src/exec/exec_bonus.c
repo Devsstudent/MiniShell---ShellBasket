@@ -189,7 +189,24 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 	else if (leaf->type == AND_L)
 		leaf_type_and(leaf, exec_in, env);
 	else if (leaf->type == RED_IN_L)
-		exec_tree(leaf->left, exec_in, env, prev);
-	else if (leaf->type == RED_OUT_TRUNC_L || leaf->type == RED_OUT_APPEND_L)
-		exec_tree(leaf->left, exec_in, env, prev);
+	{
+		exec_in->open_fd = open(leaf->right->content->head->word, O_RDONLY);
+		if (exec_in->open_fd < 0)
+			return (perror("redir open fail"));
+		exec_tree(leaf->left, exec_in, env, leaf);
+	}
+	else if (leaf->type == RED_OUT_TRUNC_L)
+	{
+		exec_in->out_fd = open("out", O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (exec_in->out_fd < 0)
+			return (perror("redir out fail"));
+		exec_tree(leaf->left, exec_in, env, leaf);
+	}
+	else if (leaf->type == RED_OUT_APPEND_L)
+	{
+		exec_in->out_fd = open("out", O_CREAT | O_RDWR | O_APPEND, 0644);
+		if (exec_in->out_fd < 0)
+			return (perror("redir out fail"));
+		exec_tree(leaf->left, exec_in, env, leaf);
+	}
 }
