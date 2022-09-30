@@ -15,7 +15,7 @@
 # include "enum.h"
 # include "struct.h"
 
-void	exec_subshell(t_leaf *laef, t_info *exec_in, t_dict *env, t_leaf *prev);
+void	exec_subshell(t_leaf *laef, t_info *exec_in, t_dict *env);
 void	wildcard(t_line *sub);
 /********************************************/
 /*                   exec                   */
