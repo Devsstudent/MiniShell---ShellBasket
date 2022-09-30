@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/16 16:53:04 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 13:01:33 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -268,9 +268,9 @@ char	*double_arr_to_char(char **items)
 	char	*word;
 	int		k;
 
-	i = 0;
+	i = -1;
 	size = 0;
-	while (items[i++])
+	while (items[++i])
 		size += ft_strlen(items[i]) + 1;
 	word = malloc(sizeof(*word) * size + 1);
 	if (!word)

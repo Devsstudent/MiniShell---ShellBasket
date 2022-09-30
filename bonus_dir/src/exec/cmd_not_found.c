@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:28:43 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/28 15:49:21 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/30 12:54:18 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -30,7 +30,9 @@ t_bool	check_cmd_in_sub(t_line *sub)
 t_bool	command_not_found(t_info *exec_in, char *cmd_path,
 		t_line *sub)
 {
-	if (!cmd_path || exec_in->open_fd == -2)
+	if (errno == 13 || errno == 2)
+		return (TRUE);
+	if ((!cmd_path || exec_in->open_fd == -2))
 	{
 		if (exec_in->pipe_fd[1] > -1)
 			close(exec_in->pipe_fd[1]);

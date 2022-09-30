@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 18:11:48 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 16:36:23 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 11:25:42 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -26,20 +26,14 @@ t_bool	check_parentheses(t_token next, t_token previous, t_token token)
 	if (token == P_CLOSE)
 	{
 		if (next == CMD_ARG || next == FILES || next == DELIMITER)
-		{
-			print_syntax_error(NULL, 1);
 			return (FALSE);
-		}
 		else
 			return (TRUE);
 	}
 	else if (token == P_OPEN)
 	{
 		if (next == P_CLOSE)
-		{
-			print_syntax_error(NULL, 1);
 			return (FALSE);
-		}
 		if (previous == UNDEF || previous == OR || previous == AND
 			|| previous == PIPE || previous == P_OPEN)
 			return (TRUE);
