@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 23:30:47 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 12:32:58 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -100,6 +100,23 @@ void	line_cpy_till_ope(t_block **buff, t_line *sub_lst)
 	}
 }
 
+void	line_cpy(t_line *line, t_line *sub_lst)
+{
+	t_block *new;
+	t_block *buff;
+
+	buff = line->head;
+	while (buff)
+	{
+		new = new_block(ft_strdup(buff->word));
+		if (!new)
+			return (free_exit());
+		new->token = buff->token;
+		line_lst_addback(sub_lst, new);
+		buff = buff->next;
+	}
+}
+
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 {
 	t_block	*new;
@@ -116,6 +133,7 @@ void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 		}
 		if ((*buff)->token == P_CLOSE)
 			count--;
+		printf("word = %s \n", (*buff)->word);
 		new = new_block(ft_strdup((*buff)->word));
 		if (!new)
 			return (free_exit());

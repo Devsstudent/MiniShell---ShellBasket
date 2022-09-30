@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 23:21:20 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 12:49:09 by mbelrhaz         ###   ########.fr       */
 /*   Updated: 2022/09/19 22:29:09 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -21,12 +21,14 @@ void	remove_parentheses(t_line *line)
 	if (line->head->token == P_OPEN)
 	{
 		buff = line->head->next;
+		free(line->head->word);
 		free(line->head);
 		line->head = buff;
 		while (buff)
 		{
 			if (buff->next->next == NULL && buff->next->token == P_CLOSE)
 			{
+				free(buff->next->word);
 				free(buff->next);
 				buff->next = NULL;
 				return ;
@@ -83,7 +85,9 @@ static void	last_elem(t_line *line, t_leaf *leaf, int lay_par)
 	leaf->left = new_leaf_bonus(line, lay_par, leaf->type);
 	if (leaf->left->type == PRTS)
 	{
+		free(leaf->left);
 		leaf->left = NULL;
+		add_to_gc(LINE, line, get_gc());
 		test(leaf, line, ++lay_par);
 	}
 }
