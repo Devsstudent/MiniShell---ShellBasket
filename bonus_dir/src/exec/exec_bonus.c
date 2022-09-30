@@ -106,11 +106,19 @@ static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *pr
 
 //A voir comment on rempli la exec_info pour reussir l'exec :)
 
-
 static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
+	int		pipe_fd[2];
+
 	if (leaf->type == PIPE_L)
 	{
+		if (pipe(pipe_fd) == -1)
+			return (perror("Error creating pipe in pipe_exec"));
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+			return (perror("Error dup in exec_bonus"));
+		exec_in->pipe_fd[1] = pipe_fd[1];
+		exec_in->pipe_fd[0] = pipe_fd[0];
+		ft_putnbr_fd(exec_in->pipe_fd[0], 2);
 		exec_in->pipe = TRUE;
 		if (prev && prev->type == PIPE_L)
 		{
@@ -137,7 +145,6 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 	{
 		if (!prev)
 			exec_in->end = TRUE;
-		//ft_putstr_fd("just checking\n", 2);
 		exec_cmd(exec_in, leaf, env, prev);
 	}
 }
