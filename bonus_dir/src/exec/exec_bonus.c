@@ -112,13 +112,15 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 
 	if (leaf->type == PIPE_L)
 	{
-		if (pipe(pipe_fd) == -1)
-			return (perror("Error creating pipe in pipe_exec"));
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-			return (perror("Error dup in exec_bonus"));
-		exec_in->pipe_fd[1] = pipe_fd[1];
-		exec_in->pipe_fd[0] = pipe_fd[0];
-		ft_putnbr_fd(exec_in->pipe_fd[0], 2);
+		if (leaf->left->parentheses > leaf->parentheses)
+		{
+			if (pipe(pipe_fd) == -1)
+				return (perror("Error creating pipe in pipe_exec"));
+			if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+				return (perror("Error dup in exec_bonus"));
+			exec_in->pipe_fd[1] = pipe_fd[1];
+			exec_in->pipe_fd[0] = pipe_fd[0];
+		}
 		exec_in->pipe = TRUE;
 		if (prev && prev->type == PIPE_L)
 		{
@@ -137,6 +139,9 @@ static void	leaf_type_cmd_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env, t_lea
 		exec_tree(leaf->left, exec_in, env, leaf);
 		exec_in->right = TRUE;
 		exec_in->left = FALSE;
+		if (leaf->left->parentheses > leaf->parentheses)
+			if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
+				return (perror("back to stdout"));
 		if ((leaf->head && leaf->right->type != PIPE_L && exec_in->right))
 			exec_in->end = TRUE;
 		exec_tree(leaf->right, exec_in, env, leaf);

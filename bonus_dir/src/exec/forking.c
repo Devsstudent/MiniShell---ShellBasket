@@ -53,8 +53,8 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	}
 	else
 	{
-		dup2(exec_in->stdou, STDOUT_FILENO);
-		ft_putnbr_fd(exec_in->pipe_fd[0], 1);
+	//	dup2(exec_in->stdou, STDOUT_FILENO);
+	//	ft_putnbr_fd(exec_in->pipe_fd[0], 1);
 		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
 	}
 	pid = fork();
