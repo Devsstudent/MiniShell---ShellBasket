@@ -55,14 +55,26 @@ static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
 	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
-	if (g_exit_status != 0)
+	if (g_exit_status == 0 && leaf->right->parentheses == leaf->parentheses && (leaf->right->type == AND_L))
 		exec_tree(leaf->right, exec_in, env, leaf);
+	else if (g_exit_status != 0)
+		exec_tree(leaf->right, exec_in, env, leaf);
+	else if (g_exit_status == 0 && leaf->right->parentheses != leaf->parentheses)
+		return ;
 }
 
-static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env)
+static void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
-	exec_tree(leaf->left, exec_in, env, leaf);
-	wait_sub_process(exec_in);
+	if (prev && prev->type == OR_L && g_exit_status != 0)
+	{
+		exec_tree(leaf->left, exec_in, env, leaf);
+		wait_sub_process(exec_in);
+	}
+	else if (!prev || prev->type != OR_L)
+	{
+		exec_tree(leaf->left, exec_in, env, leaf);
+		wait_sub_process(exec_in);
+	}
 	if (g_exit_status == 0)
 		exec_tree(leaf->right, exec_in, env, leaf);
 }
@@ -187,7 +199,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 	else if (leaf->type == OR_L)
 		leaf_type_or(leaf, exec_in, env);
 	else if (leaf->type == AND_L)
-		leaf_type_and(leaf, exec_in, env);
+		leaf_type_and(leaf, exec_in, env, prev);
 	else if (leaf->type == RED_IN_L)
 	{
 		exec_in->open_fd = open(leaf->right->content->head->word, O_RDONLY);
@@ -197,14 +209,14 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 	}
 	else if (leaf->type == RED_OUT_TRUNC_L)
 	{
-		exec_in->out_fd = open("out", O_CREAT | O_RDWR | O_TRUNC, 0644);
+		exec_in->out_fd = open(leaf->right->content->head->word, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (exec_in->out_fd < 0)
 			return (perror("redir out fail"));
 		exec_tree(leaf->left, exec_in, env, leaf);
 	}
 	else if (leaf->type == RED_OUT_APPEND_L)
 	{
-		exec_in->out_fd = open("out", O_CREAT | O_RDWR | O_APPEND, 0644);
+		exec_in->out_fd = open(leaf->right->content->head->word, O_CREAT | O_RDWR | O_APPEND, 0644);
 		if (exec_in->out_fd < 0)
 			return (perror("redir out fail"));
 		exec_tree(leaf->left, exec_in, env, leaf);

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/29 23:58:49 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 15:24:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -34,8 +34,8 @@ void	exec_subshell(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 		sub_exec_in->par_lvl = exec_in->par_lvl;
 		if (prev && prev->type == PIPE_L)
 		{
-			if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-				perror("erreur dup pipe");
+	//		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+	//			perror("erreur dup pipe");
 		}
 		if (prev && (prev->type == RED_OUT_APPEND_L || prev->type == RED_OUT_TRUNC_L))
 		{
