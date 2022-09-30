@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/30 16:06:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/30 18:34:22 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -71,7 +71,7 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
 		close(exec_in->pipe_fd[0]);
 		close(exec_in->pipe_fd[1]);
-		close(STDIN_FILENO);
+		//close(STDIN_FILENO);
 		exec_in->pipe_fd[0] = -1;
 		exec_in->pipe_fd[1] = -1;
 	}

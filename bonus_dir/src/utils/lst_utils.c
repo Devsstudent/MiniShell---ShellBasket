@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/30 12:32:58 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 18:41:10 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -133,7 +133,6 @@ void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 		}
 		if ((*buff)->token == P_CLOSE)
 			count--;
-		printf("word = %s \n", (*buff)->word);
 		new = new_block(ft_strdup((*buff)->word));
 		if (!new)
 			return (free_exit());

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/30 13:01:33 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/30 18:47:29 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -236,6 +236,7 @@ char	**handle_wildcards(char *word)
 	patterns = ft_split(word, '*');
 	if (!patterns)
 		free_exit();
+	add_to_gc(DOUBLE, patterns, get_gc());
 	fill_matches(word, filenames, patterns, matches);
 	return (matches);
 }
