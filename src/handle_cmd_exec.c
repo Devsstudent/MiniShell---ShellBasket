@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 20:10:10 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 12:50:17 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -68,7 +68,9 @@ static t_bool	check_abs_path(char *cmd, char **res)
 {
 	struct stat	statbuff;
 
-	if (!(*res))
+	if (cmd && (!cmd[0] || !strncmp(cmd, ".", 2) || !strncmp(cmd, "..", 3)))
+		return (FALSE);
+	if (!(*res) && (cmd && ft_strrchr(cmd, '/')))
 	{
 		if (access(cmd, X_OK) == 0)
 		{
@@ -87,6 +89,12 @@ static t_bool	check_abs_path(char *cmd, char **res)
 		{
 			perror(cmd);
 			g_exit_status = 126;
+			return (FALSE);
+		}
+		else if (errno == 2)
+		{
+			perror(cmd);
+			g_exit_status = errno;
 			return (FALSE);
 		}
 	}
@@ -121,14 +129,14 @@ char	*check_cmd(char **argv, t_dict *env)
 	int		j;
 	char	*res;
 
+	path_li = NULL;
 	if (!argv[0])
 		return (NULL);
 	if (check_builtins(argv))
 		return (ft_strdup(argv[0]));
 	res = NULL;
-	check_cmd_path(&res, &path_li, argv, env);
-	if (argv[0][0] == 0)
-		return (NULL);
+	if (argv[0] && !ft_strrchr(argv[0], '/'))
+		check_cmd_path(&res, &path_li, argv, env);
 	if (path_li)
 	{
 		j = 0;
@@ -136,6 +144,7 @@ char	*check_cmd(char **argv, t_dict *env)
 			free(path_li[j++]);
 		free(path_li);
 	}
+	errno = 0;
 	if (!check_abs_path(argv[0], &res))
 		return (NULL);
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 19:18:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/09/30 12:55:51 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -27,7 +27,7 @@ static void	exec_cmd(t_info *exec_in, t_line *sub, t_dict *env)
 	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (!cmd_path || exec_in->open_fd == -2)
 	{
-		if (errno != 13 && exec_in->open_fd != -2 && !cmd_path
+		if (errno != 13 && errno != 2 && exec_in->open_fd != -2 && !cmd_path
 			&& check_cmd_in_sub(sub))
 			print_error(exec_in->argv[0], 2);
 		return ;

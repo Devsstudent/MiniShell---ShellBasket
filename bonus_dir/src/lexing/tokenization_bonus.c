@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 13:03:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 16:37:01 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/09/30 11:24:54 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -65,7 +65,7 @@ void	attribute_token(t_block *block)
 		previous = get_previous_token(block->prev);
 		if (previous == UNDEF || previous == AND || previous == OR)
 			block->token = CMD_ARG;
-		if (previous == CMD_ARG || previous == FILES || previous == P_OPEN)
+		if (previous == CMD_ARG || previous == FILES || previous == P_OPEN || previous == P_CLOSE)
 			block->token = CMD_ARG;
 		if (previous == PIPE)
 			block->token = CMD_ARG;
