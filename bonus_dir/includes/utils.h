@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/30 12:36:23 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/03 21:23:17 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -15,8 +15,8 @@
 
 
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst);
-void    line_cpy_till_ope(t_block **buff, t_line *sub_lst);
-void    line_cpy(t_line * line, t_line *sub_lst);
+void	line_cpy_till_ope(t_block **buff, t_line *sub_lst);
+t_line	*line_cpy(t_line *lst);
 
 /********************************************/
 /*                   init                   */
