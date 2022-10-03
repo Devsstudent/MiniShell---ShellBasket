@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:48:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/13 21:41:41 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/03 16:30:41 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -28,10 +28,11 @@ static t_bool	line_only_has_white_space(char *line)
 t_bool	ms_line(char **line, t_info *exec_in)
 {
 	listen_to_sigs();
-	if (isatty(STDIN_FILENO))
-		*line = readline("@ShellBasket^$ ");
-	else 
-		*line = readline("");
+	rl_outstream = stderr;
+//	if (isatty(STDIN_FILENO))
+	*line = readline("@ShellBasket^$ ");
+	//else 
+	//	*line = readline("");
 	if (!(*line))
 	{
 		if (exec_in->stdou != -1)
