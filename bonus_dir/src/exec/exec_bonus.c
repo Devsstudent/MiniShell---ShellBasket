@@ -208,7 +208,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 {
 	if (leaf->parentheses > exec_in->par_lvl)
 	{
-		exec_subshell(leaf, exec_in, env, prev);
+		exec_subshell(leaf, exec_in, env);
 		exec_in->fork = FALSE;
 		return ;
 	}
