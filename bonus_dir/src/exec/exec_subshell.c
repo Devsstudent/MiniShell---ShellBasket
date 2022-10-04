@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/03 20:25:10 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/04 17:44:52 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,7 +20,8 @@ void	exec_subshell(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	pid = fork();
 	if (pid < 0)
 		return (perror("fork error"));
-	pid_li_addback(exec_in->pid_li, new_pid(pid));
+	if (pid > 0)
+		pid_li_addback(exec_in->pid_li, new_pid(pid));
 	if (pid == 0)
 	{
 		leaf->head = TRUE;
@@ -34,7 +35,6 @@ void	exec_subshell(t_leaf *leaf, t_info *exec_in, t_dict *env)
 			close(sub_exec_in->stdou);
 		if (sub_exec_in->stdi != -1)
 			close(sub_exec_in->stdi);
-		//wait_sub_process(exec_in);
 		pid_li_clear(exec_in->pid_li);
 		free_exit();
 	}

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/03 21:51:19 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/04 14:35:26 by mbelrhaz         ###   ########.fr       */
 /*   Updated: 2022/09/19 22:29:09 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -169,6 +169,7 @@ void	test(t_leaf *leaf, t_line *line, int lay_par)
 		new_lay_par = fill_leaf(leaf, buff, lay_par, sub);
 		if (leaf->left->type == PRTS)
 		{
+			//printf("word head = %s\n", sub->head->word);
 			//add_to_gc(LINE, sub, get_gc());
 			test(leaf->left, sub, ++new_lay_par);
 		}
