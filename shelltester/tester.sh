@@ -15,8 +15,8 @@ then
 else
 	printf "\033[32mOK\n";
 fi
-
 com
+
 minishell_path=../bonus_dir/minishell
 red="\033[0;31m"
 green="\033[0;32m"
@@ -34,7 +34,7 @@ i=0
 #LOOP FILL MISHELL OUTPUT
 for file in $test_li
 do
-	cat $file | bash 2>&- > minishell_output/qwe_$i
+	cat $file | valgrind --log-fd=1 -q  --suppressions=readline_ignore.txt --leak-check=full  --show-leak-kinds=all $minishell_path 2>&- > minishell_output/qwe_$i
 	i=$((i + 1))
 done
 
@@ -43,7 +43,6 @@ i=0
 for file in $(ls ./expected_output/*)
 do
 	DIFF=$(diff $file ./minishell_output/qwe_$i)
-	printf "$DIFF"
 	if [ $i -gt 25 ]
 	then
 		break
@@ -51,7 +50,9 @@ do
 	if [ "$DIFF" ]
 	then
 		printf "$i: $red KO $reset\n"
-		cat $file
+		printf "diff : $DIFF\n"
+		printf "our_output : \n"
+		cat ./minishell_output/qwe_$i
 	else
 		printf "\n$i: $green OK\n"
 	fi

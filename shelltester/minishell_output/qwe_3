@@ -1,9 +1,10 @@
 expected_output
 minishell_output
+readline_ignore.txt
 script_cut.sh
 test
-test_list
 tester.sh
+test_list
 y
 y
 y

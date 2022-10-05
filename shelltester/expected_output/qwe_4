@@ -1,13 +1,15 @@
 expected_output
 minishell_output
+readline_ignore.txt
 script_cut.sh
 test
-test_list
 tester.sh
+test_list
 0
+readline_ignore.txt
 script_cut.sh
-test_list
 tester.sh
+test_list
 
 expected_output:
 qwe_0
@@ -15,6 +17,9 @@ qwe_1
 qwe_2
 qwe_3
 qwe_4
+qwe_5
+qwe_6
+qwe_7
 
 minishell_output:
 qwe_0
@@ -22,6 +27,9 @@ qwe_1
 qwe_2
 qwe_3
 qwe_4
+qwe_5
+qwe_6
+qwe_7
 
 test:
 our_test
