@@ -43,7 +43,7 @@ int	total_char_to_add(char **val_arr)
 
 t_bool	check_char(char c)
 {
-	if (c != '_' && !ft_isalpha(c) && c != 0)
+	if (c != '_' && !ft_isalnum(c) && c != 0)
 		return (FALSE);
 	return (TRUE);
 }
