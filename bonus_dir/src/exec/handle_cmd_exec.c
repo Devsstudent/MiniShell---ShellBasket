@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/30 12:37:39 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/04 19:49:40 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -149,6 +149,6 @@ char	*check_cmd(char **argv, t_dict *env)
 	}
 	errno = 0;
 	if (!check_abs_path(argv[0], &res))
-		return (NULL);
+		return (free(res), NULL);
 	return (res);
 }

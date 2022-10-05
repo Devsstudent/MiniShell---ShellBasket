@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/04 17:36:04 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/05 17:30:01 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -21,10 +21,10 @@ void	browse_sub_tree(t_leaf *leaf)
 		t_block	*buff;
 		if (line)
 		{
+			printf("line leaf = %p\n", line);
 			buff = line->head;
 			while (buff)
 			{
-				printf("content = %s\n", buff->word);
 				buff = buff->next;
 			}
 		}

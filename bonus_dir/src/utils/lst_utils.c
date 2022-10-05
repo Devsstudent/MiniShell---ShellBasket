@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/03 21:23:54 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/04 20:29:07 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -100,6 +100,7 @@ void	line_cpy_till_ope(t_block **buff, t_line *sub_lst)
 	}
 }
 
+/*
 t_line	*line_cpy(t_line *lst)
 {
 	t_line	*new_line;
@@ -122,6 +123,7 @@ t_line	*line_cpy(t_line *lst)
 	}
 	return (new_line);
 }
+*/
 
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 {
