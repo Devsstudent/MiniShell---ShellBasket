@@ -1,6 +1,6 @@
 #!/bin/sh
 
-minishell_path=../
+minishell_path=../bonus_dir/minishell
 red="\033[0;31m"
 green="\033[0;32m"
 reset="\033[0;39m"
