@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/04 17:36:04 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/05 15:09:57 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -71,6 +71,7 @@ t_info	*init_exec_info(void)
 	exec_info->pipe_fd[1] = -1;
 	exec_info->open_fd = -1;
 	exec_info->par_lvl = 0;
+	exec_info->turn = 0;
 	exec_info->right = FALSE;
 	exec_info->left = FALSE;
 	exec_info->out_fd = -1;
