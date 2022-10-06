@@ -1,11 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */ /*                                                        :::      ::::::::   */
+/*                                                                            */ 
+/*                                                        :::      ::::::::   */
 /*   exec_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:14:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:38:49 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:08:40 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -26,7 +27,8 @@ static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	if (leaf->left->parentheses > leaf->parentheses)
 		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
 			return (perror("back to stdout"));
-	if (g_exit_status == 0 && leaf->right->parentheses == leaf->parentheses && (leaf->right->type == AND_L))
+	if (g_exit_status == 0 && leaf->right->parentheses == leaf->parentheses
+		&& (leaf->right->type == AND_L))
 		exec_tree(leaf->right, exec_in, env, leaf);
 	else if (g_exit_status != 0)
 		exec_tree(leaf->right, exec_in, env, leaf);
