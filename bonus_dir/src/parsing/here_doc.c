@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:04:23 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/08 18:27:36 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/08 20:50:43 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,7 +18,7 @@ int	total_block(t_leaf *leaf)
 	i = 0;
 	if (leaf->type == CMD)
 		return (1);
-	else if (leaf->type == PIPE_L)
+	else if (leaf->type == PIPE_L || leaf->type == AND_L || leaf->type == OR_L)
 	{
 		while (leaf != NULL)
 		{
@@ -35,7 +35,7 @@ void	parse_here_doc(t_leaf *leaf, int *fd_arr, int turn)
 		return ;
 	if (g_exit_status == 140)
 		return ;
-	if (leaf->type == PIPE_L)
+	if (leaf->type == PIPE_L || leaf->type == AND_L || leaf->type == OR_L)
 	{
 		check_here_doc(leaf->left->content, turn, fd_arr);
 		if (leaf->right)

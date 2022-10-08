@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/05 17:30:01 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/08 20:35:54 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -79,6 +79,7 @@ t_info	*init_exec_info(void)
 	exec_info->stdi = dup(STDIN_FILENO);
 	exec_info->cmd_not_found = FALSE;
 	exec_info->stdou = dup(STDOUT_FILENO);
+	exec_info->turn = 0;
 	return (exec_info);
 }
 

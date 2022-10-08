@@ -6,10 +6,11 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/04 19:49:40 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/08 20:04:53 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
+
 t_bool	is_white_space(char c)
 {
 	if (c == ' ' || (c > 8 && c < 14))
