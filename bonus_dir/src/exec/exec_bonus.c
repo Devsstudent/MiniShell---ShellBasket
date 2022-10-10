@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:14:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/05 18:08:40 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:43:17 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,8 +16,8 @@ void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env, t_leaf *prev)
 	expand(leaf->content, env);
 	wildcard(leaf->content);
 	exec_info->argv = get_cmd_arg(leaf->content);
-	if (exec_info->open_fd != -2)
-		exec(exec_info, leaf, env, prev);
+	//if (exec_info->open_fd != -2)
+	exec(exec_info, leaf, env, prev);
 }
 
 static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)

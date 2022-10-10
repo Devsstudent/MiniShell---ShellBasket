@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/08 20:32:57 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:45:41 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,8 +16,8 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 	(exec_in->turn)++;
 	if (exec_in->pipe || !check_builtins(exec_in->argv))
 	{
-		if (exec_in->open_fd != -2)
-			forking(cmd_path, exec_in, env);
+		//if (exec_in->open_fd != -2)
+		forking(cmd_path, exec_in, env);
 	}
 	else
 		execve_builtin_alone(cmd_path, env, exec_in);
