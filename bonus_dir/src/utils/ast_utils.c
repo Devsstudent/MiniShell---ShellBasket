@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:18:05 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 23:50:42 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/04 20:23:46 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -66,7 +66,6 @@ t_leaf	*new_leaf_bonus(t_line *sub, int lay_par, t_type_leaf p_type)
 		{
 			if (sub->last->token == P_CLOSE)
 				remove_parentheses(sub);
-			//It's never set to PRTS or not working good i guess
 			leaf->type = PRTS;
 		}
 		else

@@ -6,13 +6,14 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/05 15:11:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/08 20:32:57 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 {
+	(exec_in->turn)++;
 	if (exec_in->pipe || !check_builtins(exec_in->argv))
 	{
 		if (exec_in->open_fd != -2)

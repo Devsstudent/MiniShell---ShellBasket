@@ -6,10 +6,23 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/04 18:53:15 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/08 20:02:16 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
+
+/*
+	if (command_not_found(exec_in, cmd_path, leaf->content))
+	{
+		if (exec_in->end)
+			exec_in->cmd_not_found = TRUE;
+		if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
+			close(exec_in->open_fd);
+		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
+			close(exec_in->out_fd);
+		return (free_exit());
+	}
+*/
 
 static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env)
 {
@@ -57,11 +70,17 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	if (pid < 0)
 		return (perror("shebasket"));
 	pid_li_addback(exec_in->pid_li, new_pid(pid));
-	if (check_new_shell(cmd_path))
+	if (cmd_path && check_new_shell(cmd_path))
 		signal(SIGINT, SIG_IGN);
 	else
 		signal(SIGINT, sigint_handler_exec);
-	child_process(cmd_path, exec_in, env);
+	if (cmd_path)
+		child_process(cmd_path, exec_in, env);
+	else if (pid == 0)
+	{
+		pid_li_clear(exec_in->pid_li);
+		free_exit();
+	}
 	if (pid > 0)
 	{
 		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
