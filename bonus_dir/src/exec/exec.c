@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 15:04:22 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/10 15:53:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -48,9 +48,6 @@ void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
 	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (command_not_found(exec_in, cmd_path, leaf->content))
 	{
-		printf("SHOUDLBEHEREEE");
-		if (pipe(exec_in->pipe_fd) == -1)
-			return (perror("pipe fail open in exec.c"));
 		if (exec_in->end)
 			exec_in->cmd_not_found = TRUE;
 		if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
@@ -63,7 +60,7 @@ void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
 			close(exec_in->out_fd);
 			exec_in->out_fd = -1;
 		}
-		return ;
+		//return ;
 	}
 	execute_cmd(exec_in, env, cmd_path);
 }
