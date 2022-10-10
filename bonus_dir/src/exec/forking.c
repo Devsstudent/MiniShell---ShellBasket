@@ -6,33 +6,21 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/08 20:02:16 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:53:29 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-/*
-	if (command_not_found(exec_in, cmd_path, leaf->content))
-	{
-		if (exec_in->end)
-			exec_in->cmd_not_found = TRUE;
-		if (exec_in->open_fd != -1 && exec_in->open_fd != -2)
-			close(exec_in->open_fd);
-		if (exec_in->out_fd != -1 && exec_in->out_fd != -2)
-			close(exec_in->out_fd);
-		return (free_exit());
-	}
-*/
 
 static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	if (exec_in->pid_li->last->pid == 0)
 	{
-		if (exec_in->open_fd == -2 || exec_in->out_fd == -2)
+		/*if (exec_in->open_fd == -2 || exec_in->out_fd == -2)
 		{
 			g_exit_status = 1;
+			pid_li_clear(exec_in->pid_li);
 			return (free_exit());
-		}
+		}*/
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		if (!dup_in_pipe(exec_in))
@@ -88,5 +76,6 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 		close(exec_in->pipe_fd[1]);
 		exec_in->pipe_fd[0] = -1;
 		exec_in->pipe_fd[1] = -1;
+		exec_in->open_fd = -1;
 	}
 }
