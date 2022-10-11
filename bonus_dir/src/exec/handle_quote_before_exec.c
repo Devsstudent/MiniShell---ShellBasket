@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/11 14:52:41 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 20:02:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -14,15 +14,11 @@
 static int	size_till_next_char(char *word, char c, int *i)
 {
 	int	size;
-	int	save;
 
-	save = 0;
 	size = 0;
-	while (word[*i] != c)
+	while (word[*i] && word[*i] != c)
 	{
 		(*i)++;
-		if (!word[*i] && word[*i - 1] != c)
-			return (save);
 		size++;
 	}
 	if ((size_t)((*i) + 1) < ft_strlen(word))
@@ -85,7 +81,6 @@ static void	str_quote_parse(char *word, char *new_word)
 	{
 		if (word[i] == '\'')
 		{
-			printf("ASDASDA");
 			i++;
 			str_cp_till_quote(word, new_word, &i, &j);
 		}
@@ -110,7 +105,6 @@ char	*handle_quote(char *word)
 	char	*new_word;
 	int		size;
 
-	printf("%s\n", word);
 	if (word && ft_strlen(word) >= 2 && word[0] == '\"'
 		&& word[1] == '\"' && !word[2])
 		return (free(word), ft_strdup(""));
