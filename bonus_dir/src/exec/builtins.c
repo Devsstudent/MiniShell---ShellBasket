@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 16:53:47 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 15:04:55 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 14:44:51 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -40,10 +40,7 @@ t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 	argv = exec_in->argv;
 	ac = get_ac(argv);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
-	{
 		exec_echo(ac, argv, env);
-		printf("test");
-	}
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
 		exec_pwd(ac, argv, env);
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
