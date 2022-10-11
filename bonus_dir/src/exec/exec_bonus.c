@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:14:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 11:43:17 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/10 22:56:03 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -122,7 +122,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 		if (exec_in->open_fd < 0)
 			return (perror("redir open fail"));
 		if (leaf->left->parentheses > leaf->parentheses)
-			if (dup2(exec_in->open_fd, STDOUT_FILENO) == -1)
+			if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 				return (perror("back to stdout"));
 		exec_tree(leaf->left, exec_in, env, leaf);
 	}

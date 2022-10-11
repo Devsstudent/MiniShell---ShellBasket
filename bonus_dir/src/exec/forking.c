@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 12:53:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/10 19:49:33 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,12 +15,12 @@ static void	child_process(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	if (exec_in->pid_li->last->pid == 0)
 	{
-		/*if (exec_in->open_fd == -2 || exec_in->out_fd == -2)
+		if (exec_in->open_fd == -2 || exec_in->out_fd == -2)
 		{
 			g_exit_status = 1;
 			pid_li_clear(exec_in->pid_li);
 			return (free_exit());
-		}*/
+		}
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		if (!dup_in_pipe(exec_in))

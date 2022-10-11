@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 20:34:16 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 14:16:31 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -46,7 +46,7 @@ void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev)
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
 	cmd_path = check_cmd(exec_in->argv, env);
 	add_to_gc(SIMPLE, cmd_path, get_gc());
-	if (command_not_found(exec_in, cmd_path, leaf->content))
+	if (command_not_found(exec_in, cmd_path, leaf->content) && !check_builtins(exec_in->argv))
 	{
 		if (exec_in->end)
 			exec_in->cmd_not_found = TRUE;
