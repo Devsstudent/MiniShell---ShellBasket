@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:28:43 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/30 12:51:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 19:37:43 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -30,8 +30,7 @@ t_bool	check_cmd_in_sub(t_line *sub)
 t_bool	command_not_found(int pipe_fd[2], t_info *exec_in, char *cmd_path,
 		t_line *sub)
 {
-	printf("\n|%i|\n", errno);
-	ft_putstr_fd("dfsfaksdfkj", 2);
+	//printf("\n|%i|\n", errno);
 	if (errno == 13 || errno == 2)
 		return (TRUE);
 	if (!cmd_path || exec_in->open_fd == -2)

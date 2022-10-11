@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 18:22:36 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 19:37:53 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -86,7 +86,7 @@ int	main(int ac, char **av, char **envp)
 
 	env = double_char_to_lst(envp);
 	dict_modify(env, ft_strdup("SHLVL"),
-		ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+	ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();

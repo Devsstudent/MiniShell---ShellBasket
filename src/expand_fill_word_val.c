@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:26:17 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/10 19:57:55 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:15:12 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -88,11 +88,8 @@ int	size_doll_val(char *word, int i)
 
 	size = 0;
 	i++;
-	if ((word[i] >= '0' && word[i] <= '9') || (word[i] == '?'))
-	{
-		size++;
-		return (size);
-	}
+	if ((word[i] >= '0' && word[i] <= '9') || word[i] == '?')
+		return (++size);
 	while (word[i] && check_char(word[i]))
 	{
 		size++;

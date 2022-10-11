@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 20:58:24 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 14:52:41 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -110,6 +110,7 @@ char	*handle_quote(char *word)
 	char	*new_word;
 	int		size;
 
+	printf("%s\n", word);
 	if (word && ft_strlen(word) >= 2 && word[0] == '\"'
 		&& word[1] == '\"' && !word[2])
 		return (free(word), ft_strdup(""));
