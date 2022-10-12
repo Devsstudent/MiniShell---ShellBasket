@@ -53,6 +53,8 @@ OBJ = $(addprefix obj/, main.o \
 			lexing_parsing.o \
 			wait_process.o \
 			malloc_pid_func.o \
+			expand_utils_bis.o \
+			handle_cmd_utils_bis.o \
 			remove_quote_before_exec.o)
 D_LST = $(addprefix obj/, main.d \
 			ast_utils.d \
@@ -103,6 +105,8 @@ D_LST = $(addprefix obj/, main.d \
 			wait_process.d \
 			cmd_not_found.d \
 			malloc_pid_func.d \
+			expand_utils_bis.d \
+			handle_cmd_utils_bis.d \
 			null.d)
 NAME = minishell
 

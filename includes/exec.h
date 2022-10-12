@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 19:28:42 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 15:42:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -38,10 +38,13 @@ void	get_size_word_in_word(char *word, size_t *size);
 void	init_loop_get_arg(int *j, int *last, t_bool *quote, t_bool *d_quote);
 t_bool	check_quote(t_bool *d_quote, t_bool *quote, char word);
 
+//handle_cmd_utils_bis.c
+t_bool	check_kind_of_abs(struct stat statbuff, char *cmd, char **res);
+t_bool	is_white_space(char c);
+
 //handle_cmd_exec.c
 void	loop_get_arg(char *word, char **argv, int *i);
 char	*check_cmd(char **argv, t_dict *env);
-t_bool	is_white_space(char c);
 
 //redirection.c
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word);
@@ -73,14 +76,14 @@ void	close_subprocess_fd(t_info *exec_in, int pipe_fd[2]);
 //execve.c
 size_t	get_ac(char **argv);
 void	execve_cmd_alone(char *cmd_path, t_dict *env, t_info *exec_in);
-t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env, int pipe_fd[2]);
+t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env,
+			int pipe_fd[2]);
 t_bool	exec_cmd_alone_not_builtin(t_info *exec_in, t_dict *env,
 			char *cmd_path);
 
 //builtins.c
 t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in, int pipe_fd[2]);
 t_bool	check_builtins(char **argv);
-
 
 //cd.c
 void	exec_cd(int ac, char **argv, t_dict *env);

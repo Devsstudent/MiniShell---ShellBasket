@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/11 19:37:53 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 14:46:03 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -77,6 +77,12 @@ static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 	free_each_turn(get_gc());
 }
 
+static void	shlvl_setup(t_dict *env)
+{
+	dict_modify(env, ft_strdup("SHLVL"),
+		ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
@@ -85,20 +91,16 @@ int	main(int ac, char **av, char **envp)
 	t_info	*exec_info;
 
 	env = double_char_to_lst(envp);
-	dict_modify(env, ft_strdup("SHLVL"),
-	ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+	shlvl_setup(env);
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		if (tree->head == NULL && free_each_turn(get_gc()))
-		{
-			close(exec_info->stdou);
-			close(exec_info->stdi);
+		if (tree->head == NULL && free_each_turn(get_gc())
+			&& close(exec_info->stdou && close(exec_info->stdi)))
 			continue ;
-		}
 		parse_here_doc(tree->head, exec_info->fd_arr, 0);
 		if (g_exit_status == 140 && free_each_turn(get_gc()))
 		{

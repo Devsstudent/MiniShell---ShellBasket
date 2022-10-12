@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:10:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 20:21:13 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 14:40:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -23,6 +23,7 @@ void	ambiguous_case(t_bool type, t_info *exec_in)
 	write(2, msg, ft_strlen(msg));
 }
 //Empty ou contient des whitespace
+
 t_bool	check_ambiguous(char *word, t_info *exec_in, t_bool type)
 {
 	int		i;

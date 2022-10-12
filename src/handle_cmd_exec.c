@@ -6,17 +6,10 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/11 19:37:25 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 15:30:07 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-t_bool	is_white_space(char c)
-{
-	if (c == ' ' || (c > 8 && c < 14))
-		return (TRUE);
-	return (FALSE);
-}
 
 void	advance_if_space(char *word, int *j, int *last, int quote_status)
 {
@@ -71,33 +64,8 @@ static t_bool	check_abs_path(char *cmd, char **res)
 	if (cmd && (!cmd[0] || !strncmp(cmd, ".", 2) || !strncmp(cmd, "..", 3)))
 		return (FALSE);
 	if (!(*res) && (cmd && ft_strrchr(cmd, '/')))
-	{
-		if (access(cmd, X_OK) == 0)
-		{
-			if (stat(cmd, &statbuff) == -1)
-			{
-				perror("stat");
-				return (FALSE);
-			}
-			if ((statbuff.st_mode & S_IFMT) != S_IFREG)
-				return (FALSE);
-			*res = ft_strdup(cmd);
-			if (!(*res))
-				free_exit();
-		}
-		else if (errno == 13)
-		{
-			perror(cmd);
-			g_exit_status = 126;
+		if (!check_kind_of_abs(statbuff, cmd, res))
 			return (FALSE);
-		}
-		else if (errno == 2)
-		{
-			perror(cmd);
-			g_exit_status = errno;
-			return (FALSE);
-		}
-	}
 	return (TRUE);
 }
 

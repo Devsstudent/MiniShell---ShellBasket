@@ -1,8 +1,10 @@
 #!/bin/bash
+line=test_list
 
 i=0
 while read -r line
 do
-	echo "$line" > ./test/test_$i
+	printf "$line"
+	echo "$line" > ./test_0/test_$i
 	i=$((i + 1))
 done < test_list

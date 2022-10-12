@@ -4,7 +4,7 @@ minishell_path=../bonus_dir/minishell
 red="\033[0;31m"
 green="\033[0;32m"
 reset="\033[0;39m"
-test_li=$(ls ./our_test/*)
+test_li=$(ls ./test_0/*)
 (cd ../bonus_dir && make -s)
 
 #LOOP FILL MISHELL OUTPUT
@@ -45,5 +45,16 @@ rm -rf minishell_output/*
 printf "END_BIS\n"
 }
 
+fill_expected_output()
+{
+i=0
+for file in $test_li
+do
+	cat $file | bash 2>&- > expected_output/qwe_$i
+	i=$((i + 1))
+done
+}
+
+fill_expected_output
 fill_minishell_output
 check_diff

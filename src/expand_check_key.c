@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:23:11 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 20:31:31 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 15:20:19 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -36,12 +36,8 @@ int	*get_indexes_expandables(t_block *block, int dollar)
 	int		*indexes;
 	t_bool	d_quote;
 
-	i = 0;
-	j = 0;
 	indexes = malloc(sizeof(int) * (dollar + 1));
-	if (!indexes)
-		free_exit();
-	d_quote = FALSE;
+	init_get_indexes_expandables(&i, &j, indexes, &d_quote);
 	while (block->word[i])
 	{
 		advance_if_in_s_quote(&d_quote, block->word, &i);

@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 18:30:19 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 15:23:10 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -62,7 +62,7 @@ void	wait_sub_process(t_info *exec_info)
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 2)
 			g_exit_status = 130;
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 3)
-			handle_backslash();
+			return (handle_backslash());
 		else if (WIFSIGNALED(w_status) && WCOREDUMP(w_status))
 			handle_core_dump();
 	}
