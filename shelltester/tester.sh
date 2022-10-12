@@ -27,7 +27,7 @@ printf "STARBIS\n"
 for file in $(ls ./expected_output/*)
 do
 	printf "$file\n"
-	DIFF=$(diff $file ./minishell_output/qwe_$i)
+	DIFF=$(diff ./expected_output/qwe_$i ./minishell_output/qwe_$i)
 	if [ "$DIFF" ]
 	then
 		printf "$i: $red KO $reset\n"
@@ -42,7 +42,6 @@ do
 done
 (cd ../bonus_dir && make -s fclean)
 rm -rf minishell_output/*
-rm -rf expected_output/*
 printf "END_BIS\n"
 }
 
