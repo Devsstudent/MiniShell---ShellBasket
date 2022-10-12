@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/30 18:47:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 17:04:06 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -138,6 +138,27 @@ void	order_filenames(char **filenames)
 	}
 }
 
+t_bool	check_special_match(char *filename, char *word)
+{
+	if ((filename[0] == '.' && word[0] != '.')
+		|| (filename[ft_strlen(filename) - 1] == '/'
+			&& word[ft_strlen(word) - 1] != '/'))
+		return (FALSE);
+	return (TRUE);
+}
+
+t_bool	check_end_word_match(char *filename, char *word, char **patterns, int i)
+{
+	size_t	last_pattern_len;
+
+	last_pattern_len = ft_strlen(patterns[i]);
+	if (patterns[i + 1] == NULL && word[ft_strlen(word) - 1] != '*')
+		if (ft_strncmp(filename + ft_strlen(filename) - last_pattern_len,
+				patterns[i], last_pattern_len + 1) != 0)
+			return (FALSE);
+	return (TRUE);
+}
+
 t_bool	check_match(char *filename, char **patterns, char *word)
 {
 	int		i;
@@ -145,23 +166,19 @@ t_bool	check_match(char *filename, char **patterns, char *word)
 
 	i = 0;
 	ptr = filename;
-	if ((filename[0] == '.' && word[0] != '.')
-		|| (filename[ft_strlen(filename) - 1] == '/'
-			&& word[ft_strlen(word) - 1] != '/'))
+	if (!check_special_match(filename, word))
 		return (FALSE);
 	while (patterns[i])
 	{
 		if (i == 0 && word[0] != '*'
-			&& ft_strncmp(filename, patterns[0],
-				ft_strlen(patterns[0])) != 0)
+			&& ft_strncmp(filename, patterns[0], ft_strlen(patterns[0])) != 0)
 			return (FALSE);
 		ptr = ft_strnstr(ptr, patterns[i], ft_strlen(filename));
 		if (ptr == NULL)
 			return (FALSE);
 		ptr += ft_strlen(patterns[i]);
-		if (patterns[i + 1] == NULL && word[ft_strlen(word) - 1] != '*')
-			if (*ptr && *(ptr + 1) != '\0')
-				return (FALSE);
+		if (!check_end_word_match(filename, word, patterns, i))
+			return (FALSE);
 		i++;
 	}
 	return (TRUE);
@@ -261,21 +278,12 @@ void	wildcard(t_line *sub)
 	}
 }
 
-char	*double_arr_to_char(char **items)
+char	*fill_final_string(char **items, char *word)
 {
-	int		i;
-	int		j;
-	int		size;
-	char	*word;
-	int		k;
+	int	i;
+	int	k;
+	int	j;
 
-	i = -1;
-	size = 0;
-	while (items[++i])
-		size += ft_strlen(items[i]) + 1;
-	word = malloc(sizeof(*word) * size + 1);
-	if (!word)
-		free_exit();
 	i = 0;
 	k = 0;
 	while (items[i])
@@ -289,6 +297,23 @@ char	*double_arr_to_char(char **items)
 		else
 			word[k] = 0;
 	}
+	return (word);
+}
+
+char	*double_arr_to_char(char **items)
+{
+	int		i;
+	int		size;
+	char	*word;
+
+	i = -1;
+	size = 0;
+	while (items[++i])
+		size += ft_strlen(items[i]) + 1;
+	word = malloc(sizeof(*word) * size + 1);
+	if (!word)
+		free_exit();
+	word = fill_final_string(items, word);
 	return (word);
 }
 

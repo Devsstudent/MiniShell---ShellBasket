@@ -1,0 +1,1 @@
+echo hey&&(ls && pwd | wc) > hola

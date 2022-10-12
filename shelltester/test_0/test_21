@@ -1,1 +1,1 @@
-echo $"""""
+echo ""$DONTEXIST"" ""Makefile"""
