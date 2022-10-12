@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/30 19:07:01 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/11 19:41:17 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -21,10 +21,10 @@ void	browse_sub_tree(t_leaf *leaf)
 		t_block	*buff;
 		if (line)
 		{
+			printf("line leaf = %p\n", line);
 			buff = line->head;
 			while (buff)
 			{
-				printf("content = %s\n", buff->word);
 				buff = buff->next;
 			}
 		}
@@ -71,6 +71,7 @@ t_info	*init_exec_info(void)
 	exec_info->pipe_fd[1] = -1;
 	exec_info->open_fd = -1;
 	exec_info->par_lvl = 0;
+	exec_info->turn = 0;
 	exec_info->right = FALSE;
 	exec_info->left = FALSE;
 	exec_info->out_fd = -1;
@@ -79,6 +80,7 @@ t_info	*init_exec_info(void)
 	exec_info->stdi = dup(STDIN_FILENO);
 	exec_info->cmd_not_found = FALSE;
 	exec_info->stdou = dup(STDOUT_FILENO);
+	exec_info->turn = 0;
 	return (exec_info);
 }
 
@@ -126,7 +128,7 @@ int	main(int ac, char **av, char **envp)
 
 	env = double_char_to_lst(envp);
 	dict_modify(env, ft_strdup("SHLVL"),
-		ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+	ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();

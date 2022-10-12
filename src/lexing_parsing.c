@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:48:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/03 16:30:41 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 19:29:07 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -29,10 +29,7 @@ t_bool	ms_line(char **line, t_info *exec_in)
 {
 	listen_to_sigs();
 	rl_outstream = stderr;
-//	if (isatty(STDIN_FILENO))
 	*line = readline("@ShellBasket^$ ");
-	//else 
-	//	*line = readline("");
 	if (!(*line))
 	{
 		if (exec_in->stdou != -1)

@@ -1,1 +1,0 @@
-(ls -z || pwd | wc) < hola

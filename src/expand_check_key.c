@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:23:11 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/10 19:56:40 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/10 20:31:31 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -47,7 +47,9 @@ int	*get_indexes_expandables(t_block *block, int dollar)
 		advance_if_in_s_quote(&d_quote, block->word, &i);
 		if (block->word[i + 1] && block->word[i] == '$'
 			&& check_char(block->word[i + 1]))
+		{
 			indexes[j++] = i;
+		}
 		else if (block->word[i + 1] && block->word[i + 1] == '?'
 			&& block->word[i] == '$')
 			indexes[j++] = i;

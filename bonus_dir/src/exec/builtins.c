@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 16:53:47 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/27 17:48:36 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 14:44:51 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -57,6 +57,9 @@ t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 		return (FALSE);
 	close_subprocess_fd(exec_in);
 	if (fork)
+	{
+		pid_li_clear(exec_in->pid_li);
 		free_exit();
+	}
 	return (TRUE);
 }

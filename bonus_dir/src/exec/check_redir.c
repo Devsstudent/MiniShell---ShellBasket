@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 18:01:14 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:46:03 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -39,7 +39,7 @@ t_bool	check_red_in(t_block *files, t_info *exec)
 
 t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 {
-	ft_putstr_fd("TEATTAT", 2);
+	//ft_putstr_fd("TEATTAT", 2);
 	if (exec->out_fd > -1)
 		close(exec->out_fd);
 	exec->out_fd = -1;

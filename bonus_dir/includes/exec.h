@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:39:09 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/05 17:47:11 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -15,6 +15,7 @@
 # include "enum.h"
 # include "struct.h"
 
+void	close_fds_in_subshell(t_info *exec_in);
 void	exec_subshell(t_leaf *laef, t_info *exec_in, t_dict *env);
 void	wildcard(t_line *sub);
 /********************************************/

@@ -1,11 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */ /*                                                        :::      ::::::::   */
+/*                                                                            */ 
+/*                                                        :::      ::::::::   */
 /*   exec_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:14:15 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:38:49 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/10 22:56:03 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,8 +16,8 @@ void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env, t_leaf *prev)
 	expand(leaf->content, env);
 	wildcard(leaf->content);
 	exec_info->argv = get_cmd_arg(leaf->content);
-	if (exec_info->open_fd != -2)
-		exec(exec_info, leaf, env, prev);
+	//if (exec_info->open_fd != -2)
+	exec(exec_info, leaf, env, prev);
 }
 
 static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
@@ -26,7 +27,8 @@ static void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	if (leaf->left->parentheses > leaf->parentheses)
 		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
 			return (perror("back to stdout"));
-	if (g_exit_status == 0 && leaf->right->parentheses == leaf->parentheses && (leaf->right->type == AND_L))
+	if (g_exit_status == 0 && leaf->right->parentheses == leaf->parentheses
+		&& (leaf->right->type == AND_L))
 		exec_tree(leaf->right, exec_in, env, leaf);
 	else if (g_exit_status != 0)
 		exec_tree(leaf->right, exec_in, env, leaf);
@@ -120,7 +122,7 @@ void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
 		if (exec_in->open_fd < 0)
 			return (perror("redir open fail"));
 		if (leaf->left->parentheses > leaf->parentheses)
-			if (dup2(exec_in->open_fd, STDOUT_FILENO) == -1)
+			if (dup2(exec_in->open_fd, STDIN_FILENO) == -1)
 				return (perror("back to stdout"));
 		exec_tree(leaf->left, exec_in, env, leaf);
 	}

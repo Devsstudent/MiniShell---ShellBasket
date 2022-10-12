@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 15:32:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/11 14:45:44 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -47,7 +47,9 @@ t_bool	dup_cmd_alone(t_info *exec_in)
 			return (perror_false("shellbasket"));
 	if (exec_in->out_fd > -1)
 		if (dup2(exec_in->out_fd, STDOUT_FILENO) == -1)
-			return (perror_false("shellbasket"));
+			return (perror_false("shell90basket"));
+	if (exec_in->out_fd == -2 || exec_in->open_fd == -2)
+		return (FALSE);
 	return (TRUE);
 }
 
