@@ -10,20 +10,28 @@ test_li=$(ls ./our_test/*)
 #LOOP FILL MISHELL OUTPUT
 fill_minishell_output() {
 	i=0
-	printf "STARt\n"
 	for file in $test_li
 	do
-		cat $file | valgrind --log-fd=1 -q  --suppressions=readline_ignore.txt --leak-check=full  --show-leak-kinds=all $minishell_path 2>&- > minishell_output/qwe_$i
-		i=$((i + 1))
+		printf "$file\n"
+		cat $file | valgrind --log-fd=1 -q  --suppressions=readline_ignore.txt --leak-check=full  --show-leak-kinds=all $minishell_path 2>&- > minishell_output/minishell_output
+		cat $file | bash 2>&- > expected_output/expected_output
+		DIFF=$(diff ./expected_output/expected_output ./minishell_output/minishell_output)
+		if [ "$DIFF" ]
+		then
+			printf "$i: $red KO $reset\n"
+			printf "diff : $DIFF\n"
+			break
+		else 
+			printf "\n$i: $green OK\n"
+		fi
+		printf "$reset"
 	done
-	printf "END\n"
 }
 
 #LOOP DIFF
 
 check_diff() {
 i=0
-printf "STARBIS\n"
 for file in $(ls ./expected_output/*)
 do
 	printf "$file\n"
@@ -42,7 +50,6 @@ do
 done
 (cd ../bonus_dir && make -s fclean)
 rm -rf minishell_output/*
-printf "END_BIS\n"
 }
 
 fill_expected_output()
@@ -55,6 +62,4 @@ do
 done
 }
 
-fill_expected_output
 fill_minishell_output
-check_diff
