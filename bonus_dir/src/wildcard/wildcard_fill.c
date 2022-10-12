@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 20:16:38 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 20:17:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 20:42:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -66,4 +66,26 @@ void	fill_matches(char *word, char **filenames, char **patterns,
 	}
 	else
 		select_filenames(filenames, patterns, matches, word);
+}
+
+char	*fill_final_string(char **items, char *word)
+{
+	int	i;
+	int	k;
+	int	j;
+
+	i = 0;
+	k = 0;
+	while (items[i])
+	{
+		j = 0;
+		while (items[i][j])
+			word[k++] = items[i][j++];
+		i++;
+		if (items[i])
+			word[k++] = ' ';
+		else
+			word[k] = 0;
+	}
+	return (word);
 }

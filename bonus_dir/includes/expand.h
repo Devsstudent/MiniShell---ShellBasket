@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:06:58 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 20:25:24 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 20:56:36 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXPAND_H
@@ -27,7 +27,6 @@ void	handle_dollar_in_block(t_block *block, t_dict *dict);
 //expand_check_key.c
 void	fill_key_arr(t_block *block, char **key_arr, int *indexes);
 int		*get_indexes_expandables(t_block *block, int dollar);
-t_bool	char_is_num(char c, int *i);
 void	replace_key(char *new_word, int *j, char **val_arr);
 int		get_nb_of_dollar(t_block *block);
 
@@ -45,5 +44,6 @@ void	advance_if_in_s_quote(t_bool *d_quote, char *word, int *i);
 
 //expand_utils_bis.c
 void	init_get_indexes_expandables(int *i, int *j, int *ind, t_bool *d_quote);
+t_bool	char_is_num(char c, int *i);
 
 #endif

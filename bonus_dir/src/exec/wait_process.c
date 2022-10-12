@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/09 18:48:48 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:43:30 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,7 +15,8 @@ void	init_wait_sub_process(t_info *exec_info)
 {
 	if (!exec_info->fork && dup2(exec_info->stdi, STDIN_FILENO) == -1)
 		perror("sell");
-	if (!exec_info->fork && exec_info->stdou > -1 && dup2(exec_info->stdou, STDOUT_FILENO) == -1)
+	if (!exec_info->fork && exec_info->stdou > -1
+		&& dup2(exec_info->stdou, STDOUT_FILENO) == -1)
 		perror("basketttttt");
 	if (exec_info->out_fd > -1)
 		close(exec_info->out_fd);
@@ -27,13 +28,8 @@ void	init_wait_sub_process(t_info *exec_info)
 		close(exec_info->pipe_fd[1]);
 }
 
-void	wait_sub_process(t_info *exec_info)
+static void	loop_wait_process(t_pid *buff, t_info *exec_info, int w_status)
 {
-	t_pid	*buff;
-	int		w_status;
-
-	buff = exec_info->pid_li->head;
-	init_wait_sub_process(exec_info);
 	while (buff)
 	{
 		w_status = -81;
@@ -57,6 +53,17 @@ void	wait_sub_process(t_info *exec_info)
 		}
 		buff = buff->next;
 	}
+}
+
+void	wait_sub_process(t_info *exec_info)
+{
+	t_pid	*buff;
+	int		w_status;
+
+	w_status = -81;
+	buff = exec_info->pid_li->head;
+	init_wait_sub_process(exec_info);
+	loop_wait_process(buff, exec_info, w_status);
 	pid_li_clear(exec_info->pid_li);
 	exec_info->argv = NULL;
 	exec_info->pid_li->head = NULL;

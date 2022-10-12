@@ -4,7 +4,7 @@ minishell_path=../bonus_dir/minishell
 red="\033[0;31m"
 green="\033[0;32m"
 reset="\033[0;39m"
-test_li=$(ls ./test_0/*)
+test_li=$(ls ./our_test/*)
 (cd ../bonus_dir && make -s)
 
 #LOOP FILL MISHELL OUTPUT

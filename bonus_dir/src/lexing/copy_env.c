@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 14:19:25 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 19:45:11 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:48:22 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,25 @@ t_dict	*double_char_to_lst(char **d_char)
 		d_char++;
 	}
 	return (env);
+}
+
+void	loop_copy_env(char **elems_env, char *buff, t_elem *new_elem)
+{
+	int	i;
+
+	i = 1;
+	new_elem->key = elems_env[0];
+	while (elems_env[i])
+	{
+		if (i != 1)
+			buff = ft_strjoin(buff, "=");
+		buff = ft_strjoin(buff, elems_env[i]);
+		free(elems_env[i]);
+		i++;
+	}
+	new_elem->value = buff;
+	free(elems_env[i]);
+	free(elems_env);
+	new_elem->next = NULL;
+	new_elem->prev = NULL;
 }

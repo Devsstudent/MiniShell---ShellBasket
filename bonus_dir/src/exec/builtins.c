@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 16:53:47 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/11 14:44:51 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:27:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,6 +32,16 @@ t_bool	check_builtins(char **argv)
 	return (FALSE);
 }
 
+static void	exit_builtin(t_info *exec_in, t_bool fork)
+{
+	close_subprocess_fd(exec_in);
+	if (fork)
+	{
+		pid_li_clear(exec_in->pid_li);
+		free_exit();
+	}
+}
+
 t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 {
 	int		ac;
@@ -55,11 +65,6 @@ t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 		exec_cd(ac, argv, env);
 	else
 		return (FALSE);
-	close_subprocess_fd(exec_in);
-	if (fork)
-	{
-		pid_li_clear(exec_in->pid_li);
-		free_exit();
-	}
+	exit_builtin(exec_in, fork);
 	return (TRUE);
 }

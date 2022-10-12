@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 20:18:08 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 20:35:54 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 20:42:30 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -14,10 +14,8 @@
 char	*double_arr_to_char(char **items)
 {
 	int		i;
-	int		j;
 	int		size;
 	char	*word;
-	int		k;
 
 	i = -1;
 	size = 0;
@@ -26,19 +24,7 @@ char	*double_arr_to_char(char **items)
 	word = malloc(sizeof(*word) * size + 1);
 	if (!word)
 		free_exit();
-	i = 0;
-	k = 0;
-	while (items[i])
-	{
-		j = 0;
-		while (items[i][j])
-			word[k++] = items[i][j++];
-		i++;
-		if (items[i])
-			word[k++] = ' ';
-		else
-			word[k] = 0;
-	}
+	word = fill_final_string(items, word);
 	return (word);
 }
 

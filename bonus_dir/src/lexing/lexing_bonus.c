@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 19:37:13 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 22:07:43 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -14,155 +14,7 @@
 //Fill the line list; block by block
 //First check the line quotes
 
-t_bool	is_symbol(char c)
-{
-	if (c == '|' || c == '<' || c == '>' || c == '&')
-		return (FALSE);
-	return (TRUE);
-}
-
-static t_bool	check_lines_quotes(char *line)
-{
-	int		i;
-	t_quote	quote;
-
-	i = 0;
-	quote = NO;
-	while (line[i] != 0)
-	{
-		if (line[i] == '\"' && quote == DOUBLE_QUOTE)
-			quote = NO;
-		else if (line[i] == '\'' && quote == SINGLE)
-			quote = NO;
-		else if (line[i] == '\'' && quote == NO)
-			quote = SINGLE;
-		else if (line[i] == '\"' && quote == NO)
-			quote = DOUBLE_QUOTE;
-		i++;
-	}
-	if (quote != NO)
-		return (FALSE);
-	return (TRUE);
-}
-
-t_bool	not_in_quote(char *line, int i)
-{
-	static t_quote	quote;
-
-	if (line[i] == '\"' && quote == DOUBLE_QUOTE)
-		quote = NO;
-	else if (line[i] == '\'' && quote == SINGLE)
-		quote = NO;
-	else if (line[i] == '\'' && quote == NO)
-		quote = SINGLE;
-	else if (line [i] == '\"' && quote == NO)
-		quote = DOUBLE_QUOTE;
-	if (quote == NO)
-		return (TRUE);
-	return (FALSE);
-}
-
-static t_bool	check_lines_parentheses(char *line)
-{
-	int	i;
-	int	not_quote;
-	int	close;
-	int	open;
-
-	i = 0;
-	close = 0;
-	open = 0;
-	while (line[i])
-	{
-		not_quote = not_in_quote(line, i);
-		if (not_quote && line[i] == '(')
-			open++;
-		else if (not_quote && line[i] == ')')
-			close++;
-		i++;
-	}
-	if (close != open)
-		return (FALSE);
-	return (TRUE);
-}
-
-void	handle_pipe(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i >= 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	if (line[*i + 1] && line[*i + 1] == '|')
-	{
-		(*i)++;
-		(*size) += 2;
-		fill_word(size, lst, line, *i);
-	}
-	else
-	{
-		(*size) += 1;
-		fill_word(size, lst, line, *i);
-	}
-}
-
-void	handle_red_o(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i > 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	if (line[*i + 1] && line[*i + 1] == '>')
-	{
-		(*i)++;
-		(*size) += 2;
-		fill_word(size, lst, line, *i);
-	}
-	else
-	{
-		(*size) += 1;
-		fill_word(size, lst, line, *i);
-	}
-}
-
-void	handle_and(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i > 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	if (line[*i + 1] && line[*i + 1] == '&')
-	{
-		(*i)++;
-		(*size) += 2;
-		fill_word(size, lst, line, *i);
-	}
-	else
-		print_syntax_error("&", 0);
-}
-
-void	handle_par(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i > 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	if (line[*i] == ')' || line[*i] == '(')
-	{
-		(*size) += 1;
-		fill_word(size, lst, line, *i);
-	}
-}
-
-void	handle_red_i(char *line, int *i, int *size, t_line *lst)
-{
-	if (*i > 1 && line[*i - 1])
-		fill_word(size, lst, line, *i - 1);
-	if (line[*i + 1] && line[*i + 1] == '<')
-	{
-		(*i)++;
-		(*size) += 2;
-		fill_word(size, lst, line, *i);
-	}
-	else
-	{
-		(*size) += 1;
-		fill_word(size, lst, line, *i);
-	}
-}
-
-void	analyse_symbol(char *line, int *i, int *size, t_line *lst)
+static void	analyse_symbol(char *line, int *i, int *size, t_line *lst)
 {
 	if (line[*i] == '|')
 		handle_pipe(line, i, size, lst);
@@ -185,7 +37,7 @@ static void	handle_space(char *line, int *i, int *size, t_line *lst)
 	*size = 0;
 }
 
-void	analyse_word(char *line, int *i, int *size_word, t_line *lst)
+static void	analyse_word(char *line, int *i, int *size_word, t_line *lst)
 {
 	if (line[*i] == ' ' || (line[*i] >= 9 && line[*i] <= 13))
 		handle_space(line, i, size_word, lst);
@@ -193,7 +45,7 @@ void	analyse_word(char *line, int *i, int *size_word, t_line *lst)
 		analyse_symbol(line, i, size_word, lst);
 }
 
-void	handle_line(char *line, t_line *lst)
+static void	handle_line(char *line, t_line *lst)
 {
 	int		i;
 	int		size_word;

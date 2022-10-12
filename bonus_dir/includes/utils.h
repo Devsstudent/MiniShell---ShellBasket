@@ -6,13 +6,11 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 20:20:46 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 22:27:21 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
 # define UTILS_H
-
-
 
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst);
 void	line_cpy_till_ope(t_block **buff, t_line *sub_lst);
@@ -56,10 +54,10 @@ t_bool	handle_ctrl_c(char **line, int stdi);
 /*              wildcard_utils.c            */
 /********************************************/
 
-char	*double_arr_to_char(char **items);
-int	get_nb_files(void);
+int		get_nb_files(void);
 char	**get_filenames(void);
-int	get_min(char **filenames, int i);
+int		get_min(char **filenames, int i);
+char	*double_arr_to_char(char **items);
 
 /********************************************/
 /*                 errror                   */

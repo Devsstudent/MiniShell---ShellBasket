@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test_li=$(ls ./test_aa/*)
+test_li=$(ls ./test_0/*)
 i=0
 for file in $test_li
 do

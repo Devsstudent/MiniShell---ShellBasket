@@ -6,31 +6,10 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 19:42:34 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:49:40 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-void	loop_copy_env(char **elems_env, char *buff, t_elem	*new_elem)
-{
-	int	i;
-
-	i = 1;
-	new_elem->key = elems_env[0];
-	while (elems_env[i])
-	{
-		if (i != 1)
-			buff = ft_strjoin(buff, "=");
-		buff = ft_strjoin(buff, elems_env[i]);
-		free(elems_env[i]);
-		i++;
-	}
-	new_elem->value = buff;
-	free(elems_env[i]);
-	free(elems_env);
-	new_elem->next = NULL;
-	new_elem->prev = NULL;
-}
 
 t_elem	*new_elem(char *content)
 {
@@ -99,31 +78,6 @@ void	line_cpy_till_ope(t_block **buff, t_line *sub_lst)
 		*buff = (*buff)->next;
 	}
 }
-
-/*
-t_line	*line_cpy(t_line *lst)
-{
-	t_line	*new_line;
-	t_block	*new;
-	t_block	*buff;
-
-	new_line = malloc(sizeof(t_line));
-	if (!new_line)
-		free_exit();
-	new_line->head = NULL;
-	buff = lst->head;
-	while (buff)
-	{
-		new = new_block(ft_strdup(buff->word));
-		if (!new)
-			free_exit();
-		new->token = buff->token;
-		line_lst_addback(new_line, new);
-		buff = buff->next;
-	}
-	return (new_line);
-}
-*/
 
 void	line_cpy_till_pend(t_block **buff, t_line *sub_lst)
 {

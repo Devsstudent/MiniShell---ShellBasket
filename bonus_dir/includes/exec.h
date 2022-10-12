@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 20:25:40 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 22:27:53 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -20,13 +20,28 @@ void	exec_subshell(t_leaf *laef, t_info *exec_in, t_dict *env);
 /********************************************/
 /*                   exec                   */
 /********************************************/
+//exec_bonus.c
+void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env);
+t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in);
+t_bool	exec_left_right_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env);
+void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev);
+
+//exec_bonus_leaf_type.c
+t_bool	leaf_red_in(t_leaf *leaf, t_info *exec_in, t_dict *env);
+void	leaf_type_cmd(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev);
+void	leaf_type_pipe(t_leaf *leaf, t_info *exec_in,
+			t_dict *env, t_leaf *prev);
+void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env);
+void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env,
+			t_leaf *prev);
+
 //forking.c
 void	forking(char *cmd_path, t_info *exec_in, t_dict *env);
 void	forking_cmd_alone(char *cmd_path, t_info *exec_in, t_dict *env);
 
 //exec.c
 //void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_tree *tree);
-void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env, t_leaf *prev);
+void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env);
 
 //cmd_not_found.c
 t_bool	command_not_found(t_info *exec_in, char *cmd_path,
@@ -40,10 +55,13 @@ void	get_size_word_in_word(char *word, size_t *size);
 void	init_loop_get_arg(int *j, int *last, t_bool *quote, t_bool *d_quote);
 t_bool	check_quote(t_bool *d_quote, t_bool *quote, char word);
 
+//handle_cmd_utils_bis.c
+t_bool	is_white_space(char c);
+t_bool	check_kind_of_abs(struct stat statbuff, char *cmd, char **res);
+
 //handle_cmd_exec.c
 void	loop_get_arg(char *word, char **argv, int *i);
 char	*check_cmd(char **argv, t_dict *env);
-t_bool	is_white_space(char c);
 
 //redirection.c
 void	check_quote_redir(t_bool *d_quote, t_bool *quote, char word);
@@ -81,7 +99,6 @@ void	execve_builtin_alone(char *cmd_path, t_dict *env, t_info *exec_in);
 t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in);
 t_bool	check_builtins(char **argv);
 
-
 //cd.c
 void	exec_cd(int ac, char **argv, t_dict *env);
 //echo.c
@@ -101,6 +118,4 @@ void	exec_env(int ac, char **argv, t_dict *env);
 //pwd.c
 void	exec_pwd(int ac, char **argv, t_dict *env);
 
-void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env, t_leaf *prev);
-void	exec_tree(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev);
 #endif

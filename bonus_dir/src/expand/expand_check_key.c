@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:23:11 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 15:20:19 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:17:11 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -55,26 +55,35 @@ int	*get_indexes_expandables(t_block *block, int dollar)
 	return (indexes);
 }
 
-t_bool	char_is_num(char c, int *i)
+void	encompass_quotes(char *new_word, int *j, char quote)
 {
-	if ((c >= '0' && c <= '9') || c == '?')
+	if (quote == '\'')
 	{
-		(*i)++;
-		return (TRUE);
+		new_word[(*j)++] = '\"';
+		new_word[(*j)++] = '\'';
+		new_word[*j] = '\"';
 	}
-	return (FALSE);
+	else if (quote == '\"')
+	{
+		new_word[(*j)++] = '\'';
+		new_word[(*j)++] = '\"';
+		new_word[*j] = '\'';
+	}
 }
 
 void	replace_key(char *new_word, int *j, char **val_arr)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	if (!(*val_arr))
 		return ;
 	while ((*val_arr)[i])
 	{
-		new_word[*j] = (*val_arr)[i];
+		if ((*val_arr)[i] == '\'' || (*val_arr)[i] == '\"')
+			encompass_quotes(new_word, j, (*val_arr)[i]);
+		else
+			new_word[*j] = (*val_arr)[i];
 		i++;
 		(*j)++;
 	}

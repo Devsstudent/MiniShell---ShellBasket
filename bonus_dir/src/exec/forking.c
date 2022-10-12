@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 19:49:33 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:31:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -43,6 +43,16 @@ static t_bool	check_new_shell(char *cmd_path)
 	return (FALSE);
 }
 
+void	main_process_end(t_info *exec_in)
+{
+	dup2(exec_in->pipe_fd[0], STDIN_FILENO);
+	close(exec_in->pipe_fd[0]);
+	close(exec_in->pipe_fd[1]);
+	exec_in->pipe_fd[0] = -1;
+	exec_in->pipe_fd[1] = -1;
+	exec_in->open_fd = -1;
+}
+
 void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	int	pid;
@@ -65,17 +75,7 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	if (cmd_path)
 		child_process(cmd_path, exec_in, env);
 	else if (pid == 0)
-	{
-		pid_li_clear(exec_in->pid_li);
-		free_exit();
-	}
+		return (pid_li_clear(exec_in->pid_li), free_exit());
 	if (pid > 0)
-	{
-		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
-		close(exec_in->pipe_fd[0]);
-		close(exec_in->pipe_fd[1]);
-		exec_in->pipe_fd[0] = -1;
-		exec_in->pipe_fd[1] = -1;
-		exec_in->open_fd = -1;
-	}
+		main_process_end(exec_in);
 }

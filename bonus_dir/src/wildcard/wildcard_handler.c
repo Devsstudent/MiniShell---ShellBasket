@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 22:35:16 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/12 20:30:05 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:15:42 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -21,7 +21,6 @@
 
 //order the list using ft_strncmp
 // we have a list
-
 
 void	order_filenames(char **filenames)
 {
@@ -45,35 +44,6 @@ void	order_filenames(char **filenames)
 	}
 }
 
-t_bool	check_match(char *filename, char **patterns, char *word)
-{
-	int		i;
-	char	*ptr;
-
-	i = 0;
-	ptr = filename;
-	if ((filename[0] == '.' && word[0] != '.')
-		|| (filename[ft_strlen(filename) - 1] == '/'
-			&& word[ft_strlen(word) - 1] != '/'))
-		return (FALSE);
-	while (patterns[i])
-	{
-		if (i == 0 && word[0] != '*'
-			&& ft_strncmp(filename, patterns[0],
-				ft_strlen(patterns[0])) != 0)
-			return (FALSE);
-		ptr = ft_strnstr(ptr, patterns[i], ft_strlen(filename));
-		if (ptr == NULL)
-			return (FALSE);
-		ptr += ft_strlen(patterns[i]);
-		if (patterns[i + 1] == NULL && word[ft_strlen(word) - 1] != '*')
-			if (*ptr && *(ptr + 1) != '\0')
-				return (FALSE);
-		i++;
-	}
-	return (TRUE);
-}
-
 void	select_filenames(char **filenames, char **patterns, char **matches,
 	char *word)
 {
@@ -93,7 +63,6 @@ void	select_filenames(char **filenames, char **patterns, char **matches,
 	}
 	matches[j] = NULL;
 }
-
 
 char	**handle_wildcards(char *word)
 {

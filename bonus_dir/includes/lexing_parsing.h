@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:41:30 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/22 16:48:35 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 22:40:08 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LEXING_PARSING_H
@@ -25,15 +25,14 @@ void	dict_clear(t_dict *dict);
 char	*dict_get_value(t_dict *dict, char *key);
 //copy_env.c
 t_dict	*double_char_to_lst(char **d_char);
+void	loop_copy_env(char **elems_env, char *buff, t_elem *new_elem);
 //dict_to_double.c
 char	**dict_to_double_char_env(t_dict *dict);
 char	**dict_to_double_char_export(t_dict *dict);
 //lst_utils.c
-void	loop_copy_env(char **elems_env, char *buff, t_elem *new_elem);
 t_elem	*new_elem(char *content);
 t_elem	*create_elem(char *key, char *value);
 char	*dict_get_key(t_dict *dict, char *key);
-//
 
 /********************************************/
 /*                parsing                   */
@@ -44,13 +43,20 @@ t_bool	ms_line(char **line, t_info *exec_in);
 t_tree	*ms_lex_and_parse(char **line, t_info *exec_in);
 
 //abstract_syntax_tree.c
-void		test(t_leaf *leaf, t_line *line, int lay_par);
-void		fill_ast_bonus(t_line *line, t_tree *tree);
-void		remove_parentheses(t_line *line);
-t_line		*fill_parentheses_block(t_block **buff);
-t_type_leaf	get_type(t_token token);
-t_line		*fill_till_ope(t_block **buff);
+void	fill_ast_bonus(t_line *line, t_tree *tree);
+t_bool	subshell_redir(t_block **buff, t_block **new,
+			t_bool *par, t_line **sub);
 
+//ast_bonus_fill.c
+void	last_elem(t_line *line, t_leaf *leaf, int lay_par);
+t_line	*fill_till_ope(t_block **buff);
+void	fill_sub(t_block **buff, t_bool *par, t_line **sub);
+int		fill_leaf(t_leaf *leaf, t_block *buff, int lay_par, t_line *sub);
+
+//abstract_syntax_tree_bonus_utils.c
+void	handle_last_elem(t_leaf *leaf, t_line *sub, int lay_par, t_bool par);
+t_line	*fill_parentheses_block(t_block **buff);
+void	remove_parentheses(t_line *line);
 /********************************************/
 /*                 here_doc                 */
 /********************************************/
@@ -72,42 +78,40 @@ t_token	get_previous_token(t_block *block);
 t_bool	attribute_symbol(t_block *block);
 
 //check_symbol.c
-t_bool		check_pipe(t_token next, t_token previous);
-t_bool		check_symbol(t_block *block);
-t_bool		check_parentheses(t_token next, t_token previous, t_token token);
-t_bool		check_and(t_token next, t_token previous, t_token token);
-t_bool		check_or(t_token next, t_token previous, t_token token);
+t_bool	check_pipe(t_token next, t_token previous);
+t_bool	check_symbol(t_block *block);
+t_bool	check_parentheses(t_token next, t_token previous, t_token token);
+t_bool	check_and(t_token next, t_token previous, t_token token);
+t_bool	check_or(t_token next, t_token previous, t_token token);
 
 /********************************************/
 /*                  lexing                  */
 /********************************************/
-//lexing.c
-t_bool	not_in_quote(char *line, int i);
-void	analyse_symbol(char *line, int *i, int *size, t_line *lst);
-void	analyse_word(char *line, int *i, int *size_word, t_line *lst);
+//lexing_bonus.c
 t_line	*fill_line_lst(char *line);
+
+//lexing_utils.c
+t_bool	is_symbol(char c);
+t_bool	not_in_quote(char *line, int i);
+t_bool	check_lines_quotes(char *line);
+t_bool	check_lines_parentheses(char *line);
+
+//lexing_bonus_handle.c
+void	handle_pipe(char *line, int *i, int *size, t_line *lst);
+void	handle_red_o(char *line, int *i, int *size, t_line *lst);
+void	handle_and(char *line, int *i, int *size, t_line *lst);
+void	handle_par(char *line, int *i, int *size, t_line *lst);
+void	handle_red_i(char *line, int *i, int *size, t_line *lst);
 
 //lexing_fill_word.c
 void	fill_word(int *size, t_line *lst, char *line, int i);
-
-//lexing_handle.c
-void	handle_line(char *line, t_line *lst);
-void	handle_pipe(char *line, int *i, int *size, t_line *lst);
-void	handle_red_o(char *line, int *i, int *size, t_line *lst);
-void	handle_red_i(char *line, int *i, int *size, t_line *lst);
-//void	handle_space(char *line, int *i, int *size, t_line *lst);
 
 /********************************************/
 /*          abstract syntax tree            */
 /********************************************/
 
-//abstract_syntax_tree.c
-t_line	*fill_till_pipe(t_block **buff);
-void	fill_tree_while_pipe(t_tree **tree, t_line *cmd);
-void	fill_ast(t_line *line, t_tree *tree);
 //ast_utils.c
 t_leaf	*new_leaf(t_line *cmd, t_type_leaf type);
 void	clean_tree(t_leaf *leaf);
-void	fill_ast_bonus(t_line *line, t_tree *tree);
 
 #endif
