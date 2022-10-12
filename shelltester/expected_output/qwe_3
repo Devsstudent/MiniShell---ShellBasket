@@ -1,9 +1,12 @@
 expected_output
 minishell_output
+original_output
+our_output
 script_cut.sh
 test
-test_list
 tester.sh
+test_file
+test_list
 y
 y
 y

@@ -1,13 +1,16 @@
 expected_output
 minishell_output
+original_output
+our_output
 script_cut.sh
 test
-test_list
 tester.sh
+test_file
+test_list
 0
 script_cut.sh
-test_list
 tester.sh
+test_list
 
 expected_output:
 qwe_0
@@ -22,6 +25,12 @@ qwe_1
 qwe_2
 qwe_3
 qwe_4
+
+original_output:
+test1
+
+our_output:
+test1
 
 test:
 our_test
@@ -849,4 +858,6 @@ test_96
 test_97
 test_98
 test_99
+
+test_file:
 0
