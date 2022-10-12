@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 15:13:44 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/04 20:29:07 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 19:42:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -86,7 +86,7 @@ char	*dict_get_key(t_dict *dict, char *key)
 
 void	line_cpy_till_ope(t_block **buff, t_line *sub_lst)
 {
-	t_block *new;
+	t_block	*new;
 
 	while (*buff && !((*buff)->token == PIPE
 			|| (*buff)->token == OR || (*buff)->token == AND))

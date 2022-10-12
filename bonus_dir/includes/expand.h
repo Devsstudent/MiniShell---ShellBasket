@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:06:58 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/14 16:49:01 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 19:48:00 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXPAND_H
@@ -52,5 +52,8 @@ int		total_char_to_add(char **val_arr);
 t_bool	check_char(char c);
 void	check_null_val(char *val);
 void	advance_if_in_s_quote(t_bool *d_quote, char *word, int *i);
+
+//expand_utils_bis.c
+void	init_get_indexes_expandables(int *i, int *j, int *ind, t_bool *d_quote);
 
 #endif

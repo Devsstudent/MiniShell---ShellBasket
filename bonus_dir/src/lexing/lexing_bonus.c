@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <mbelrhaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 14:15:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 22:32:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 19:37:13 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -183,7 +183,7 @@ static void	handle_space(char *line, int *i, int *size, t_line *lst)
 	if (*i > 0 && (line[*i - 1]))
 		fill_word(size, lst, line, *i - 1);
 	*size = 0;
-} 
+}
 
 void	analyse_word(char *line, int *i, int *size_word, t_line *lst)
 {
@@ -220,7 +220,7 @@ void	handle_line(char *line, t_line *lst)
 t_line	*fill_line_lst(char *line)
 {
 	t_line	*block_lst;
-	
+
 	block_lst = (t_line *) malloc(sizeof(t_line));
 	if (!block_lst)
 		free_exit();

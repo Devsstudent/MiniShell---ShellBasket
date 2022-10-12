@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/10 22:09:00 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 19:45:31 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -42,7 +42,6 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr,
 		free_exit();
 	fill_new_word(new_word, block->word, val_arr, indexes);
 	free(block->word);
-	//block->word = new_word;
 	final_word = ft_strjoin(new_word, "\"");
 	if (!final_word)
 		free_exit();

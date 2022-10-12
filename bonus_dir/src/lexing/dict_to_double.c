@@ -6,12 +6,13 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:43:10 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/10 20:19:03 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 19:40:41 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
-static void	init_dict_to_double(int *i, t_elem **buff, char ***arr, t_dict *dict)
+static void	init_dict_to_double(int *i, t_elem **buff,
+			char ***arr, t_dict *dict)
 {
 	*i = 0;
 	*buff = dict->head;

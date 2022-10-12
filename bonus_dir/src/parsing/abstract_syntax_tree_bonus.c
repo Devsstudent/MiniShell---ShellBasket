@@ -6,13 +6,11 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:47:32 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/05 17:27:28 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 19:44:20 by odessein         ###   ########.fr       */
 /*   Updated: 2022/09/19 22:29:09 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-//When we have somthing in parentheses we should handle it as a subshell and just use the result so need to know if its in parenthese or not
 
 void	remove_parentheses(t_line *line)
 {
@@ -91,6 +89,7 @@ static void	last_elem(t_line *line, t_leaf *leaf, int lay_par)
 		test(leaf, line, ++lay_par);
 	}
 }
+
 static void	last_elem_not_par(t_leaf *leaf, int lay_par, t_line *sub)
 {
 	leaf->type = CMD;
@@ -116,8 +115,8 @@ void	fill_sub(t_block **buff, t_bool *par, t_line **sub)
 	{
 		*sub = fill_parentheses_block(buff);
 		if (*buff && ((*buff)->token == RED_IN
-			|| (*buff)->token == RED_OUT_TRUNC
-			|| (*buff)->token == RED_OUT_APPEND)
+				|| (*buff)->token == RED_OUT_TRUNC
+				|| (*buff)->token == RED_OUT_APPEND)
 			&& (*buff)->next->next)
 		{
 			while (i < 2)
@@ -167,11 +166,12 @@ static t_bool	simple_cmd(t_line *line)
 void	test(t_leaf *leaf, t_line *line, int lay_par)
 {
 	t_block	*buff;
-	t_line	*sub = NULL;
+	t_line	*sub;
 	t_bool	par;
 	int		new_lay_par;
 
 	buff = line->head;
+	sub = NULL;
 	while (buff)
 	{
 		fill_sub(&buff, &par, &sub);
