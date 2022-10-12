@@ -1,1 +1,1 @@
-echo $DONTEXIST Hola
+( ( ls ) &&pwd )

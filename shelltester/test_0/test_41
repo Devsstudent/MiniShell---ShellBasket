@@ -1,1 +1,1 @@
-echo $""HOLA"""
+(ls && pwd)

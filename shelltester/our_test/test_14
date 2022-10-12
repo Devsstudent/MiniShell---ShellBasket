@@ -1,1 +1,2 @@
 export | echo hola
+echo $?

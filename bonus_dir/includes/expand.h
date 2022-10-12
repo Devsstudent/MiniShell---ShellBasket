@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:06:58 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 19:48:00 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 20:25:24 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXPAND_H
@@ -23,16 +23,6 @@ t_bool	handle_simple_word(char *new_word, char *word, int *indexes);
 void	expand_block(t_block *block, char **key_arr, char **val_arr,
 			int *indexes);
 void	handle_dollar_in_block(t_block *block, t_dict *dict);
-//wildcard_handler_new.c
-int	get_nb_files(void);
-void	fill_filenames(char **filenames, DIR **dir, struct dirent **ent);
-char	**get_filenames(void);
-int	get_min(char **filenames, int i);
-void	order_filenames(char **filenames);
-t_bool	check_match(char *filename, char **patterns, char *word);
-void	select_filenames(char **filenames, char **patterns, char **matches, char *word);
-void	fill_matches(char *word, char **filenames, char **patterns, char **matches);
-char	**handle_wildcards(char *word);
 
 //expand_check_key.c
 void	fill_key_arr(t_block *block, char **key_arr, int *indexes);

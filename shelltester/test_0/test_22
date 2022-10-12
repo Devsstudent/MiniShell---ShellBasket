@@ -1,1 +1,1 @@
-echo ""$"""""""
+echo -n bonjour && echo -n hola

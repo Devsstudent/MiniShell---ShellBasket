@@ -1,1 +1,1 @@
-echo """" $HOME"
+cat | echo || ls

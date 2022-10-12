@@ -1,1 +1,1 @@
-echo $""HOME"""
+pwd || ls && echo hola

@@ -26,6 +26,7 @@ object:
 	@mkdir -p obj/builtins
 	@mkdir -p obj/utils
 	@mkdir -p obj/error
+	@mkdir -p obj/wildcard
 
 clean:
 	make -s clean -C $(LIB)

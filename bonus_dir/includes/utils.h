@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/03 21:23:17 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/12 20:20:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -51,6 +51,15 @@ void	sigint_handler(int signum);
 void	sigint_handler_exec(int signum);
 void	listen_to_sigs(void);
 t_bool	handle_ctrl_c(char **line, int stdi);
+
+/********************************************/
+/*              wildcard_utils.c            */
+/********************************************/
+
+char	*double_arr_to_char(char **items);
+int	get_nb_files(void);
+char	**get_filenames(void);
+int	get_min(char **filenames, int i);
 
 /********************************************/
 /*                 errror                   */

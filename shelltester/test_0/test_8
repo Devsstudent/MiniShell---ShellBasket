@@ -1,1 +1,1 @@
->>echo>>
+export HOLA | echo hola

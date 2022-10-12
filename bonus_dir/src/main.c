@@ -6,83 +6,10 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/11 19:41:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 20:15:21 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-void	browse_sub_tree(t_leaf *leaf)
-{
-	printf("type = %i, PAR = %i p_type = %i\n", leaf->type, leaf->parentheses, leaf->parent_type);
-	if (leaf->type == CMD)
-	{
-		t_line *line;
-		line = leaf->content;
-		t_block	*buff;
-		if (line)
-		{
-			printf("line leaf = %p\n", line);
-			buff = line->head;
-			while (buff)
-			{
-				buff = buff->next;
-			}
-		}
-	}
-	if (leaf->left != NULL)
-	{
-		printf("left\n");
-		browse_sub_tree(leaf->left);
-	}
-	else
-		return ;
-	if (leaf->right != NULL)
-	{
-		printf("right\n");
-		browse_sub_tree(leaf->right);
-	}
-	else
-		return ;
-}
-
-void	browse_tree(t_tree *tree)
-{
-	t_leaf  *buff;
-
-	buff = tree->head;
-	browse_sub_tree(buff);
-}
-
-t_info	*init_exec_info(void)
-{
-	t_info	*exec_info;
-
-	exec_info = (t_info *) malloc(sizeof(t_info));
-	if (!exec_info)
-		free_exit();
-	add_to_gc(EXEC_INFO, exec_info, get_gc());
-	exec_info->pid_li = NULL;
-	exec_info->pipe = FALSE;
-	exec_info->argv = NULL;
-	exec_info->fd_arr = NULL;
-	exec_info->prev_pipe = FALSE;
-	exec_info->fd_arr_size = 0;
-	exec_info->pipe_fd[0] = -1;
-	exec_info->pipe_fd[1] = -1;
-	exec_info->open_fd = -1;
-	exec_info->par_lvl = 0;
-	exec_info->turn = 0;
-	exec_info->right = FALSE;
-	exec_info->left = FALSE;
-	exec_info->out_fd = -1;
-	exec_info->end = FALSE;
-	exec_info->fork = FALSE;
-	exec_info->stdi = dup(STDIN_FILENO);
-	exec_info->cmd_not_found = FALSE;
-	exec_info->stdou = dup(STDOUT_FILENO);
-	exec_info->turn = 0;
-	return (exec_info);
-}
 
 //Function recursive d'exec
 //Function recursive de parcours de l'ast
@@ -108,7 +35,6 @@ void	init_pid_lst(t_info *exec_info)
 
 static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 {
-	//browse_tree(tree);
 	init_pid_lst(exec_info);
 	exec_tree(tree->head, exec_info, env, NULL);
 	wait_sub_process(exec_info);
@@ -119,6 +45,12 @@ static void	main_extension(t_info *exec_info, t_tree *tree, t_dict *env)
 	free_each_turn(get_gc());
 }
 
+static void	setup_shlvl(t_dict *env)
+{
+	dict_modify(env, ft_strdup("SHLVL"),
+		ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
@@ -127,20 +59,16 @@ int	main(int ac, char **av, char **envp)
 	t_info	*exec_info;
 
 	env = double_char_to_lst(envp);
-	dict_modify(env, ft_strdup("SHLVL"),
-	ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
+	setup_shlvl(env);
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		if (tree->head == NULL && free_each_turn(get_gc()))
-		{
-			close(exec_info->stdou);
-			close(exec_info->stdi);
+		if (tree->head == NULL && free_each_turn(get_gc())
+			&& close(exec_info->stdou) && close(exec_info->stdi))
 			continue ;
-		}
 		parse_here_doc(tree->head, exec_info->fd_arr, 0);
 		if (g_exit_status == 140 && free_each_turn(get_gc()))
 		{

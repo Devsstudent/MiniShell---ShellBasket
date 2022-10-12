@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 13:02:02 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/22 16:29:48 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/12 20:22:49 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@
 # include "utils.h"
 # include "enum.h"
 # include "expand.h"
+# include "wildcard.h"
 
 #endif
