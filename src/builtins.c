@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 16:53:47 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/10 16:51:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 20:33:55 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,11 +32,25 @@ t_bool	check_builtins(char **argv)
 	return (FALSE);
 }
 
+static void	exit_builtin(t_info *exec_in, t_bool fork, int pipe_fd[2])
+{
+	close_subprocess_fd(exec_in, pipe_fd);
+	if (fork)
+		free_exit();
+}
+
+static void	sig_pipe_handler(t_bool fork)
+{
+	if (fork)
+		signal(SIGPIPE, sigpipe_handler);
+}
+
 t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in, int pipe_fd[2])
 {
 	int		ac;
 	char	**argv;
 
+	sig_pipe_handler(fork);
 	argv = exec_in->argv;
 	ac = get_ac(argv);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
@@ -55,8 +69,6 @@ t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in, int pipe_fd[2])
 		exec_cd(ac, argv, env);
 	else
 		return (FALSE);
-	close_subprocess_fd(exec_in, pipe_fd);
-	if (fork)
-		free_exit();
+	exit_builtin(exec_in, fork, pipe_fd);
 	return (TRUE);
 }

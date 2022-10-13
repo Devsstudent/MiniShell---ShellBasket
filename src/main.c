@@ -6,43 +6,10 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 20:25:56 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 14:46:03 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 20:19:44 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-/*
-void	browse_sub_tree(t_leaf *leaf)
-{
-	t_line	*line;
-	t_block	*buff;
-if (leaf->type == CMD) {
-		line = leaf->content;
-		if (line)
-		{
-			buff = line->head;
-			while (buff)
-				buff = buff->next;
-		}
-	}
-	if (leaf->left != NULL)
-		browse_sub_tree(leaf->left);
-	else
-		return ;
-	if (leaf->right != NULL)
-		browse_sub_tree(leaf->right);
-	else
-		return ;
-}
-
-void	browse_tree(t_tree *tree)
-{
-	t_leaf	*buff;
-
-	buff = tree->head;
-	browse_sub_tree(buff);
-}
-*/
 
 static t_info	*init_exec_info(void)
 {
@@ -83,6 +50,18 @@ static void	shlvl_setup(t_dict *env)
 		ft_itoa(ft_atoi(dict_get_value(env, "SHLVL")) + 1));
 }
 
+t_bool	check_tree(t_tree *tree, t_info *exec_info)
+{
+	if (tree->head == NULL)
+	{
+		free_each_turn(get_gc());
+		close(exec_info->stdi);
+		close(exec_info->stdou);
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
@@ -98,8 +77,7 @@ int	main(int ac, char **av, char **envp)
 		if (ms_line(&line, exec_info))
 			continue ;
 		tree = ms_lex_and_parse(&line, exec_info);
-		if (tree->head == NULL && free_each_turn(get_gc())
-			&& close(exec_info->stdou && close(exec_info->stdi)))
+		if (!check_tree(tree, exec_info))
 			continue ;
 		parse_here_doc(tree->head, exec_info->fd_arr, 0);
 		if (g_exit_status == 140 && free_each_turn(get_gc()))
