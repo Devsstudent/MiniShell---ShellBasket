@@ -37,9 +37,9 @@ void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env)
 	int		i;
 
 	i = -1;
-	check_redirection(exec_in, leaf->content);
 	while (exec_in->argv[++i])
 		exec_in->argv[i] = handle_quote(exec_in->argv[i]);
+	check_redirection(exec_in, leaf->content);
 	cmd_path = check_cmd(exec_in->argv, env);
 	add_to_gc(SIMPLE, cmd_path, get_gc());
 	if (command_not_found(exec_in, cmd_path, leaf->content)

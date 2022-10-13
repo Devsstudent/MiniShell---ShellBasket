@@ -25,6 +25,7 @@ t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in)
 
 	if (leaf->left->parentheses > leaf->parentheses)
 	{
+		ft_putstr_fd("test", 2);
 		if (pipe(pipe_fd) == -1)
 			return (perror_false("Error creating pipe in pipe_exec"));
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
