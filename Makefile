@@ -112,6 +112,9 @@ NAME = minishell
 
 all : $(NAME)
 
+test: 
+	(cd shelltester && bash ./tester.sh $(shell pwd)/minishell)
+
 $(NAME): $(OBJ)
 	make bonus -s -C $(LIB)
 	$(CC) $(FLAG) $(OBJ) -L /usr/local/opt/readline/lib  -lreadline -L $(LIB) -lft -o $(NAME)
