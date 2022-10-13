@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:12:26 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/16 13:59:46 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 15:41:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -29,6 +29,8 @@ t_bool	execve_cmd(char *pathname, t_info *exec_info, t_dict *env)
 
 	argv = exec_info->argv;
 	env_bis = dict_to_double_char_env(env);
+	ft_putstr_fd(argv[0], 2);
+	write(2, "\n", 1);
 	if (!exec_builtin(env, 1, exec_info))
 	{
 		i = 0;

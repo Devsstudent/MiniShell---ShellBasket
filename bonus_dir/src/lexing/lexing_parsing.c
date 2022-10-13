@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:48:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/05 17:12:26 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/13 17:13:08 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -59,7 +59,10 @@ t_tree	*ms_lex_and_parse(char **line, t_info *exec_in)
 		return (tree->head = NULL, tree);
 	add_to_gc(LINE, line_lst, get_gc());
 	if (!tokenization(line_lst))
-		return (tree->head = NULL, tree);
+	{
+		tree->head = NULL;
+		return (tree);
+	}
 	fill_ast_bonus(line_lst, tree);
 	if (exec_in)
 	{

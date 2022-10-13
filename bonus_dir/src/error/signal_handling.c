@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 19:02:58 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/08 19:52:13 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/13 17:02:46 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,6 +16,12 @@
  * if we are in a heredoc, the function sigint_handler shouldn't be called twice
  * so we ignore one call
 */
+
+void	sigpipe_handler(int signum)
+{
+	if (signum == SIGPIPE)
+		free_exit();
+}
 
 void	sigint_handler_exec(int signum)
 {

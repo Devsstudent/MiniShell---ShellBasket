@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:50:29 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/12 14:14:39 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/13 17:32:56 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -91,10 +91,11 @@ void	display_export_env(t_dict *env)
 	vars = dict_to_double_char_export(env);
 	while (vars[i])
 	{
-		ft_putstr_fd(vars[i], 1);
+		write(1, vars[i], ft_strlen(vars[i]));
 		write(1, "\n", 1);
 		i++;
 	}
+	return ;
 }
 
 void	exec_export(int ac, char **argv, t_dict *env)

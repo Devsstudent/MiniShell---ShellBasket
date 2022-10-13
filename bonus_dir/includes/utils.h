@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:05:37 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 22:27:21 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 16:46:59 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef UTILS_H
@@ -46,6 +46,7 @@ void	free_exit(void);
 /********************************************/
 //signal_handling.c
 void	sigint_handler(int signum);
+void	sigpipe_handler(int signum);
 void	sigint_handler_exec(int signum);
 void	listen_to_sigs(void);
 t_bool	handle_ctrl_c(char **line, int stdi);

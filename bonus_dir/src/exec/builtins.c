@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 16:53:47 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 21:27:34 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 18:07:29 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -36,9 +36,15 @@ static void	exit_builtin(t_info *exec_in, t_bool fork)
 {
 	close_subprocess_fd(exec_in);
 	if (fork)
+		free_exit();
+}
+
+static void	sig_pipe_handler(t_info *exec_in, t_bool fork)
+{
+	if (fork)
 	{
 		pid_li_clear(exec_in->pid_li);
-		free_exit();
+		signal(SIGPIPE, sigpipe_handler);
 	}
 }
 
@@ -47,6 +53,7 @@ t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 	int		ac;
 	char	**argv;
 
+	sig_pipe_handler(exec_in, fork);
 	argv = exec_in->argv;
 	ac = get_ac(argv);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
@@ -57,9 +64,9 @@ t_bool	exec_builtin(t_dict *env, t_bool fork, t_info *exec_in)
 		exec_env(ac, argv, env);
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 		exec_exit(ac, exec_in, 0);
-	else if (ft_strncmp(argv[0], "unset", 5) == 0)
+	else if (ft_strncmp(argv[0], "unset", 6) == 0)
 		exec_unset(ac, argv, env);
-	else if (ft_strncmp(argv[0], "export", 5) == 0)
+	else if (ft_strncmp(argv[0], "export", 7) == 0)
 		exec_export(ac, argv, env);
 	else if (ft_strncmp(argv[0], "cd", 5) == 0)
 		exec_cd(ac, argv, env);
