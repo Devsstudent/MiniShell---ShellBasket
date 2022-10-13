@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 17:58:23 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/12 14:40:07 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 22:17:34 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -29,7 +29,6 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr,
 {
 	int		size;
 	char	*new_word;
-	char	*final_word;
 
 	size = ft_strlen(block->word) + total_char_to_add(val_arr)
 		- total_char_to_remove(key_arr);
@@ -42,13 +41,7 @@ void	expand_block(t_block *block, char **key_arr, char **val_arr,
 		free_exit();
 	fill_new_word(new_word, block->word, val_arr, indexes);
 	free(block->word);
-	final_word = ft_strjoin(new_word, "\"");
-	if (!final_word)
-		free_exit();
-	block->word = ft_strjoin(ft_strdup("\""), final_word);
-	if (!block->word)
-		free_exit();
-	free(final_word);
+	block->word = new_word;
 }
 
 void	handle_dollar_in_block(t_block *block, t_dict *dict)

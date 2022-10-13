@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:19:05 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 15:17:17 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 22:17:13 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -30,12 +30,20 @@ int	total_char_to_add(char **val_arr)
 {
 	int	size;
 	int	i;
+	int	j;
 
 	i = 0;
 	size = 0;
 	while (val_arr[i])
 	{
-		size += ft_strlen(val_arr[i]);
+		j = 0;
+		while (val_arr[i][j])
+		{
+			if (val_arr[i][j] == '\'' || val_arr[i][j] == '\"')
+				size += 2;
+			size++;
+			j++;
+		}
 		i++;
 	}
 	return (size);
