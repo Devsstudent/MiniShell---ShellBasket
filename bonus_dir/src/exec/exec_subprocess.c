@@ -1,8 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_subprocess.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
+/*   exec_subprocess.c                                  :+:      :+:    :+:   */ /*                                                    +:+ +:+         +:+     */
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
@@ -20,11 +19,10 @@ static t_bool	dup_stdout(t_info *exec_in)
 	}
 	else if (exec_in->end)
 	{
-		ft_putstr_fd("end ??\n", 2);
 		if (dup2(STDOUT_FILENO, exec_in->stdou) == -1)
 			return (perror_false("error in dup out"));
-///		close(exec_in->pipe_fd[1]);
-//		exec_in->end = FALSE;
+		close(exec_in->pipe_fd[1]);
+		exec_in->end = FALSE;
 	}
 	else if (exec_in->pipe && (exec_in->left || exec_in->right))
 	{

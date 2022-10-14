@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/14 18:28:49 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 19:03:00 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -30,6 +30,7 @@ static void	sub_proc(t_leaf *leaf, t_info *exec_in, t_info *sub_exec_in,
 	sub_exec_in = init_exec_info();
 	sub_exec_in->fork = TRUE;
 	sub_exec_in->par_lvl = exec_in->par_lvl;
+	sub_exec_in->sub_std = exec_in->sub_std;
 	init_pid_lst(sub_exec_in);
 	close_fds_in_subshell(exec_in);
 	exec_tree(leaf, sub_exec_in, env, leaf);
