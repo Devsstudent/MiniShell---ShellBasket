@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 21:08:50 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 15:02:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 16:04:43 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -25,7 +25,6 @@ t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in)
 
 	if (leaf->left->parentheses > leaf->parentheses)
 	{
-		ft_putstr_fd("HEYY\n", 2);
 		if (pipe(pipe_fd) == -1)
 			return (perror_false("Error creating pipe in pipe_exec"));
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)

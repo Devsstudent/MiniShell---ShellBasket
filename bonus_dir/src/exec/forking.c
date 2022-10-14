@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 14:58:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 16:08:28 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -45,7 +45,8 @@ static t_bool	check_new_shell(char *cmd_path)
 
 void	main_process_end(t_info *exec_in)
 {
-	dup2(exec_in->pipe_fd[0], STDIN_FILENO);
+	if (exec_in->pipe)
+		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
 	close(exec_in->pipe_fd[0]);
 	close(exec_in->pipe_fd[1]);
 	exec_in->pipe_fd[0] = -1;
@@ -58,10 +59,8 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 	int	pid;
 
 	if (exec_in->pipe_fd[1] == -1 && exec_in->pipe_fd[0] == -1)
-	{
 		if (pipe(exec_in->pipe_fd) == -1)
 			return (perror("pipe fail in forking.c"));
-	}
 	if (!cmd_path)
 		return ;
 	pid = fork();
