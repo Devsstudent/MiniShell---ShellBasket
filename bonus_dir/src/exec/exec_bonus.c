@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 21:08:50 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 20:07:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 21:48:02 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -23,14 +23,6 @@ t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in)
 {
 	int	pipe_fd[2];
 
-	if (leaf->right->parentheses > leaf->parentheses)
-	{
-		exec_in->sub_std = open(".tmp_sub_std", O_RDWR | O_CREAT | O_APPEND, 0666);
-		if (exec_in->sub_std == -1)
-			return (perror_false("Error opening .tmp_sub_std"));
-		if (dup2(exec_in->sub_std, STDOUT_FILENO) == -1)
-			return (perror_false("Dup tmp_sub_std"));
-	}
 	if (leaf->left->parentheses > leaf->parentheses)
 	{
 		if (pipe(pipe_fd) == -1)
@@ -48,10 +40,21 @@ t_bool	exec_left_right_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
 	exec_in->left = TRUE;
 	exec_in->right = FALSE;
+	if (leaf->right->parentheses > leaf->parentheses)
+	{
+		exec_in->sub_std = open(".tmp_sub_std", O_RDWR | O_CREAT | O_APPEND, 0666);
+		if (exec_in->sub_std == -1)
+			return (perror_false("Error opening .tmp_sub_std"));
+		if (dup2(exec_in->sub_std, STDOUT_FILENO) == -1)
+			return (perror_false("Dup tmp_sub_std"));
+	}
 	exec_tree(leaf->left, exec_in, env, leaf);
 	exec_in->right = TRUE;
 	exec_in->left = FALSE;
 	if (leaf->left->parentheses > leaf->parentheses)
+		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
+			return (perror_false("back to stdout"));
+	if (leaf->right->parentheses > leaf->parentheses)
 		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
 			return (perror_false("back to stdout"));
 	if ((leaf->head && leaf->right->type != PIPE_L && exec_in->right))

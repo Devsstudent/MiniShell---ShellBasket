@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 22:10:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 19:49:15 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 21:40:04 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,12 +24,10 @@ void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	else if (g_exit_status != 0)
 	{
 		if (exec_in->fork)
-		{
-	//		if (dup2(exec_in->sub_std, STDIN_FILENO) == -1)
-	//			return (perror("dup sub_std to stdin"));
-  	//		close(exec_in->sub_std);
+			exec_in->open_fd = exec_in->sub_std;
 			//Have to unlink to file too
-		}
+	//	if (dup2(exec_in->sub_std, STDIN_FILENO) == -1)
+	//		perror("brie le fromage");
 		exec_tree(leaf->right, exec_in, env, leaf);
 	}
 	else if (g_exit_status == 0
