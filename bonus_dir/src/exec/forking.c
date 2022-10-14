@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 21:31:46 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 14:58:28 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -57,13 +57,13 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	int	pid;
 
-	if (exec_in->pipe_fd[1] == -1)
+	if (exec_in->pipe_fd[1] == -1 && exec_in->pipe_fd[0] == -1)
 	{
 		if (pipe(exec_in->pipe_fd) == -1)
 			return (perror("pipe fail in forking.c"));
 	}
-	else
-		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
+	if (!cmd_path)
+		return ;
 	pid = fork();
 	if (pid < 0)
 		return (perror("shebasket"));
@@ -72,10 +72,8 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 		signal(SIGINT, SIG_IGN);
 	else
 		signal(SIGINT, sigint_handler_exec);
-	if (cmd_path)
+	if (pid == 0)
 		child_process(cmd_path, exec_in, env);
-	else if (pid == 0)
-		return (pid_li_clear(exec_in->pid_li), free_exit());
 	if (pid > 0)
 		main_process_end(exec_in);
 }

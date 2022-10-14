@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:23:11 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 15:20:19 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/13 22:12:45 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -65,6 +65,22 @@ t_bool	char_is_num(char c, int *i)
 	return (FALSE);
 }
 
+void	encompass_quotes(char *new_word, int *j, char quote)
+{
+	if (quote == '\'')
+	{
+		new_word[(*j)++] = '\"';
+		new_word[(*j)++] = '\'';
+		new_word[*j] = '\"';
+	}
+	else if (quote == '\"')
+	{
+		new_word[(*j)++] = '\'';
+		new_word[(*j)++] = '\"';
+		new_word[*j] = '\'';
+	}
+}
+
 void	replace_key(char *new_word, int *j, char **val_arr)
 {
 	int	i;
@@ -74,7 +90,10 @@ void	replace_key(char *new_word, int *j, char **val_arr)
 		return ;
 	while ((*val_arr)[i])
 	{
-		new_word[*j] = (*val_arr)[i];
+		if ((*val_arr)[i] == '\'' || (*val_arr)[i] == '\"')
+			encompass_quotes(new_word, j, (*val_arr)[i]);
+		else
+			new_word[*j] = (*val_arr)[i];
 		i++;
 		(*j)++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/12 21:32:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 14:16:16 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -56,4 +56,7 @@ void	exec_subshell(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		pid_li_addback(exec_in->pid_li, new_pid(pid));
 	if (pid == 0)
 		sub_proc(leaf, exec_in, sub_exec_in, env);
+	if (exec_in->pipe && exec_in->left)
+		if (dup2(exec_in->pipe_fd[0], STDIN_FILENO == -1))
+			return (perror("pipe to stdin, end of subshell"));
 }
