@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:58:19 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 21:06:29 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 16:45:10 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,10 +20,11 @@ static t_bool	dup_stdout(t_info *exec_in)
 	}
 	else if (exec_in->end)
 	{
+		ft_putstr_fd("end ??\n", 2);
 		if (dup2(STDOUT_FILENO, exec_in->stdou) == -1)
 			return (perror_false("error in dup out"));
-		close(exec_in->pipe_fd[1]);
-		exec_in->end = FALSE;
+///		close(exec_in->pipe_fd[1]);
+//		exec_in->end = FALSE;
 	}
 	else if (exec_in->pipe && (exec_in->left || exec_in->right))
 	{
