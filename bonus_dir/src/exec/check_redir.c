@@ -27,6 +27,7 @@ t_bool	check_red_in(t_block *files, t_info *exec)
 		files->word[0] = ' ';
 		ft_bzero(files->word + 1, ft_strlen(files->word) - 1);
 	}
+	files->word = handle_quote(files->word);
 	exec->open_fd = open(files->word, O_RDONLY);
 	if (exec->open_fd == -1)
 	{
@@ -53,6 +54,7 @@ t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 		write(2, " :", 2);
 		ft_bzero(files->word, ft_strlen(files->word));
 	}
+	files->word = handle_quote(files->word);
 	if (red->token == RED_OUT_TRUNC)
 		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else

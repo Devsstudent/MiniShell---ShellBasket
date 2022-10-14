@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 21:08:50 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 22:13:27 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/14 16:40:20 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -51,7 +51,6 @@ t_bool	exec_left_right_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	exec_tree(leaf->right, exec_in, env, leaf);
 	return (TRUE);
 }
-
 static t_bool	leaf_red_out(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
 	if (leaf->type == RED_OUT_TRUNC_L)
