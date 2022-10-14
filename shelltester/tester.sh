@@ -12,7 +12,7 @@ fi
 red="\033[0;31m"
 green="\033[0;32m"
 reset="\033[0;39m"
-test_li=$(ls ./test_0/*)
+test_li=$(ls ./test_bonus/*)
 
 printf "path : $minishell_dir_path\n"
 (cd $minishell_dir_path && make -s)
