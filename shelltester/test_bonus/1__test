@@ -1,1 +1,2 @@
 echo coucou | (cat && cat)
+echo $?

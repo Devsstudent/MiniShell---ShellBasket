@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 22:10:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/17 19:45:20 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:16:57 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -26,22 +26,18 @@ void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		exec_tree(leaf->right, exec_in, env, leaf);
 	else if (g_exit_status != 0)
 	{
-		if (exec_in->tmp_fd > 0)
+		if (exec_in->tmp_fd >= 0)
 		{
 			exec_in->tmp_fd = open(".tmp_fd", O_RDONLY);
 			if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
-				perror("AYAAA");
+				perror("tmp_fd to stdin leaf_type_or");
 			close(exec_in->tmp_fd);
 		}
 		exec_tree(leaf->right, exec_in, env, leaf);
 	}
 	else if (g_exit_status == 0
 		&& leaf->right->parentheses != leaf->parentheses)
-	{
-		unlink(".tmp_fd");
 		return ;
-	}
-	unlink(".tmp_fd");
 }
 
 void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
