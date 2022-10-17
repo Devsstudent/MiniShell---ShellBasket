@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/17 17:36:38 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 19:36:42 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -23,12 +23,29 @@ void	close_fds_in_subshell(t_info *exec_in)
 		close(exec_in->pipe_fd[1]);
 }
 
+static void	right_side_sub_proc(t_info *sub_exec_in)
+{
+	char	c;
+
+	sub_exec_in->tmp_fd = open(".tmp_fd", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	while (read(STDIN_FILENO, &c, 1) > 0)
+		write(2, &c, 1);
+	close(sub_exec_in->tmp_fd);
+	sub_exec_in->tmp_fd = open(".tmp_fd", O_RDONLY);
+	if (dup2(sub_exec_in->tmp_fd, STDIN_FILENO) == -1)
+		perror("okaymanyyy");
+	close(sub_exec_in->tmp_fd);
+}
+
 static void	sub_proc(t_leaf *leaf, t_info *exec_in, t_info *sub_exec_in,
 		t_dict *env)
 {
+
 	leaf->head = TRUE;
 	sub_exec_in = init_exec_info();
 	sub_exec_in->fork = TRUE;
+	if (exec_in->pipe && exec_in->right)
+		right_side_sub_proc(exec_in);
 	sub_exec_in->par_lvl = exec_in->par_lvl;
 	init_pid_lst(sub_exec_in);
 	close_fds_in_subshell(exec_in);

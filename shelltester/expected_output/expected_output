@@ -1,2 +1,15 @@
-aa$
-bb$
+expected_output
+minishell_output
+our_test
+readline_ignore.txt
+script_cut.sh
+test
+test_0
+test_aa
+test_bonus
+tester.sh
+test_list
+test_list_bis
+test_list_bonus
+test_mandatory
+0
