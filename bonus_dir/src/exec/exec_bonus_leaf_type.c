@@ -23,8 +23,10 @@ void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		exec_tree(leaf->right, exec_in, env, leaf);
 	else if (g_exit_status != 0)
 	{
-		ft_putstr_fd("YAY\n", 2);
+		if (exec_in->fork)
+			exec_in->open_fd = exec_in->sub_std;
 		exec_tree(leaf->right, exec_in, env, leaf);
+		close(exec_in->sub_std);
 	}
 	else if (g_exit_status == 0
 		&& leaf->right->parentheses != leaf->parentheses)
