@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/14 18:28:49 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:17:39 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,7 +20,23 @@ void	close_fds_in_subshell(t_info *exec_in)
 	if (exec_in->pipe_fd[0] != -1)
 		close(exec_in->pipe_fd[0]);
 	if (exec_in->pipe_fd[1] != -1)
-		close(exec_in->pipe_fd[1]);
+		close(exec_in->pipe_fd[1]); }
+static void	right_side_sub_proc(t_info *sub_exec_in)
+{
+	char	c;
+
+	sub_exec_in->tmp_fd = open(".tmp_fd", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (sub_exec_in->tmp_fd < 0)
+		perror("fail creating .tmp_fd");
+	while (read(STDIN_FILENO, &c, 1) > 0)
+		write(sub_exec_in->tmp_fd, &c, 1);
+	close(sub_exec_in->tmp_fd);
+	sub_exec_in->tmp_fd = open(".tmp_fd", O_RDONLY);
+	if (sub_exec_in->tmp_fd == -1)
+		perror("fail_opening .tmp_fd");
+	if (dup2(sub_exec_in->tmp_fd, STDIN_FILENO) == -1)
+		perror("error dubping tmp to STDIN");
+	close(sub_exec_in->tmp_fd);
 }
 
 static void	sub_proc(t_leaf *leaf, t_info *exec_in, t_info *sub_exec_in,
@@ -32,6 +48,8 @@ static void	sub_proc(t_leaf *leaf, t_info *exec_in, t_info *sub_exec_in,
 	sub_exec_in->par_lvl = exec_in->par_lvl;
 	sub_exec_in->sub_std = exec_in->sub_std;
 	init_pid_lst(sub_exec_in);
+	if (exec_in->pipe && exec_in->right)
+		right_side_sub_proc(sub_exec_in);
 	close_fds_in_subshell(exec_in);
 	exec_tree(leaf, sub_exec_in, env, leaf);
 	wait_sub_process(sub_exec_in);
@@ -62,5 +80,7 @@ void	exec_subshell(t_leaf *leaf, t_info *exec_in, t_dict *env)
 			return (perror("pipe to stdin, end of subshell"));
 	close(exec_in->pipe_fd[0]);
 	close(exec_in->pipe_fd[1]);
+	if (pid > 0)
+		unlink(".tmp_fd");
 	(exec_in->par_lvl)--;
 }

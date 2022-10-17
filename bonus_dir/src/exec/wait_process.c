@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:44:13 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 21:43:30 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:02:01 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -42,7 +42,9 @@ static void	loop_wait_process(t_pid *buff, t_info *exec_info, int w_status)
 			continue ;
 		}
 		if (WIFEXITED(w_status) && !exec_info->cmd_not_found)
+		{
 			g_exit_status = WEXITSTATUS(w_status);
+		}
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 2)
 			g_exit_status = 130;
 		else if (WIFSIGNALED(w_status) && WTERMSIG(w_status) == 3)
@@ -66,6 +68,7 @@ void	wait_sub_process(t_info *exec_info)
 	loop_wait_process(buff, exec_info, w_status);
 	pid_li_clear(exec_info->pid_li);
 	exec_info->argv = NULL;
+	exec_info->cmd_not_found = FALSE;
 	exec_info->pid_li->head = NULL;
 	exec_info->pid_li->last = NULL;
 }

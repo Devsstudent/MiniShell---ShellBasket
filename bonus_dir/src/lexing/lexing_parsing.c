@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 18:48:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/13 17:13:08 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:04:47 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -29,7 +29,9 @@ t_bool	ms_line(char **line, t_info *exec_in)
 {
 	listen_to_sigs();
 	rl_outstream = stderr;
-	*line = readline("@ShellBasket % ");
+	ft_putstr_fd("\033[105m\033[107m", 2);
+	*line = readline("@ShellBasket\033[0m %");
+	ft_putstr_fd("\033[0m", 2);
 	if (!(*line))
 	{
 		if (exec_in->stdou > -1)

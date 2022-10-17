@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 22:10:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 16:42:46 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:16:57 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,6 +15,9 @@ void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
 	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
+	//Cpy du STDIN dans un fichier temporaire histoire de dup ce fichier
+	//sur sur la deuxieme partie
+	//Only in the parentheses case ... so : if in fork like
 	if (leaf->left->parentheses > leaf->parentheses)
 		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
 			return (perror("back to stdout"));
@@ -23,10 +26,14 @@ void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		exec_tree(leaf->right, exec_in, env, leaf);
 	else if (g_exit_status != 0)
 	{
-		if (exec_in->fork)
-			exec_in->open_fd = exec_in->sub_std;
+		if (exec_in->tmp_fd >= 0)
+		{
+			exec_in->tmp_fd = open(".tmp_fd", O_RDONLY);
+			if (dup2(exec_in->tmp_fd, STDIN_FILENO) == -1)
+				perror("tmp_fd to stdin leaf_type_or");
+			close(exec_in->tmp_fd);
+		}
 		exec_tree(leaf->right, exec_in, env, leaf);
-		close(exec_in->sub_std);
 	}
 	else if (g_exit_status == 0
 		&& leaf->right->parentheses != leaf->parentheses)

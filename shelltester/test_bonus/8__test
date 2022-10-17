@@ -1,1 +1,2 @@
 (echoooooooo || echo toto) | (cat -e || ahahah)
+echo $?
