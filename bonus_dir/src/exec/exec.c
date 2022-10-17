@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/13 15:27:27 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:00:50 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -24,9 +24,9 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 		close(exec_in->out_fd);
 	if (exec_in->end)
 	{
-		if (exec_in->pipe_fd[0] != -1)
+		if (exec_in->pipe_fd[0] > -1)
 			close(exec_in->pipe_fd[0]);
-		if (exec_in->pipe_fd[1] != -1)
+		if (exec_in->pipe_fd[1] > -1)
 			close(exec_in->pipe_fd[1]);
 	}
 }

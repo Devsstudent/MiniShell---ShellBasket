@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 16:08:28 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 17:35:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -46,7 +46,8 @@ static t_bool	check_new_shell(char *cmd_path)
 void	main_process_end(t_info *exec_in)
 {
 	if (exec_in->pipe)
-		dup2(exec_in->pipe_fd[0], STDIN_FILENO);
+		if (dup2(exec_in->pipe_fd[0], STDIN_FILENO) == -1)
+			perror("fail dup forking.c:50");
 	close(exec_in->pipe_fd[0]);
 	close(exec_in->pipe_fd[1]);
 	exec_in->pipe_fd[0] = -1;

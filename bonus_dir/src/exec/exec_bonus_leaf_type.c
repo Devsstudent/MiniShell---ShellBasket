@@ -6,15 +6,33 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 22:10:24 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 16:21:40 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 17:17:06 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 
 void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
+	char	c;
+	int		fd;
+
+	fd = 0;
+	if (exec_in->fork)
+	{
+		fd = open(".tmp_fd", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		while (read(STDIN_FILENO, &c, 1) > 0)
+			write(fd, &c, 1);
+		close(fd);
+		fd = open(".tmp_fd", O_RDONLY);
+		if (dup2(fd, STDIN_FILENO) == -1)
+			perror("okaymanyyy");
+		close(fd);
+	}
 	exec_tree(leaf->left, exec_in, env, leaf);
 	wait_sub_process(exec_in);
+	//Cpy du STDIN dans un fichier temporaire histoire de dup ce fichier
+	//sur sur la deuxieme partie
+	//Only in the parentheses case ... so : if in fork like
 	if (leaf->left->parentheses > leaf->parentheses)
 		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
 			return (perror("back to stdout"));
@@ -22,10 +40,23 @@ void	leaf_type_or(t_leaf *leaf, t_info *exec_in, t_dict *env)
 		&& (leaf->right->type == AND_L))
 		exec_tree(leaf->right, exec_in, env, leaf);
 	else if (g_exit_status != 0)
+	{
+		if (fd > 0)
+		{
+			fd = open(".tmp_fd", O_RDONLY);
+			if (dup2(fd, STDIN_FILENO) == -1)
+				perror("AYAAA");
+			close(fd);
+		}
 		exec_tree(leaf->right, exec_in, env, leaf);
+	}
 	else if (g_exit_status == 0
 		&& leaf->right->parentheses != leaf->parentheses)
+	{
+		//unlink
 		return ;
+	}
+	//unlink
 }
 
 void	leaf_type_and(t_leaf *leaf, t_info *exec_in, t_dict *env, t_leaf *prev)
