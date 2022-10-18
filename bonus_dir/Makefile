@@ -15,7 +15,7 @@ $(NAME): $(OBJ)
 	$(CC) $(FLAG) $(OBJ) -L /usr/local/opt/readline/lib  -lreadline -L $(LIB) -lft -o $(NAME)
 
 test :
-	(cd ../shelltester && bash ./tester.sh $(shell pwd)/minishell)
+	(cd ../shelltester && bash ./tester.sh $(shell pwd)/minishell $(test_dir))
 
 obj/%.o: src/%.c | object
 	$(CC) $(FLAG) -I $(LIB) -I $(HEAD) -I /usr/local/opt/readline/include -c $< -o $@

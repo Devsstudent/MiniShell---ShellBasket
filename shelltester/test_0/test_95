@@ -1,1 +1,0 @@
-whoami | cat -e | cat -e > /tmp/bonjour

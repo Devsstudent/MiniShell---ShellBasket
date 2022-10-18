@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:16:09 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/10 16:14:29 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/18 15:52:26 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -61,6 +61,7 @@ void	exec_unset(int ac, char **argv, t_dict *env)
 		i++;
 	}
 	g_exit_status = 0;
-	if (invalid_identifier)
-		g_exit_status = 1;
+	(void) invalid_identifier;
+//	if (invalid_identifier)
+//		g_exit_status = 1;
 }

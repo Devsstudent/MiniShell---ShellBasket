@@ -113,7 +113,7 @@ NAME = minishell
 all : $(NAME)
 
 test: 
-	(cd shelltester && bash ./tester.sh $(shell pwd)/minishell)
+	(cd shelltester && bash ./tester.sh $(shell pwd)/minishell $(test_dir))
 
 $(NAME): $(OBJ)
 	make bonus -s -C $(LIB)
