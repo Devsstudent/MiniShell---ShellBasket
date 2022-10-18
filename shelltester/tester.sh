@@ -2,9 +2,13 @@
 
 if [ -z "$1" ]
 then
+	#You can setup your path here
 	minishell_path=../minishell
 	minishell_dir_path=../
 else
+	#Or directyly implement it in your Makefile with a rules including the direct path of the tester
+	#Mine : 
+	#	(cd PATH OF THIS TESTER && bash ./tester.sh $(shell pwd)/minishell)
 	minishell_path=$1
 	minishell_dir_path=${minishell_path::-9}
 fi
@@ -12,9 +16,18 @@ fi
 red="\033[0;31m"
 green="\033[0;32m"
 reset="\033[0;39m"
+cyan="\033[0;36m"
+#Setup a directory with a lot a testfile inside like mine and give the dirpath of your choice behind
 test_li=$(ls ./test_bonus/*)
+printf "$cyan     _______. __    __   _______  __       __      .___________. _______     _______.___________. _______ .______      \n"
+printf "    /       ||  |  |  | |   ____||  |     |  |     |           ||   ____|   /       |           ||   ____||   _  \     \n"
+printf "   |   (----\`|  |__|  | |  |__   |  |     |  |     \`---|  |----\`|  |__     |   (----\`---|  |----\`|  |__   |  |_)  |    \n"
+printf "    \   \    |   __   | |   __|  |  |     |  |         |  |     |   __|     \   \       |  |     |   __|  |      /     \n"
+printf ".----)   |   |  |  |  | |  |____ |  \`----.|  \`----.    |  |     |  |____.----)   |      |  |     |  |____ |  |\  \----.\n"
+printf "|_______/    |__|  |__| |_______||_______||_______|    |__|     |_______|_______/       |__|     |_______|| _| \`._____|"
+printf "$reset\n\n"
 
-printf "path : $minishell_dir_path\n"
+printf "\npath : $minishell_dir_path\n"
 (cd $minishell_dir_path && make -s)
 #LOOP FILL MISHELL OUTPUT
 loop_test() {

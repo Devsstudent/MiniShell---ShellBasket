@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 17:44:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/09/29 18:35:07 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/17 19:18:25 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef STRUCT_H
@@ -83,12 +83,14 @@ typedef struct s_info{
 	char		**argv;
 	int			open_fd;
 	int			out_fd;
+	int			tmp_fd;
 	int			*fd_arr;
 	int			fd_arr_size;
 	int			turn;
 	int			stdou;
 	int			stdi;
 	int			pipe_fd[2];
+	int			sub_std;
 	int			par_lvl;
 	t_bool		left;
 	t_bool		right;

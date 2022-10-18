@@ -1,1 +1,2 @@
 (Ahahah || echo coucou) | cat -e
+echo $?
