@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:05:42 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 15:01:47 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/18 22:15:26 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -60,6 +60,7 @@ int	main(int ac, char **av, char **envp)
 
 	env = double_char_to_lst(envp);
 	setup_shlvl(env);
+	ft_putstr_fd("\033[H\033[2J", 2);
 	while (ac && av[0])
 	{
 		exec_info = init_exec_info();

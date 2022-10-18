@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:12:52 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/14 19:31:51 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/19 00:13:17 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -58,7 +58,7 @@ void	forking(char *cmd_path, t_info *exec_in, t_dict *env)
 {
 	int	pid;
 
-	if (exec_in->pipe_fd[1] == -1 && exec_in->pipe_fd[0] == -1)
+	//if (exec_in->pipe_fd[1] == -1 && exec_in->pipe_fd[0] == -1)
 		if (pipe(exec_in->pipe_fd) == -1)
 			return (perror("pipe fail in forking.c"));
 	if (!cmd_path)
