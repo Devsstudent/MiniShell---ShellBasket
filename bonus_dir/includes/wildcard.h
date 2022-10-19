@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 20:22:10 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 22:26:43 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/19 18:39:31 by mbelrhaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef WILDCARD_H
@@ -15,6 +15,16 @@
 /********************************************/
 /*                 wildcard                 */
 /********************************************/
+
+//wildcard_handle_quotes.c
+char	**ft_split_wildcard(char *word);
+
+//wildcard_handle_quotes_utils.c
+char	**ft_free(char **splitos, int size);
+char	**handle_quotes_in_blocks(char **splitos);
+void	str_advance_till_quote(char *word, int *i);
+void	str_adv_count_till_quote(char *word, int *i, int *k);
+void	str_fill_till_quote(char *word, int *i, int *k, char *block);
 
 //wildcard_fill.c
 void	fill_filenames(char **filenames, DIR **dir, struct dirent **ent);
