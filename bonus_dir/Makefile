@@ -7,7 +7,24 @@ YO= $(SRC:.c=.o)
 OBJ= $(YO:./src%=./obj%)
 D_LST= $(OBJ:.o=.d)
 NAME= minishell
-
+OBJ= $(addprefix obj/, $(addsuffix .o, main \
+	$(addprefix exec/,
+		) \
+	$(addprefix lexing/,
+		) \
+	$(addprefix expand/,
+		) \
+	$(addprefix error/,
+		) \
+	$(addprefix builtins/,
+		) \
+	$(addprefix parsing/,
+		) \
+	$(addprefix utils/, 
+		) \
+	$(addprefix wildcard/,
+		)))
+	
 all: $(NAME)
 
 $(NAME): $(OBJ)

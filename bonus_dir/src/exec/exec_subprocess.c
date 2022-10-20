@@ -20,7 +20,6 @@ static t_bool	dup_stdout(t_info *exec_in)
 	}
 	else if (exec_in->end)
 	{
-		ft_putstr_fd("end ??\n", 2);
 		if (dup2(STDOUT_FILENO, exec_in->stdou) == -1)
 			return (perror_false("error in dup out"));
 	}
