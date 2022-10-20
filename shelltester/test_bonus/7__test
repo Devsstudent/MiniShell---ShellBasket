@@ -1,2 +1,2 @@
-(echoooooooo || echo toto) | (ahahah | | cat -e)
+(echoooooooo || echo toto) | (ahahah || aksdjksj)
 echo $?

@@ -23,16 +23,30 @@ t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in)
 {
 	int	pipe_fd[2];
 
-	if (leaf->left->parentheses > leaf->parentheses)
-	{
-		if (pipe(pipe_fd) == -1)
-			return (perror_false("Error creating pipe in pipe_exec"));
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-			return (perror_false("Error dup in exec_bonus"));
-		exec_in->pipe_fd[1] = pipe_fd[1];
-		exec_in->pipe_fd[0] = pipe_fd[0];
-	}
+	(void) leaf;
+	if (pipe(pipe_fd) == -1)
+		return (perror_false("Error creating pipe in pipe_exec"));
+	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+		return (perror_false("Error dup in exec_bonus"));
+	exec_in->pipe_fd[1] = pipe_fd[1];
+	exec_in->pipe_fd[0] = pipe_fd[0];
+	ft_putnbr_fd(exec_in->pipe_fd[0], 2);
 	exec_in->pipe = TRUE;
+	return (TRUE);
+}
+
+t_bool	fill_sub_std(t_info *exec_in)
+{
+	//Si pas de parentheses a gauche il faut quand meme copier :)
+	char	c;
+
+	exec_in->sub_std = open(".tmp_sub_std", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (exec_in->sub_std < 0)
+		return (perror_false("open .tmp_sub_std failed"));
+	while (read(exec_in->pipe_fd[0], &c, 1) > 0)
+	{
+		write(2, "X", 1);
+	}
 	return (TRUE);
 }
 
@@ -43,14 +57,25 @@ t_bool	exec_left_right_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env)
 	exec_tree(leaf->left, exec_in, env, leaf);
 	exec_in->right = TRUE;
 	exec_in->left = FALSE;
-	if (leaf->left->parentheses > leaf->parentheses)
-		if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
-			return (perror_false("back to stdout"));
+	if (dup2(exec_in->stdou, STDOUT_FILENO) == -1)
+		return (perror_false("back to stdout"));
+	if (leaf->right->parentheses > leaf->parentheses)
+		if (!fill_sub_std(exec_in))
+			return (FALSE);
+	if (!(leaf->left->parentheses > leaf->parentheses))
+	{
+		close(exec_in->pipe_fd[1]);
+		close(exec_in->pipe_fd[0]);
+		exec_in->pipe_fd[0] = -1;
+		exec_in->pipe_fd[1] = -1;
+	}
 	if ((leaf->head && leaf->right->type != PIPE_L && exec_in->right))
 		exec_in->end = TRUE;
 	exec_tree(leaf->right, exec_in, env, leaf);
+	close(exec_in->sub_std);
 	return (TRUE);
 }
+
 static t_bool	leaf_red_out(t_leaf *leaf, t_info *exec_in, t_dict *env)
 {
 	if (leaf->type == RED_OUT_TRUNC_L)

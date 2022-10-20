@@ -21,6 +21,7 @@ static void	init_content_exec_info(t_info *exec_info)
 	exec_info->fd_arr_size = 0;
 	exec_info->pipe_fd[0] = -1;
 	exec_info->pipe_fd[1] = -1;
+	exec_info->sub_std = -1;
 	exec_info->open_fd = -1;
 	exec_info->par_lvl = 0;
 	exec_info->tmp_fd = -1;

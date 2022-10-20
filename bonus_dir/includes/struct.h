@@ -90,6 +90,7 @@ typedef struct s_info{
 	int			stdou;
 	int			stdi;
 	int			pipe_fd[2];
+	int			sub_std;
 	int			par_lvl;
 	t_bool		left;
 	t_bool		right;

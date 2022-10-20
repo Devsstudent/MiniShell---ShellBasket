@@ -1,2 +1,6 @@
+<<<<<<< HEAD
+ls | (cat akdjakjds | cat)
+=======
 cat | (cat) | (cat)
+>>>>>>> e14a580cebfb9988d225caa1ea1639c95fd2ba12
 echo $?

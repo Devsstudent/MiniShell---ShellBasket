@@ -32,8 +32,7 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 }
 
 void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env)
-{
-	char	*cmd_path;
+{ char	*cmd_path;
 	int		i;
 
 	i = -1;

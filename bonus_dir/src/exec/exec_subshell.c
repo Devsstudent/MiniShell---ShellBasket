@@ -46,6 +46,7 @@ static void	sub_proc(t_leaf *leaf, t_info *exec_in, t_info *sub_exec_in,
 	sub_exec_in = init_exec_info();
 	sub_exec_in->fork = TRUE;
 	sub_exec_in->par_lvl = exec_in->par_lvl;
+	sub_exec_in->sub_std = exec_in->sub_std;
 	init_pid_lst(sub_exec_in);
 	if (exec_in->pipe && exec_in->right)
 		right_side_sub_proc(sub_exec_in);
