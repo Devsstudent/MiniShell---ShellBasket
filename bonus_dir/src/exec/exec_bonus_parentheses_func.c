@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 10:55:20 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/20 10:56:18 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 11:54:53 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -22,7 +22,6 @@ t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in)
 		return (perror_false("Error dup in exec_bonus"));
 	exec_in->pipe_fd[1] = pipe_fd[1];
 	exec_in->pipe_fd[0] = pipe_fd[0];
-	ft_putnbr_fd(exec_in->pipe_fd[0], 2);
 	exec_in->pipe = TRUE;
 	return (TRUE);
 }

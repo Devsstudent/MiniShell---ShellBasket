@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:21:45 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/09/12 14:40:16 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/20 12:17:28 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -74,7 +74,7 @@ static long long	ft_atoll(char *arg)
 void	exec_exit(int ac, t_info *exec_info, t_bool display_exit)
 {
 	if (display_exit)
-		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("exit\n", 2);
 	if (ac >= 2)
 	{
 		if (!arg_is_num(exec_info->argv[1]) || !arg_is_ll(exec_info->argv[1]))
