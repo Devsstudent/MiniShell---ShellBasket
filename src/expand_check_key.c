@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:23:11 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/13 22:12:45 by mbelrhaz         ###   ########.fr       */
+/*   Updated: 2022/10/20 11:02:34 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -53,16 +53,6 @@ int	*get_indexes_expandables(t_block *block, int dollar)
 	}
 	indexes[j] = -1;
 	return (indexes);
-}
-
-t_bool	char_is_num(char c, int *i)
-{
-	if ((c >= '0' && c <= '9') || c == '?')
-	{
-		(*i)++;
-		return (TRUE);
-	}
-	return (FALSE);
 }
 
 void	encompass_quotes(char *new_word, int *j, char quote)

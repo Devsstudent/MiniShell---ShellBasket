@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:40:53 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/18 11:58:11 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 10:53:57 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -32,7 +32,8 @@ void	execute_cmd(t_info *exec_in, t_dict *env, char *cmd_path)
 }
 
 void	exec(t_info *exec_in, t_leaf *leaf, t_dict *env)
-{ char	*cmd_path;
+{
+	char	*cmd_path;
 	int		i;
 
 	i = -1;

@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 17:16:09 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/18 15:52:26 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 10:52:05 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -18,7 +18,7 @@ static void	put_error_unset(char *arg)
 	ft_putstr_fd(": not a valid identifier\n", 2);
 }
 
-t_bool	check_valid_identifier(char *arg)
+static void	check_valid_identifier(char *arg)
 {
 	int	i;
 
@@ -26,42 +26,35 @@ t_bool	check_valid_identifier(char *arg)
 	if (!(ft_isalpha(arg[0]) || arg[0] == '_'))
 	{
 		put_error_unset(arg);
-		return (FALSE);
+		return ;
 	}
 	while (arg[i])
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '+' && arg[i] != '_')
 		{
 			put_error_unset(arg);
-			return (FALSE);
+			return ;
 		}
 		if (arg[i] == '+' && arg[i + 1] != '=')
 		{
 			put_error_unset(arg);
-			return (FALSE);
+			return ;
 		}
 		i++;
 	}
-	return (TRUE);
 }
 
 void	exec_unset(int ac, char **argv, t_dict *env)
 {
 	int		i;
-	t_bool	invalid_identifier;
 
 	i = 1;
-	invalid_identifier = FALSE;
 	while (i < ac)
 	{
-		if (!check_valid_identifier(argv[i]))
-			invalid_identifier = TRUE;
+		check_valid_identifier(argv[i]);
 		if (strncmp(argv[i], "_", 2) != 0)
 			dict_delone(env, argv[i]);
 		i++;
 	}
 	g_exit_status = 0;
-	(void) invalid_identifier;
-//	if (invalid_identifier)
-//		g_exit_status = 1;
 }

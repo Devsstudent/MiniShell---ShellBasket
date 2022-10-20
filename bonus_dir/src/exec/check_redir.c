@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:22:33 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 19:38:45 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 11:00:32 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -59,9 +59,8 @@ t_bool	check_red_out(t_block *files, t_info *exec, t_block *red)
 		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else
 		exec->out_fd = open(files->word, O_CREAT | O_RDWR | O_APPEND, 0644);
-	if (exec->out_fd == -1)
+	if (exec->out_fd == -1 && !perror_false(files->word))
 	{
-		perror(files->word);
 		exec->out_fd = -2;
 		return (FALSE);
 	}

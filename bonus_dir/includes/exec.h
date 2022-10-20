@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 18:03:12 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 22:27:53 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 10:59:21 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef EXEC_H
@@ -20,6 +20,10 @@ void	exec_subshell(t_leaf *laef, t_info *exec_in, t_dict *env);
 /********************************************/
 /*                   exec                   */
 /********************************************/
+//exec_bonus_parentheses_func.c
+t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in);
+t_bool	fill_sub_std(t_info *exec_in);
+
 //exec_bonus.c
 void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env);
 t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in);

@@ -2,29 +2,75 @@ FLAG = -Wall -g -Wextra -Werror -MMD
 CC= gcc
 LIB= ../libft
 HEAD= ./includes
-SRC= $(shell find ./src -name "*.c")
-YO= $(SRC:.c=.o)
-OBJ= $(YO:./src%=./obj%)
-D_LST= $(OBJ:.o=.d)
 NAME= minishell
 OBJ= $(addprefix obj/, $(addsuffix .o, main \
-	$(addprefix exec/,
-		) \
-	$(addprefix lexing/,
-		) \
-	$(addprefix expand/,
-		) \
-	$(addprefix error/,
-		) \
-	$(addprefix builtins/,
-		) \
-	$(addprefix parsing/,
-		) \
-	$(addprefix utils/, 
-		) \
-	$(addprefix wildcard/,
-		)))
-	
+	$(addprefix exec/, builtins \
+		exec_bonus_parentheses_func \
+		check_redir \
+		cmd_not_found \
+		exec_bonus \
+		exec_bonus_leaf_type \
+		exec \
+		exec_subprocess \
+		exec_subshell \
+		execve \
+		forking \
+		handle_cmd_exec \
+		handle_quote_before_exec \
+		redir_ambiguous \
+		redirection \
+		remove_quote_before_exec \
+		wait_process) \
+	$(addprefix lexing/, check_symbol \
+		copy_env \
+		dict_to_double \
+		lexing_bonus \
+		lexing_bonus_handle \
+		lexing_fill_word \
+		lexing_parsing \
+		tokenization_bonus) \
+	$(addprefix expand/, expand \
+		expand_check_key \
+		expand_fill_word_val) \
+	$(addprefix error/, error \
+		free_exit \
+		garbage_collector \
+		garbage_collector_free \
+		signal_handling \
+		singleton) \
+	$(addprefix builtins/, cd \
+		echo \
+		env \
+		exit \
+		export \
+		pwd \
+		unset) \
+	$(addprefix parsing/, abstract_syntax_tree_bonus \
+		ast_bonus_fill \
+		here_doc) \
+	$(addprefix utils/, abstract_syntax_tree_bonus_utils \
+		ast_utils \
+		dict_utils \
+		exec_info_utils \
+		expand_utils_bis \
+		expand_utils \
+		export_utils \
+		ft_strdup \
+		handle_cmd_utils_bis \
+		handle_cmd_utils \
+		here_doc_utils \
+		lexing_utils \
+		line_lst_utils \
+		lst_utils \
+		pid_utils \
+		wildcard_utils) \
+	$(addprefix wildcard/, wildcard_check \
+		wildcard_fill \
+		wildcard_handle_quotes_utils \
+		wildcard_handle_quotes \
+		wildcard_handler)))
+
+D_LST= $(OBJ:.o=.d)
 all: $(NAME)
 
 $(NAME): $(OBJ)

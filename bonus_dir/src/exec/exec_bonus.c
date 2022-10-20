@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 21:08:50 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/18 11:53:11 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 10:55:35 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -17,37 +17,6 @@ void	exec_cmd(t_info *exec_info, t_leaf *leaf, t_dict *env)
 	wildcard(leaf->content);
 	exec_info->argv = get_cmd_arg(leaf->content);
 	exec(exec_info, leaf, env);
-}
-
-t_bool	parentheses_pipe(t_leaf *leaf, t_info *exec_in)
-{
-	int	pipe_fd[2];
-
-	(void) leaf;
-	if (pipe(pipe_fd) == -1)
-		return (perror_false("Error creating pipe in pipe_exec"));
-	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-		return (perror_false("Error dup in exec_bonus"));
-	exec_in->pipe_fd[1] = pipe_fd[1];
-	exec_in->pipe_fd[0] = pipe_fd[0];
-	ft_putnbr_fd(exec_in->pipe_fd[0], 2);
-	exec_in->pipe = TRUE;
-	return (TRUE);
-}
-
-t_bool	fill_sub_std(t_info *exec_in)
-{
-	//Si pas de parentheses a gauche il faut quand meme copier :)
-	char	c;
-
-	exec_in->sub_std = open(".tmp_sub_std", O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (exec_in->sub_std < 0)
-		return (perror_false("open .tmp_sub_std failed"));
-	while (read(exec_in->pipe_fd[0], &c, 1) > 0)
-	{
-		write(2, "X", 1);
-	}
-	return (TRUE);
 }
 
 t_bool	exec_left_right_pipe(t_leaf *leaf, t_info *exec_in, t_dict *env)

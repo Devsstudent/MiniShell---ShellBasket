@@ -6,7 +6,7 @@
 /*   By: mbelrhaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 16:21:55 by mbelrhaz          #+#    #+#             */
-/*   Updated: 2022/10/17 22:17:39 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 10:50:37 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -20,7 +20,9 @@ void	close_fds_in_subshell(t_info *exec_in)
 	if (exec_in->pipe_fd[0] != -1)
 		close(exec_in->pipe_fd[0]);
 	if (exec_in->pipe_fd[1] != -1)
-		close(exec_in->pipe_fd[1]); }
+		close(exec_in->pipe_fd[1]);
+}
+
 static void	right_side_sub_proc(t_info *sub_exec_in)
 {
 	char	c;
