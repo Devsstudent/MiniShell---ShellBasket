@@ -1,8 +1,7 @@
 FLAG = -Wall -g -Wextra -Werror -MMD
-CC= gcc
 LIB= ../libft
 HEAD= ./includes
-NAME= minishell
+NAME= ../minishell_bonus
 OBJ= $(addprefix obj/, $(addsuffix .o, main \
 	$(addprefix exec/, builtins \
 		exec_bonus_parentheses_func \

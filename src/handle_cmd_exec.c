@@ -6,7 +6,7 @@
 /*   By: odessein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:08:06 by odessein          #+#    #+#             */
-/*   Updated: 2022/10/12 15:30:07 by odessein         ###   ########.fr       */
+/*   Updated: 2022/10/20 14:07:01 by odessein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -59,8 +59,9 @@ void	loop_get_arg(char *word, char **argv, int *i)
 
 static t_bool	check_abs_path(char *cmd, char **res)
 {
-	struct stat	statbuff;
+	struct stat statbuff;
 
+	statbuff.st_uid = 0;
 	if (cmd && (!cmd[0] || !strncmp(cmd, ".", 2) || !strncmp(cmd, "..", 3)))
 		return (FALSE);
 	if (!(*res) && (cmd && ft_strrchr(cmd, '/')))
