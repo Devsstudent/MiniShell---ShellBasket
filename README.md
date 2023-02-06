@@ -1,6 +1,6 @@
-#Minishell Project of 42 school
+# Minishell Project of 42 school
 
-###Goals
+### Goals
 * This project is about reproducing the shell functionnality using systemcall excve to excute binary commands
 * We had to have your own shell handling : 
 	* Redirections
@@ -12,4 +12,4 @@
 	* Wildcard
 * It's a command line reproduction but just a basic one
 
-[Subject](https://cdn.intra.42.fr/pdf/pdf/64488/en.subject.pdf)
+### [Subject Here](https://cdn.intra.42.fr/pdf/pdf/64488/en.subject.pdf)
