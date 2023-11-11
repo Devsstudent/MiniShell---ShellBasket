@@ -10,6 +10,7 @@
 * In the bonus part we handle:
 	* Parentheses priority
 	* Wildcard
+	* AND (&&) / OR (||)
 * It's a command line reproduction but just a basic one
 
 ### [Subject Here](https://cdn.intra.42.fr/pdf/pdf/64488/en.subject.pdf)
